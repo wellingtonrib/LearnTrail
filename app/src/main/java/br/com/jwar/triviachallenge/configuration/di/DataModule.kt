@@ -13,6 +13,8 @@ import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
 import br.com.jwar.triviachallenge.data.repositories.CategoryRepositoryImpl
 import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
 import br.com.jwar.triviachallenge.data.repositories.ChallengeRepositoryImpl
+import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
+import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,12 +37,12 @@ class DataModule {
     @Provides
     fun providesChallengeDataSource(
         challengeService: ChallengeService,
-    ): ChallengeDataSource =
-        ChallengeDataSourceImpl(challengeService)
+    ): ChallengeDataSource = ChallengeDataSourceImpl(challengeService)
 
     @Provides
-    fun providesChallengeResponseToChallengeMapper(): ChallengeResponseToChallengeMapper =
-        ChallengeResponseToChallengeMapperImpl()
+    fun providesChallengeResponseToChallengeMapper(
+        translatorService: TranslatorService,
+    ): ChallengeResponseToChallengeMapper = ChallengeResponseToChallengeMapperImpl(translatorService)
 
     @Provides
     fun providesChallengeRepository(
@@ -50,16 +52,19 @@ class DataModule {
         ChallengeRepositoryImpl(challengeDataSource, challengeResponseToChallengeMapper)
 
     @Provides
-    fun providesCategoryDataSource(): CategoryDataSource =
-        CategoryDataSourceImpl()
+    fun providesCategoryDataSource(): CategoryDataSource = CategoryDataSourceImpl()
 
     @Provides
-    fun providesCategoryResponseToCategory(): CategoryResponseToCategoryMapper =
-        CategoryResponseToCategoryMapperImpl()
+    fun providesCategoryResponseToCategoryMapper(
+        translatorService: TranslatorService
+    ): CategoryResponseToCategoryMapper = CategoryResponseToCategoryMapperImpl(translatorService)
 
     @Provides
     fun providesCategoryRepository(
         categoryDataSource: CategoryDataSource,
         categoryResponseToCategoryMapper: CategoryResponseToCategoryMapper,
     ): CategoryRepository = CategoryRepositoryImpl(categoryDataSource, categoryResponseToCategoryMapper)
+
+    @Provides
+    fun providesTranslatorService(): TranslatorService = TranslatorServiceImpl()
 }
