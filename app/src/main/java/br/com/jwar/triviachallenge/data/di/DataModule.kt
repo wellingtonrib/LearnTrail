@@ -1,20 +1,20 @@
-package br.com.jwar.triviachallenge.configuration.di
+package br.com.jwar.triviachallenge.data.di
 
 import br.com.jwar.triviachallenge.data.datasources.CategoryDataSource
 import br.com.jwar.triviachallenge.data.datasources.CategoryDataSourceImpl
-import br.com.jwar.triviachallenge.data.services.ChallengeService
 import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSource
 import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSourceImpl
 import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapper
 import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapperImpl
 import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapper
 import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapperImpl
-import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
 import br.com.jwar.triviachallenge.data.repositories.CategoryRepositoryImpl
-import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
 import br.com.jwar.triviachallenge.data.repositories.ChallengeRepositoryImpl
+import br.com.jwar.triviachallenge.data.services.ChallengeService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
+import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
+import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

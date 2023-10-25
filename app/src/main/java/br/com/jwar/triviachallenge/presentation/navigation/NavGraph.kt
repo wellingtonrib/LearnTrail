@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import br.com.jwar.triviachallenge.presentation.ui.screens.categories.CategoriesRoute
 import br.com.jwar.triviachallenge.presentation.ui.screens.challenge.ChallengeRoute
+import br.com.jwar.triviachallenge.presentation.ui.screens.settings.SettingsRoute
 
 @ExperimentalMaterial3Api
 @Composable
@@ -15,10 +16,18 @@ fun NavGraph(navController: NavHostController) {
         navController = navController,
         startDestination = "categories"
     ) {
+        composable("settings") {
+            SettingsRoute()
+        }
         composable("categories") {
-            CategoriesRoute { categoryId ->
-                navController.navigate("challenge/$categoryId")
-            }
+            CategoriesRoute(
+                navigateToSettings = {
+                    navController.navigate("settings")
+                },
+                navigateToChallenge = { categoryId ->
+                    navController.navigate("challenge/$categoryId")
+                }
+            )
         }
         composable("challenge/{categoryId}") { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId").orEmpty()

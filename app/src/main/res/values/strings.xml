@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Trivia Challenge</string>
+    <string name="choose_a_category">Choose a category</string>
+    <string name="settings">Settings</string>
 </resources>

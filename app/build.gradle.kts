@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.mlkit.translate)
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.appcompat)
 
     kapt(libs.hilt.compiler)
 
