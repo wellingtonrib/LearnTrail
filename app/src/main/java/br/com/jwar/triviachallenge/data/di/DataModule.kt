@@ -13,24 +13,41 @@ import br.com.jwar.triviachallenge.data.repositories.ChallengeRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.ChallengeService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
+import br.com.jwar.triviachallenge.data.util.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
 import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
     @Provides
-    fun providesChallengeService(): ChallengeService =
+    @Singleton
+    fun providesConvertFactory() : Converter.Factory =
+        MoshiConverterFactory.create(
+            Moshi.Builder()
+                .add(HtmlStringAdapter())
+                .build()
+        )
+
+    @Provides
+    @Singleton
+    fun providesChallengeService(
+        convertFactory: Converter.Factory
+    ): ChallengeService =
         Retrofit.Builder()
             .baseUrl("https://opentdb.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(convertFactory)
             .build()
             .create(ChallengeService::class.java)
 
@@ -40,11 +57,13 @@ class DataModule {
     ): ChallengeDataSource = ChallengeDataSourceImpl(challengeService)
 
     @Provides
+    @Singleton
     fun providesChallengeResponseToChallengeMapper(
         translatorService: TranslatorService,
     ): ChallengeResponseToChallengeMapper = ChallengeResponseToChallengeMapperImpl(translatorService)
 
     @Provides
+    @Singleton
     fun providesChallengeRepository(
         challengeDataSource: ChallengeDataSource,
         challengeResponseToChallengeMapper: ChallengeResponseToChallengeMapper,
@@ -52,9 +71,11 @@ class DataModule {
         ChallengeRepositoryImpl(challengeDataSource, challengeResponseToChallengeMapper)
 
     @Provides
+    @Singleton
     fun providesCategoryDataSource(): CategoryDataSource = CategoryDataSourceImpl()
 
     @Provides
+    @Singleton
     fun providesCategoryResponseToCategoryMapper(
         translatorService: TranslatorService
     ): CategoryResponseToCategoryMapper = CategoryResponseToCategoryMapperImpl(translatorService)
@@ -66,5 +87,6 @@ class DataModule {
     ): CategoryRepository = CategoryRepositoryImpl(categoryDataSource, categoryResponseToCategoryMapper)
 
     @Provides
+    @Singleton
     fun providesTranslatorService(): TranslatorService = TranslatorServiceImpl()
 }

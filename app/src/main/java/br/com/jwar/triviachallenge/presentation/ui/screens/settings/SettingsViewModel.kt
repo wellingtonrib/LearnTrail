@@ -2,12 +2,14 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
+import br.com.jwar.triviachallenge.presentation.ui.util.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -15,17 +17,22 @@ class SettingsViewModel @Inject constructor(
     private val translatorService: TranslatorService
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        SettingsViewState(
-            supportedLanguages = translatorService.getSupportedLanguages(),
-            currentLanguage = translatorService.getLanguage()
-        )
-    )
+    private val _uiState = MutableStateFlow<SettingsViewState>(getIdleState())
     val uiState = _uiState.asStateFlow()
 
-    fun onSelectLanguage(language: String) = viewModelScope.launch {
-        _uiState.update { it.copy(isLoading = true, currentLanguage = language) }
-        translatorService.setLanguage(language)
-        _uiState.update { it.copy(isLoading = false) }
+    fun onSelectLanguage(language: String) = viewModelScope.launch(Dispatchers.IO) {
+        _uiState.value = SettingsViewState.Processing
+        val result = translatorService.setTargetLanguage(language)
+        if (result.isSuccess) {
+            _uiState.value = getIdleState(UIText.StringResource(R.string.language_changed))
+        } else {
+            _uiState.value = getIdleState(UIText.DynamicString(result.exceptionOrNull()?.message.orEmpty()))
+        }
     }
+
+    private fun getIdleState(message: UIText? = null) = SettingsViewState.Idle(
+        supportedLanguages = translatorService.getSupportedLanguages(),
+        currentLanguage = translatorService.getTargetLanguage().value,
+        showMessage = message
+    )
 }

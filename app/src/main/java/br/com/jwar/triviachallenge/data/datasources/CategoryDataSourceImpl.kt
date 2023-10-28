@@ -7,11 +7,11 @@ class CategoryDataSourceImpl : CategoryDataSource {
         "10" to "Entertainment: Books",
         "11" to "Entertainment: Film",
         "12" to "Entertainment: Music",
-        "13" to "Entertainment: Musicals &amp; Theatres",
+        "13" to "Entertainment: Musicals & Theatres",
         "14" to "Entertainment: Television",
         "15" to "Entertainment: Video Games",
         "16" to "Entertainment: Board Games",
-        "17" to "Science &amp; Nature",
+        "17" to "Science & Nature",
         "18" to "Science: Computers",
         "19" to "Science: Mathematics",
         "20" to "Mythology",
@@ -25,7 +25,7 @@ class CategoryDataSourceImpl : CategoryDataSource {
         "28" to "Vehicles",
         "29" to "Entertainment: Comics",
         "30" to "Science: Gadgets",
-        "31" to "Entertainment: Japanese Anime &amp; Manga",
-        "32" to "Entertainment: Cartoon &amp; Animations"
+        "31" to "Entertainment: Japanese Anime & Manga",
+        "32" to "Entertainment: Cartoon & Animations"
     )
 }

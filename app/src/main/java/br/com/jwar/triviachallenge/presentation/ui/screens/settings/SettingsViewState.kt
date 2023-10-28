@@ -1,7 +1,13 @@
 package br.com.jwar.triviachallenge.presentation.ui.screens.settings
 
-data class SettingsViewState(
-    val supportedLanguages: Collection<String>,
-    val currentLanguage: String,
-    val isLoading: Boolean = false
-)
+import br.com.jwar.triviachallenge.presentation.ui.util.UIText
+
+sealed class SettingsViewState {
+    object Processing : SettingsViewState()
+
+    data class Idle(
+        val supportedLanguages: Collection<String>,
+        val currentLanguage: String,
+        val showMessage: UIText? = null,
+    ) : SettingsViewState()
+}

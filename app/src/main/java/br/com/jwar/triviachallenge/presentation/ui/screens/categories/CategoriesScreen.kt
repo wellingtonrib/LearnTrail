@@ -36,7 +36,7 @@ fun CategoriesScreen(
                 title = { Text(text = stringResource(R.string.choose_a_category)) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Outlined.Settings, "Settings")
+                        Icon(Icons.Outlined.Settings, stringResource(R.string.settings))
                     }
                 }
             )

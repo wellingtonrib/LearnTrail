@@ -4,7 +4,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.presentation.ui.components.ErrorContent
 import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 
@@ -39,7 +41,7 @@ fun CategoriesRoute(
                 }
             )
         is CategoriesViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: "Unknown error") {
+            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.unknown_error)) {
                 viewModel.getCategories()
             }
     }

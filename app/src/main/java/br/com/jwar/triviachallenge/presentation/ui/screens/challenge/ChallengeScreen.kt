@@ -21,8 +21,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 
@@ -46,7 +48,7 @@ fun ChallengeScreen(
                 },
                 actions = {
                     IconButton(onClick = onFinish) {
-                        Icon(Icons.Outlined.Close, "Close")
+                        Icon(Icons.Outlined.Close, stringResource(R.string.close))
                     }
                 }
             )
@@ -92,14 +94,14 @@ fun ChallengeScreen(
                 if (isResultShown) {
                     Button(onClick = onNext) {
                         if (isLastQuestion) {
-                            Text(text = "Finish")
+                            Text(text = stringResource(R.string.finish))
                         } else {
-                            Text(text = "Next Question")
+                            Text(text = stringResource(R.string.next_question))
                         }
                     }
                 } else {
                     Button(onClick = onCheck, enabled = selectedAnswer != null) {
-                        Text(text = "Check")
+                        Text(text = stringResource(R.string.check))
                     }
                 }
             }

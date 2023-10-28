@@ -2,4 +2,12 @@
 <resources>
     <string name="choose_a_category">Escolha uma categoria</string>
     <string name="settings">Configurações</string>
+    <string name="unknown_error">Erro desconhecido</string>
+    <string name="close">Fechar</string>
+    <string name="finish">Terminar</string>
+    <string name="next_question">Próxima questão</string>
+    <string name="check">Verificar</string>
+    <string name="language_changed">Linguagem atualizada</string>
+    <string name="app_name">Desafio de curiosidades</string>
+    <string name="language">Idioma</string>
 </resources>
