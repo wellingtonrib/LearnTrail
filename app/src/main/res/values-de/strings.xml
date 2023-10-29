@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wissensquiz</string>
+    <string name="choose_a_category">Kategorie auswählen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="unknown_error">Unbekannter Fehler</string>
+    <string name="close">Schließen</string>
+    <string name="finish">Beenden</string>
+    <string name="next_question">Nächste Frage</string>
+    <string name="check">Überprüfen</string>
+    <string name="language_changed">Sprache geändert</string>
+    <string name="language">Sprache</string>
+</resources>

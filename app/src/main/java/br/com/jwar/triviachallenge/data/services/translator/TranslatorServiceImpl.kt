@@ -9,19 +9,12 @@ import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlinx.coroutines.tasks.await
 
 class TranslatorServiceImpl @Inject constructor(): TranslatorService {
 
-    private val supportedLanguages = mapOf(
-        "en" to "English",
-        "pt" to "Portuguese",
-    )
-
     private var translator: Translator? = null
-
-    override fun getSupportedLanguages() = supportedLanguages.values
 
     override suspend fun translate(text: String): String =
         try {
@@ -30,19 +23,18 @@ class TranslatorServiceImpl @Inject constructor(): TranslatorService {
             text
         }
 
-    override suspend fun setTargetLanguage(language: String) =
+    override suspend fun setTargetLanguage(language: Language) =
         try {
             deleteCurrentModelIfNeeded()
-            setApplicationLanguage(language)
+            setApplicationLocales(LocaleListCompat.forLanguageTags(language.name.lowercase()))
             Result.success(getTranslator(true))
         } catch (e: Exception) {
             Result.failure(e)
         }
 
-    override fun getTargetLanguage(): Map.Entry<String, String> {
+    override fun getTargetLanguage(): Language {
         val currentLanguage = getApplicationLocales().toLanguageTags()
-        return supportedLanguages.entries
-            .find { it.key == currentLanguage } ?: supportedLanguages.entries.first()
+        return Language.values().find { it.name.lowercase() == currentLanguage } ?: Language.EN
     }
 
     private fun deleteCurrentModelIfNeeded() {
@@ -51,15 +43,9 @@ class TranslatorServiceImpl @Inject constructor(): TranslatorService {
         RemoteModelManager.getInstance().deleteDownloadedModel(currentModel)
     }
 
-    private fun setApplicationLanguage(language: String) {
-        val languageKey = supportedLanguages.entries
-            .find { it.value == language }?.key ?: supportedLanguages.keys.first()
-        setApplicationLocales(LocaleListCompat.forLanguageTags(languageKey))
-    }
-
     private suspend fun getTranslator(rebuild: Boolean = false): Translator {
         if (translator == null || rebuild) {
-            val language = getTargetLanguage().key
+            val language = getTargetLanguage().name.lowercase()
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.ENGLISH)
                 .setTargetLanguage(language)

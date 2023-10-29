@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trivia Desafío</string>
+    <string name="choose_a_category">Elige una categoría</string>
+    <string name="settings">Ajustes</string>
+    <string name="unknown_error">Error desconocido</string>
+    <string name="close">Cerrar</string>
+    <string name="finish">Terminar</string>
+    <string name="next_question">Siguiente Pregunta</string>
+    <string name="check">Verificar</string>
+    <string name="language_changed">Idioma cambiado</string>
+    <string name="language">Idioma</string>
+</resources>

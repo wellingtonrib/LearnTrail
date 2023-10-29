@@ -28,16 +28,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
+import br.com.jwar.triviachallenge.data.services.translator.Language
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 import br.com.jwar.triviachallenge.presentation.ui.util.UIText
 
 @ExperimentalMaterial3Api
 @Composable
 fun SettingsScreen(
-    supportedLanguages: Collection<String>,
-    currentLanguage: String,
+    currentLanguage: Language,
     showMessage: UIText? = null,
-    onSelectLanguage: (String) -> Unit,
+    onSelectLanguage: (Language) -> Unit,
 ) {
     var showLanguages by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -77,7 +77,7 @@ fun SettingsScreen(
                 ) {
                     Button(onClick = { showLanguages = !showLanguages }) {
                         Text(
-                            text = currentLanguage
+                            text = currentLanguage.value
                         )
                     }
                     DropdownMenu(
@@ -85,12 +85,12 @@ fun SettingsScreen(
                         expanded = showLanguages,
                         onDismissRequest = { showLanguages = false }
                     ) {
-                        supportedLanguages.forEach { entry ->
+                        Language.values().forEach { language ->
                             DropdownMenuItem(
-                                text = { Text(entry) },
+                                text = { Text(language.value) },
                                 onClick = {
                                     showLanguages = false
-                                    onSelectLanguage(entry)
+                                    onSelectLanguage(language)
                                 }
                             )
                         }
@@ -107,8 +107,7 @@ fun SettingsScreen(
 fun PreviewSettingsScreen() {
     TriviaChallengeTheme {
         SettingsScreen(
-            supportedLanguages = listOf( "English", "Portuguese"),
-            currentLanguage = "Portuguese",
+            currentLanguage = Language.EN,
         ) {}
     }
 }

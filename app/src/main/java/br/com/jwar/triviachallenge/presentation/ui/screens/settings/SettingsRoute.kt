@@ -14,7 +14,6 @@ fun SettingsRoute(
     when (val state = viewModel.uiState.collectAsState().value) {
         is SettingsViewState.Idle -> {
             SettingsScreen(
-                supportedLanguages = state.supportedLanguages,
                 currentLanguage = state.currentLanguage,
                 showMessage = state.showMessage,
             ) { language ->

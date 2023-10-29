@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">تحدي المعلومات</string>
+    <string name="choose_a_category">اختر فئة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+    <string name="close">إغلاق</string>
+    <string name="finish">إنهاء</string>
+    <string name="next_question">السؤال التالي</string>
+    <string name="check">التحقق</string>
+    <string name="language_changed">تغيير اللغة</string>
+    <string name="language">اللغة</string>
+</resources>
