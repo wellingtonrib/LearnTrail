@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Défi Trivia</string>
-    <string name="choose_a_category">Choisissez une catégorie</string>
-    <string name="settings">Paramètres</string>
-    <string name="unknown_error">Erreur inconnue</string>
-    <string name="close">Fermer</string>
-    <string name="finish">Terminer</string>
-    <string name="next_question">Question suivante</string>
-    <string name="check">Vérifier</string>
-    <string name="language_changed">Langue modifiée</string>
-    <string name="language">Langue</string>
+    <string name="title_categories">Choisissez une catégorie</string>
+    <string name="title_settings">Paramètres</string>
+    <string name="error_unknown">Erreur inconnue</string>
+    <string name="action_close">Fermer</string>
+    <string name="action_finish">Terminer</string>
+    <string name="action_continue">Continuer</string>
+    <string name="action_check">Vérifier</string>
+    <string name="message_language_changed">Langue modifiée</string>
+    <string name="label_language">Langue</string>
 </resources>

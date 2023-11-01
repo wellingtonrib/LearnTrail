@@ -41,7 +41,7 @@ fun ChallengeRoute(
                 onFinish = { viewModel.onFinish() }
             )
         is ChallengeViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.unknown_error)) {
+            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
                 viewModel.getChallenge(categoryId.orEmpty())
             }
     }

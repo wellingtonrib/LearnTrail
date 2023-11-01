@@ -41,7 +41,7 @@ fun CategoriesRoute(
                 }
             )
         is CategoriesViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.unknown_error)) {
+            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
                 viewModel.getCategories()
             }
     }

@@ -48,7 +48,7 @@ fun ChallengeScreen(
                 },
                 actions = {
                     IconButton(onClick = onFinish) {
-                        Icon(Icons.Outlined.Close, stringResource(R.string.close))
+                        Icon(Icons.Outlined.Close, stringResource(R.string.action_close))
                     }
                 }
             )
@@ -94,14 +94,14 @@ fun ChallengeScreen(
                 if (isResultShown) {
                     Button(onClick = onNext) {
                         if (isLastQuestion) {
-                            Text(text = stringResource(R.string.finish))
+                            Text(text = stringResource(R.string.action_finish))
                         } else {
-                            Text(text = stringResource(R.string.next_question))
+                            Text(text = stringResource(R.string.action_continue))
                         }
                     }
                 } else {
                     Button(onClick = onCheck, enabled = selectedAnswer != null) {
-                        Text(text = stringResource(R.string.check))
+                        Text(text = stringResource(R.string.action_check))
                     }
                 }
             }

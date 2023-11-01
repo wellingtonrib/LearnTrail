@@ -56,7 +56,7 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.settings))
+                    Text(text = stringResource(R.string.title_settings))
                 },
             )
         }
@@ -70,7 +70,7 @@ fun SettingsScreen(
                     .fillMaxWidth(),
                 verticalAlignment = CenterVertically
             ) {
-                Text(text = stringResource(R.string.language))
+                Text(text = stringResource(R.string.label_language))
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(
                     modifier = Modifier.weight(1f)

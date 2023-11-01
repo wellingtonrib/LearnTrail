@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Trivia Challenge</string>
-    <string name="choose_a_category">Choose a category</string>
-    <string name="settings">Settings</string>
-    <string name="unknown_error">Unknown error</string>
-    <string name="close">Close</string>
-    <string name="finish">Finish</string>
-    <string name="next_question">Next Question</string>
-    <string name="check">Check</string>
-    <string name="language_changed">Language changed</string>
-    <string name="language">Language</string>
+    <string name="title_categories">Choose a category</string>
+    <string name="title_settings">Settings</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="action_close">Close</string>
+    <string name="action_finish">Finish</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_check">Check</string>
+    <string name="message_language_changed">Language changed</string>
+    <string name="label_language">Language</string>
 </resources>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">智力挑战</string>
-    <string name="choose_a_category">选择一个类别</string>
-    <string name="settings">设置</string>
-    <string name="unknown_error">未知错误</string>
-    <string name="close">关闭</string>
-    <string name="finish">完成</string>
-    <string name="next_question">下一题</string>
-    <string name="check">检查</string>
-    <string name="language_changed">语言已更改</string>
-    <string name="language">语言</string>
+    <string name="title_categories">选择一个类别</string>
+    <string name="title_settings">设置</string>
+    <string name="error_unknown">未知错误</string>
+    <string name="action_close">关闭</string>
+    <string name="action_finish">完成</string>
+    <string name="action_continue">继续</string>
+    <string name="action_check">检查</string>
+    <string name="message_language_changed">语言已更改</string>
+    <string name="label_language">语言</string>
 </resources>

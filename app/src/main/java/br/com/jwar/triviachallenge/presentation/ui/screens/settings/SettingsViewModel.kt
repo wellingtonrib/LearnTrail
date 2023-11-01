@@ -25,7 +25,7 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = SettingsViewState.Processing
         val result = translatorService.setTargetLanguage(language)
         if (result.isSuccess) {
-            _uiState.value = getIdleState(UIText.StringResource(R.string.language_changed))
+            _uiState.value = getIdleState(UIText.StringResource(R.string.message_language_changed))
         } else {
             _uiState.value = getIdleState(UIText.DynamicString(result.exceptionOrNull()?.message.orEmpty()))
         }

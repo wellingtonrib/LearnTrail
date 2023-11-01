@@ -33,10 +33,10 @@ fun CategoriesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.choose_a_category)) },
+                title = { Text(text = stringResource(R.string.title_categories)) },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Outlined.Settings, stringResource(R.string.settings))
+                        Icon(Icons.Outlined.Settings, stringResource(R.string.title_settings))
                     }
                 }
             )
