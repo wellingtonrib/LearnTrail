@@ -4,7 +4,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.presentation.ui.components.ErrorContent
 import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 
@@ -12,6 +14,7 @@ import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 @Composable
 fun CategoriesRoute(
     viewModel: CategoriesViewModel = hiltViewModel(),
+    navigateToSettings: () -> Unit,
     navigateToChallenge: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
@@ -19,6 +22,7 @@ fun CategoriesRoute(
         viewModel.uiEffect.collect { effect ->
             when(effect) {
                 is CategoriesViewEffect.NavigateToChallenge -> navigateToChallenge(effect.categoryId)
+                is CategoriesViewEffect.NavigateToSettings -> navigateToSettings()
             }
         }
     }
@@ -27,11 +31,17 @@ fun CategoriesRoute(
         is CategoriesViewState.Loading ->
             LoadingContent()
         is CategoriesViewState.Loaded ->
-            CategoriesScreen(state.categories) { categoryId ->
-                viewModel.onSelectCategory(categoryId)
-            }
+            CategoriesScreen(
+                categories = state.categories,
+                onNavigateToSettings = {
+                   viewModel.onActionSettings()
+                },
+                onNavigateToChallenge = { categoryId ->
+                    viewModel.onSelectCategory(categoryId)
+                }
+            )
         is CategoriesViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: "Unknown error") {
+            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
                 viewModel.getCategories()
             }
     }

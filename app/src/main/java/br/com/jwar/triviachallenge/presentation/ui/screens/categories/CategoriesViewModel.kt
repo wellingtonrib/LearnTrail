@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val categoriesRepository: CategoryRepository,
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CategoriesViewState>(CategoriesViewState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -34,6 +34,10 @@ class CategoriesViewModel @Inject constructor(
 
     fun onSelectCategory(categoryId: String) = viewModelScope.launch {
         _uiEffect.send(CategoriesViewEffect.NavigateToChallenge(categoryId))
+    }
+
+    fun onActionSettings() = viewModelScope.launch {
+        _uiEffect.send(CategoriesViewEffect.NavigateToSettings)
     }
 
 }

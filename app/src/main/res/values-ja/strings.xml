@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">トリビア チャレンジ</string>
+    <string name="title_categories">カテゴリを選択</string>
+    <string name="title_settings">設定</string>
+    <string name="error_unknown">不明なエラー</string>
+    <string name="action_close">閉じる</string>
+    <string name="action_finish">終了</string>
+    <string name="action_continue">続ける</string>
+    <string name="action_check">確認</string>
+    <string name="message_language_changed">言語が変更されました</string>
+    <string name="label_language">言語</string>
+</resources>

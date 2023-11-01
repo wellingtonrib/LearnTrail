@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Викторина</string>
+    <string name="title_categories">Выберите категорию</string>
+    <string name="title_settings">Настройки</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_finish">Завершить</string>
+    <string name="action_continue">Продолжить</string>
+    <string name="action_check">Проверить</string>
+    <string name="message_language_changed">Изменение языка</string>
+    <string name="label_language">Язык</string>
+</resources>
