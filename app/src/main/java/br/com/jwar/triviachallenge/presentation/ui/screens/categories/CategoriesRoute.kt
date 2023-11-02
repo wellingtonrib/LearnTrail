@@ -33,12 +33,8 @@ fun CategoriesRoute(
         is CategoriesViewState.Loaded ->
             CategoriesScreen(
                 categories = state.categories,
-                onNavigateToSettings = {
-                   viewModel.onActionSettings()
-                },
-                onNavigateToChallenge = { categoryId ->
-                    viewModel.onSelectCategory(categoryId)
-                }
+                onNavigateToSettings = viewModel::onNavigateToSettings,
+                onNavigateToChallenge = viewModel::onNavigateToChallenge
             )
         is CategoriesViewState.Error ->
             ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {

@@ -32,12 +32,12 @@ class CategoriesViewModel @Inject constructor(
             .collect { categories -> _uiState.update { CategoriesViewState.Loaded(categories) } }
     }
 
-    fun onSelectCategory(categoryId: String) = viewModelScope.launch {
-        _uiEffect.send(CategoriesViewEffect.NavigateToChallenge(categoryId))
+    fun onNavigateToSettings() = viewModelScope.launch {
+        _uiEffect.send(CategoriesViewEffect.NavigateToSettings)
     }
 
-    fun onActionSettings() = viewModelScope.launch {
-        _uiEffect.send(CategoriesViewEffect.NavigateToSettings)
+    fun onNavigateToChallenge(categoryId: String) = viewModelScope.launch{
+        _uiEffect.send(CategoriesViewEffect.NavigateToChallenge(categoryId))
     }
 
 }

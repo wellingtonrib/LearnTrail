@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.util
+package br.com.jwar.triviachallenge.presentation.model
 
 import android.content.Context
 import androidx.annotation.StringRes

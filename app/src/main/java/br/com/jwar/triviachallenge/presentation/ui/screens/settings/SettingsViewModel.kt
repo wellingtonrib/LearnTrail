@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.Language
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
-import br.com.jwar.triviachallenge.presentation.ui.util.UIText
+import br.com.jwar.triviachallenge.presentation.model.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
