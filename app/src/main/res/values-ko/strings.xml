@@ -10,4 +10,6 @@
     <string name="action_check">확인</string>
     <string name="message_language_changed">언어가 변경되었습니다</string>
     <string name="label_language">언어</string>
+    <string name="message_correct_answer">정답입니다!</string>
+    <string name="message_wrong_answer">"잘못된 답변! "</string>
 </resources>

@@ -10,4 +10,6 @@
     <string name="action_check">检查</string>
     <string name="message_language_changed">语言已更改</string>
     <string name="label_language">语言</string>
+    <string name="message_correct_answer">正确答案！</string>
+    <string name="message_wrong_answer">错误答案！</string>
 </resources>

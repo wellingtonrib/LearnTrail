@@ -10,4 +10,6 @@
     <string name="action_check">التحقق</string>
     <string name="message_language_changed">تغيير اللغة</string>
     <string name="label_language">اللغة</string>
+    <string name="message_correct_answer">إجابة صحيحة!</string>
+    <string name="message_wrong_answer">إجابة خاطئة!</string>
 </resources>

@@ -10,4 +10,6 @@
     <string name="action_check">Проверить</string>
     <string name="message_language_changed">Изменение языка</string>
     <string name="label_language">Язык</string>
+    <string name="message_correct_answer">Правильный ответ!</string>
+    <string name="message_wrong_answer">"Неправильный ответ! "</string>
 </resources>

@@ -9,4 +9,6 @@
     <string name="action_check">Check</string>
     <string name="message_language_changed">Language changed</string>
     <string name="label_language">Language</string>
+    <string name="message_correct_answer">Correct answer!</string>
+    <string name="message_wrong_answer">Wrong answer!</string>
 </resources>

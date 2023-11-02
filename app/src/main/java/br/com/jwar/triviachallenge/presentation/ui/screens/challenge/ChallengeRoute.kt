@@ -39,9 +39,11 @@ fun ChallengeRoute(
                 isResultShown = state.isResultShown,
                 isFinished = state.isFinished,
                 isSucceeded = state.isSucceeded,
-                onSelectAnswer = { viewModel.onSelectAnswer(it) },
-                onCheck = { viewModel.onCheck() },
-                onNext = { viewModel.onNext() }
+                userMessage = state.userMessages.firstOrNull(),
+                onSelectAnswer = viewModel::onSelectAnswer,
+                onCheck = viewModel::onCheck,
+                onNext = viewModel::onNext,
+                onMessageShown = viewModel::onMessageShown
             ) { viewModel.onFinish() }
 
         is ChallengeViewState.Error ->

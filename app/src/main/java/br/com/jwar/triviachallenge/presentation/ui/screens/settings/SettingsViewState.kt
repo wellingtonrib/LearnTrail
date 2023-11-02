@@ -1,7 +1,7 @@
 package br.com.jwar.triviachallenge.presentation.ui.screens.settings
 
 import br.com.jwar.triviachallenge.data.services.translator.Language
-import br.com.jwar.triviachallenge.presentation.ui.util.UIText
+import br.com.jwar.triviachallenge.presentation.model.UIText
 
 sealed class SettingsViewState {
     object Processing : SettingsViewState()

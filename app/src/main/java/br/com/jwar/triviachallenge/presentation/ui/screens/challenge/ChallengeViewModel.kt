@@ -2,7 +2,11 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.challenge
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
+import br.com.jwar.triviachallenge.presentation.model.UIMessage
+import br.com.jwar.triviachallenge.presentation.model.UIMessageStyle
+import br.com.jwar.triviachallenge.presentation.model.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,10 +47,16 @@ class ChallengeViewModel @Inject constructor(
             val isCorrectAnswer = state.selectedAnswer == state.currentQuestion.correctAnswer
             val attemptsLeft = if (isCorrectAnswer) state.attemptsLeft else state.attemptsLeft - 1
             val points = if (isCorrectAnswer) state.points + 1 else state.points
+            val messageRes = if (isCorrectAnswer) R.string.message_correct_answer else R.string.message_wrong_answer
+            val messageStyle = if (isCorrectAnswer) UIMessageStyle.SUCCESS else UIMessageStyle.DANGER
             state.copy(
                 isResultShown = true,
                 attemptsLeft = attemptsLeft,
-                points = points
+                points = points,
+                userMessages = state.userMessages + UIMessage(
+                    text = UIText.StringResource(messageRes),
+                    style = messageStyle
+                )
             )
         }
     }
@@ -77,6 +87,12 @@ class ChallengeViewModel @Inject constructor(
 
     fun onFinish() = viewModelScope.launch {
         _uiEffect.send(ChallengeViewEffect.NavigateToCategories)
+    }
+
+    fun onMessageShown(uiMessage: UIMessage) {
+        _uiState.updateLoadedState { state ->
+            state.copy(userMessages = state.userMessages - uiMessage)
+        }
     }
 }
 

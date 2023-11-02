@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.Language
+import br.com.jwar.triviachallenge.presentation.model.UIText
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
-import br.com.jwar.triviachallenge.presentation.ui.util.UIText
 
 @ExperimentalMaterial3Api
 @Composable

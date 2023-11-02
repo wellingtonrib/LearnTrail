@@ -10,4 +10,6 @@
     <string name="action_check">Verificar</string>
     <string name="message_language_changed">Idioma cambiado</string>
     <string name="label_language">Idioma</string>
+    <string name="message_correct_answer">Respuesta correcta</string>
+    <string name="message_wrong_answer">Respuesta incorrecta</string>
 </resources>
