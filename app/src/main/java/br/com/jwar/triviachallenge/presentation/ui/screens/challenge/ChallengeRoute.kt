@@ -31,15 +31,19 @@ fun ChallengeRoute(
             LoadingContent()
         is ChallengeViewState.Loaded ->
             ChallengeScreen(
-                nextQuestion = state.nextQuestion,
+                currentQuestion = state.currentQuestion,
                 selectedAnswer = state.selectedAnswer,
+                attemptsLeft = state.attemptsLeft,
+                points = state.points,
+                progress = state.progress,
                 isResultShown = state.isResultShown,
-                isLastQuestion = state.isLastQuestion,
+                isFinished = state.isFinished,
+                isSucceeded = state.isSucceeded,
                 onSelectAnswer = { viewModel.onSelectAnswer(it) },
                 onCheck = { viewModel.onCheck() },
-                onNext = { viewModel.onNext() },
-                onFinish = { viewModel.onFinish() }
-            )
+                onNext = { viewModel.onNext() }
+            ) { viewModel.onFinish() }
+
         is ChallengeViewState.Error ->
             ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
                 viewModel.getChallenge(categoryId.orEmpty())

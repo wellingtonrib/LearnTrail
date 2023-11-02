@@ -9,10 +9,14 @@ sealed class ChallengeViewState {
 
     data class Loaded(
         val challenge: Challenge,
-        val nextQuestion: Question = challenge.questions.first(),
+        val currentQuestion: Question = challenge.questions.first(),
         val selectedAnswer: String? = null,
         val isResultShown: Boolean = false,
-        val isLastQuestion: Boolean = challenge.questions.last() == nextQuestion
+        val attemptsLeft: Int = 3,
+        val points: Int = 0,
+        val progress: String = "1",
+        val isFinished: Boolean = false,
+        val isSucceeded: Boolean = false,
     ) : ChallengeViewState()
 
     data class Error(val error: Throwable) : ChallengeViewState()

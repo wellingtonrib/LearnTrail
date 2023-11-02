@@ -33,26 +33,44 @@ class ChallengeViewModel @Inject constructor(
     }
 
     fun onSelectAnswer(answer: String) {
-        _uiState.updateLoadedState { it.copy(selectedAnswer = answer) }
+        _uiState.updateLoadedState { state ->
+            state.copy(selectedAnswer = answer)
+        }
     }
 
     fun onCheck() {
-        _uiState.updateLoadedState { it.copy(isResultShown = true) }
+        _uiState.updateLoadedState { state ->
+            val isCorrectAnswer = state.selectedAnswer == state.currentQuestion.correctAnswer
+            val attemptsLeft = if (isCorrectAnswer) state.attemptsLeft else state.attemptsLeft - 1
+            val points = if (isCorrectAnswer) state.points + 1 else state.points
+            state.copy(
+                isResultShown = true,
+                attemptsLeft = attemptsLeft,
+                points = points
+            )
+        }
     }
 
     fun onNext() {
         _uiState.updateLoadedState { state ->
-            val currentQuestionIndex = state.challenge.questions.indexOf(state.nextQuestion)
-            if (currentQuestionIndex < state.challenge.questions.size - 1) {
-                val nextQuestion = state.challenge.questions[currentQuestionIndex + 1]
+            val hasAttemptsRemaining = state.attemptsLeft > 0
+            val currentQuestionIndex = state.challenge.questions.indexOf(state.currentQuestion)
+            val hasNextQuestion = currentQuestionIndex < state.challenge.questions.size - 1
+            if (hasAttemptsRemaining && hasNextQuestion) {
+                val nextQuestionIndex = currentQuestionIndex + 1
+                val nextQuestion = state.challenge.questions[nextQuestionIndex]
+                val progress = "${nextQuestionIndex + 1}/${state.challenge.questions.size}"
                 state.copy(
-                    nextQuestion = nextQuestion,
+                    currentQuestion = nextQuestion,
                     selectedAnswer = null,
                     isResultShown = false,
-                    isLastQuestion = state.challenge.questions.last() == nextQuestion
+                    progress = progress,
                 )
             } else {
-                state.also { onFinish() }
+                state.copy(
+                    isFinished = true,
+                    isSucceeded = hasAttemptsRemaining,
+                )
             }
         }
     }
@@ -60,7 +78,6 @@ class ChallengeViewModel @Inject constructor(
     fun onFinish() = viewModelScope.launch {
         _uiEffect.send(ChallengeViewEffect.NavigateToCategories)
     }
-
 }
 
 private fun MutableStateFlow<ChallengeViewState>.updateLoadedState(
