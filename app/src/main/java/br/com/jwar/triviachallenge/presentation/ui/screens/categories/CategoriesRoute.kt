@@ -15,13 +15,13 @@ import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 fun CategoriesRoute(
     viewModel: CategoriesViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
-    navigateToChallenge: (String) -> Unit,
+    navigateToChallenge: (String, String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.getCategories()
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                is CategoriesViewEffect.NavigateToChallenge -> navigateToChallenge(effect.categoryId)
+                is CategoriesViewEffect.NavigateToChallenge -> navigateToChallenge(effect.categoryId, effect.challengeId)
                 is CategoriesViewEffect.NavigateToSettings -> navigateToSettings()
             }
         }

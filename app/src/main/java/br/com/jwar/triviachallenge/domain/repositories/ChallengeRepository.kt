@@ -4,5 +4,5 @@ import br.com.jwar.triviachallenge.domain.model.Challenge
 import kotlinx.coroutines.flow.Flow
 
 interface ChallengeRepository {
-    fun getChallenge(categoryId: String): Flow<Challenge>
+    fun getChallenge(categoryId: String, challengeId: String): Flow<Challenge>
 }

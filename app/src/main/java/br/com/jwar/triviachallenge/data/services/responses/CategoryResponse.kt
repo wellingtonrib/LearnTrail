@@ -1,3 +1,12 @@
 package br.com.jwar.triviachallenge.data.services.responses
 
-typealias CategoryResponse = Map<String, String>
+data class CategoryResponse(
+    val id: String,
+    val name: String,
+    val lessons: List<CategoryLessonResponse> = emptyList(),
+)
+
+data class CategoryLessonResponse(
+    val id: String,
+    val name: String,
+)

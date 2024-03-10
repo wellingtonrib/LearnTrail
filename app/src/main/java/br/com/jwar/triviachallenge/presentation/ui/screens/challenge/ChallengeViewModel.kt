@@ -29,8 +29,8 @@ class ChallengeViewModel @Inject constructor(
     private val _uiEffect = Channel<ChallengeViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    fun getChallenge(categoryId: String) = viewModelScope.launch {
-        challengeRepository.getChallenge(categoryId)
+    fun getChallenge(categoryId: String, challengeId: String) = viewModelScope.launch {
+        challengeRepository.getChallenge(categoryId, challengeId)
             .onStart { _uiState.update { ChallengeViewState.Loading } }
             .catch { error -> _uiState.update { ChallengeViewState.Error(error) } }
             .collect { challenge -> _uiState.update { ChallengeViewState.Loaded(challenge) } }

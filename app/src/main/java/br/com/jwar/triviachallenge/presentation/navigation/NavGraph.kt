@@ -24,14 +24,15 @@ fun NavGraph(navController: NavHostController) {
                 navigateToSettings = {
                     navController.navigate("settings")
                 },
-                navigateToChallenge = { categoryId ->
-                    navController.navigate("challenge/$categoryId")
+                navigateToChallenge = { categoryId, challengeId ->
+                    navController.navigate("challenge/$categoryId/$challengeId")
                 }
             )
         }
-        composable("challenge/{categoryId}") { backStackEntry ->
+        composable("challenge/{categoryId}/{challengeId}") { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId").orEmpty()
-            ChallengeRoute(categoryId = categoryId) {
+            val challengeId = backStackEntry.arguments?.getString("challengeId").orEmpty()
+            ChallengeRoute(categoryId = categoryId, challengeId = challengeId) {
                 navController.navigate("categories") {
                     popUpTo(navController.graph.id) {
                         inclusive = true

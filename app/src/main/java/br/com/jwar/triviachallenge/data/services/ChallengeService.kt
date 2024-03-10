@@ -6,5 +6,8 @@ import retrofit2.http.Query
 
 interface ChallengeService {
     @GET("api.php?amount=5&type=multiple")
-    suspend fun getChallenge(@Query("category") categoryId: String): ChallengeResponse
+    suspend fun getChallenge(
+        @Query("category") categoryId: String,
+        @Query("difficulty") challengeId: String,
+    ): ChallengeResponse
 }

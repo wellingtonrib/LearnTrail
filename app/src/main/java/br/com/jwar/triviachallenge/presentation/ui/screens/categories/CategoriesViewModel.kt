@@ -36,8 +36,8 @@ class CategoriesViewModel @Inject constructor(
         _uiEffect.send(CategoriesViewEffect.NavigateToSettings)
     }
 
-    fun onNavigateToChallenge(categoryId: String) = viewModelScope.launch{
-        _uiEffect.send(CategoriesViewEffect.NavigateToChallenge(categoryId))
+    fun onNavigateToChallenge(categoryId: String, challengeId: String) = viewModelScope.launch {
+        _uiEffect.send(CategoriesViewEffect.NavigateToChallenge(categoryId, challengeId))
     }
 
 }

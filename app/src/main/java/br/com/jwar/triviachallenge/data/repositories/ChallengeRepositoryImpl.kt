@@ -15,8 +15,8 @@ class ChallengeRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ChallengeRepository {
 
-    override fun getChallenge(categoryId: String) = flow {
-        val challengeResponse = challengeDataSource.getChallenge(categoryId)
+    override fun getChallenge(categoryId: String, challengeId: String) = flow {
+        val challengeResponse = challengeDataSource.getChallenge(categoryId, challengeId)
         val challenge = challengeResponseToChallengeMapper.mapFrom(challengeResponse)
         emit(challenge)
     }.flowOn(dispatcher)

@@ -1,5 +1,7 @@
 package br.com.jwar.triviachallenge.data.datasources
 
+import br.com.jwar.triviachallenge.data.services.responses.CategoryResponse
+
 interface CategoryDataSource {
-    fun getCategories(): Map<String, String>
+    suspend fun getCategories(): List<CategoryResponse>
 }

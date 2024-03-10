@@ -11,7 +11,10 @@ class ChallengeDataSourceImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ChallengeDataSource {
 
-    override suspend fun getChallenge(categoryId: String) = withContext(dispatcher) {
-        challengeService.getChallenge(categoryId)
+    override suspend fun getChallenge(
+        categoryId: String,
+        challengeId: String,
+    ) = withContext(dispatcher) {
+        challengeService.getChallenge(categoryId, challengeId)
     }
 }        
