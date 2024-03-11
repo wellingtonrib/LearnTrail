@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Trivia Challenge</string>
-    <string name="title_categories">Choose a category</string>
+    <string name="title_home">Home</string>
     <string name="title_settings">Settings</string>
     <string name="error_unknown">Unknown error</string>
     <string name="action_close">Close</string>
@@ -11,4 +11,5 @@
     <string name="label_language">Language</string>
     <string name="message_correct_answer">Correct answer!</string>
     <string name="message_wrong_answer">Wrong answer!</string>
+    <string name="label_lesson">Lesson %1$d</string>
 </resources>

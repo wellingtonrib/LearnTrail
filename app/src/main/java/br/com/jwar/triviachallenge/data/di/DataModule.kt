@@ -1,21 +1,21 @@
 package br.com.jwar.triviachallenge.data.di
 
-import br.com.jwar.triviachallenge.data.datasources.CategoryDataSource
-import br.com.jwar.triviachallenge.data.datasources.CategoryDataSourceImpl
-import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSource
-import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSourceImpl
-import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapper
-import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapperImpl
-import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapper
-import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapperImpl
-import br.com.jwar.triviachallenge.data.repositories.CategoryRepositoryImpl
-import br.com.jwar.triviachallenge.data.repositories.ChallengeRepositoryImpl
-import br.com.jwar.triviachallenge.data.services.ChallengeService
+import br.com.jwar.triviachallenge.data.datasources.UnitsDataSource
+import br.com.jwar.triviachallenge.data.datasources.UnitsDataSourceImpl
+import br.com.jwar.triviachallenge.data.datasources.ActivityDataSource
+import br.com.jwar.triviachallenge.data.datasources.ActivityDataSourceImpl
+import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapper
+import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapperImpl
+import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapper
+import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapperImpl
+import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
+import br.com.jwar.triviachallenge.data.services.ActivityService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
 import br.com.jwar.triviachallenge.data.util.HtmlStringAdapter
-import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
-import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
+import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
+import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -42,49 +42,48 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesChallengeService(
+    fun providesActivityService(
         convertFactory: Converter.Factory
-    ): ChallengeService =
+    ): ActivityService =
         Retrofit.Builder()
             .baseUrl("https://opentdb.com/")
             .addConverterFactory(convertFactory)
             .build()
-            .create(ChallengeService::class.java)
+            .create(ActivityService::class.java)
 
     @Provides
-    fun providesChallengeDataSource(
-        challengeService: ChallengeService,
-    ): ChallengeDataSource = ChallengeDataSourceImpl(challengeService)
+    fun providesActivityDataSource(
+        activityService: ActivityService,
+    ): ActivityDataSource = ActivityDataSourceImpl(activityService)
 
     @Provides
     @Singleton
-    fun providesChallengeResponseToChallengeMapper(
+    fun providesActivityDataToDomainMapper(
         translatorService: TranslatorService,
-    ): ChallengeResponseToChallengeMapper = ChallengeResponseToChallengeMapperImpl(translatorService)
+    ): ActivityDataToDomainMapper = ActivityDataToDomainMapperImpl(translatorService)
 
     @Provides
     @Singleton
-    fun providesChallengeRepository(
-        challengeDataSource: ChallengeDataSource,
-        challengeResponseToChallengeMapper: ChallengeResponseToChallengeMapper,
-    ): ChallengeRepository =
-        ChallengeRepositoryImpl(challengeDataSource, challengeResponseToChallengeMapper)
+    fun providesActivityRepository(
+        activityDataSource: ActivityDataSource,
+        activityDataToDomainMapper: ActivityDataToDomainMapper,
+    ): ActivityRepository = ActivityRepositoryImpl(activityDataSource, activityDataToDomainMapper)
 
     @Provides
     @Singleton
-    fun providesCategoryDataSource(): CategoryDataSource = CategoryDataSourceImpl()
+    fun providesUnitDataSource(): UnitsDataSource = UnitsDataSourceImpl()
 
     @Provides
     @Singleton
-    fun providesCategoryResponseToCategoryMapper(
+    fun providesUnitDataToDomainMapper(
         translatorService: TranslatorService
-    ): CategoryResponseToCategoryMapper = CategoryResponseToCategoryMapperImpl(translatorService)
+    ): UnitDataToDomainMapper = UnitDataToDomainMapperImpl(translatorService)
 
     @Provides
-    fun providesCategoryRepository(
-        categoryDataSource: CategoryDataSource,
-        categoryResponseToCategoryMapper: CategoryResponseToCategoryMapper,
-    ): CategoryRepository = CategoryRepositoryImpl(categoryDataSource, categoryResponseToCategoryMapper)
+    fun providesUnitRepository(
+        unitsDataSource: UnitsDataSource,
+        unitDataToDomainMapper: UnitDataToDomainMapper,
+    ): UnitRepository = UnitRepositoryImpl(unitsDataSource, unitDataToDomainMapper)
 
     @Provides
     @Singleton

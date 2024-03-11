@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">智力挑战</string>
-    <string name="title_categories">选择一个类别</string>
+    <string name="title_home">首页</string>
     <string name="title_settings">设置</string>
     <string name="error_unknown">未知错误</string>
     <string name="action_close">关闭</string>
@@ -12,4 +12,5 @@
     <string name="label_language">语言</string>
     <string name="message_correct_answer">正确答案！</string>
     <string name="message_wrong_answer">错误答案！</string>
+    <string name="label_lesson">课 %1$d</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Викторина</string>
-    <string name="title_categories">Выберите категорию</string>
+    <string name="title_home">Главная</string>
     <string name="title_settings">Настройки</string>
     <string name="error_unknown">Неизвестная ошибка</string>
     <string name="action_close">Закрыть</string>
@@ -12,4 +12,5 @@
     <string name="label_language">Язык</string>
     <string name="message_correct_answer">Правильный ответ!</string>
     <string name="message_wrong_answer">"Неправильный ответ! "</string>
+    <string name="label_lesson">Урок %1$d</string>
 </resources>

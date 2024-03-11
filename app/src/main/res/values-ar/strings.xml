@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">تحدي المعلومات</string>
-    <string name="title_categories">اختر فئة</string>
+    <string name="title_home">الصفحة الرئيسية</string>
     <string name="title_settings">الإعدادات</string>
     <string name="error_unknown">خطأ غير معروف</string>
     <string name="action_close">إغلاق</string>
@@ -12,4 +12,5 @@
     <string name="label_language">اللغة</string>
     <string name="message_correct_answer">إجابة صحيحة!</string>
     <string name="message_wrong_answer">إجابة خاطئة!</string>
+    <string name="label_lesson">الدرس %1$d</string>
 </resources>
