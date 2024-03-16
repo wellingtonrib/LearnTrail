@@ -1,19 +1,17 @@
 package br.com.jwar.triviachallenge.data.di
 
-import br.com.jwar.triviachallenge.data.datasources.UnitsDataSource
-import br.com.jwar.triviachallenge.data.datasources.UnitsDataSourceImpl
-import br.com.jwar.triviachallenge.data.datasources.ActivityDataSource
-import br.com.jwar.triviachallenge.data.datasources.ActivityDataSourceImpl
+import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaRemoteDataSourceImpl
 import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapper
 import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapperImpl
 import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapper
 import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapperImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
-import br.com.jwar.triviachallenge.data.services.ActivityService
+import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaApi
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
-import br.com.jwar.triviachallenge.data.util.HtmlStringAdapter
+import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import com.squareup.moshi.Moshi
@@ -44,17 +42,17 @@ class DataModule {
     @Singleton
     fun providesActivityService(
         convertFactory: Converter.Factory
-    ): ActivityService =
+    ): TriviaApi =
         Retrofit.Builder()
             .baseUrl("https://opentdb.com/")
             .addConverterFactory(convertFactory)
             .build()
-            .create(ActivityService::class.java)
+            .create(TriviaApi::class.java)
 
     @Provides
     fun providesActivityDataSource(
-        activityService: ActivityService,
-    ): ActivityDataSource = ActivityDataSourceImpl(activityService)
+        triviaApi: TriviaApi,
+    ): TriviaRemoteDataSource = TriviaRemoteDataSourceImpl(triviaApi)
 
     @Provides
     @Singleton
@@ -65,13 +63,13 @@ class DataModule {
     @Provides
     @Singleton
     fun providesActivityRepository(
-        activityDataSource: ActivityDataSource,
+        triviaRemoteDataSource: TriviaRemoteDataSource,
         activityDataToDomainMapper: ActivityDataToDomainMapper,
-    ): ActivityRepository = ActivityRepositoryImpl(activityDataSource, activityDataToDomainMapper)
+    ): ActivityRepository = ActivityRepositoryImpl(triviaRemoteDataSource, activityDataToDomainMapper)
 
     @Provides
     @Singleton
-    fun providesUnitDataSource(): UnitsDataSource = UnitsDataSourceImpl()
+    fun providesUnitDataSource(): UnitsDataSource = TriviaCategoriesDataSource()
 
     @Provides
     @Singleton

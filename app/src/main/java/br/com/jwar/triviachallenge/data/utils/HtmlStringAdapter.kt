@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.data.util
+package br.com.jwar.triviachallenge.data.utils
 
 import android.text.Html
 import com.squareup.moshi.FromJson

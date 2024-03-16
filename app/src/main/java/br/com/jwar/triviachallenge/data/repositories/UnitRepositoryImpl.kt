@@ -1,6 +1,5 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.UnitsDataSource
 import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapper
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import kotlinx.coroutines.CoroutineDispatcher

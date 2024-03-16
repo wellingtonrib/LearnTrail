@@ -2,7 +2,7 @@ package br.com.jwar.triviachallenge.data.mappers
 
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
-import br.com.jwar.triviachallenge.data.services.responses.ActivityResponse
+import br.com.jwar.triviachallenge.data.services.responses.TriviaQuestionsResponse
 import br.com.jwar.triviachallenge.data.services.responses.Result
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import javax.inject.Inject
@@ -10,11 +10,11 @@ import javax.inject.Inject
 class ActivityDataToDomainMapperImpl @Inject constructor(
     private val translatorService: TranslatorService
 ) : ActivityDataToDomainMapper {
-    override suspend fun mapFrom(activityResponse: ActivityResponse): Activity {
+    override suspend fun mapFrom(triviaQuestionsResponse: TriviaQuestionsResponse): Activity {
         return Activity(
-            questions = activityResponse.results.map { result ->
+            questions = triviaQuestionsResponse.results.map { result ->
                 Question(
-                    category = mapUnit(result),
+                    unit = mapUnit(result),
                     correctAnswer = mapCorrectAnswer(result),
                     difficulty = result.difficulty,
                     answers = mapAnswers(result),

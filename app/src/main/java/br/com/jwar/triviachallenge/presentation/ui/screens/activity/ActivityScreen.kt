@@ -78,7 +78,7 @@ fun ActivityScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = currentQuestion.category)
+                    Text(text = currentQuestion.unit)
                 },
                 actions = {
                     IconButton(onClick = onFinish) {
@@ -182,7 +182,7 @@ fun GreetingChallengeScreen() {
     TriviaChallengeTheme {
         ActivityScreen(
             currentQuestion = Question(
-                category = "Category name",
+                unit = "Category name",
                 correctAnswer = "Correct",
                 difficulty = "",
                 answers = listOf(),

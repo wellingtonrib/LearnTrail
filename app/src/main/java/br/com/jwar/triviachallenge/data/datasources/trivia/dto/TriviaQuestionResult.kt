@@ -1,13 +1,8 @@
-package br.com.jwar.triviachallenge.data.services.responses
+package br.com.jwar.triviachallenge.data.datasources.trivia.dto
 
 import com.squareup.moshi.Json
 
-data class ActivityResponse(
-    @field:Json(name = "response_code") val responseCode: Int,
-    @field:Json(name = "results") val results: List<Result>
-)
-
-data class Result(
+data class TriviaQuestionResult(
     @field:Json(name = "category") val category: String,
     @field:Json(name = "correct_answer") val correctAnswer: String,
     @field:Json(name = "difficulty") val difficulty: String,
