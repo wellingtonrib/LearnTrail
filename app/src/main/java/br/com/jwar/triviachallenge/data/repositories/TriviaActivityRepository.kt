@@ -1,13 +1,13 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.TriviaRemoteDataSource
 import br.com.jwar.triviachallenge.data.mappers.TriviaQuestionResponseToActivityMapper
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
 class TriviaActivityRepository @Inject constructor(
     private val triviaRemoteDataSource: TriviaRemoteDataSource,

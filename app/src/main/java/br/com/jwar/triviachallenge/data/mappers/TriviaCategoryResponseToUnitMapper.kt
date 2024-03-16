@@ -1,7 +1,7 @@
 package br.com.jwar.triviachallenge.data.mappers
 
 import br.com.jwar.triviachallenge.domain.model.Unit
-import br.com.jwar.triviachallenge.data.datasources.trivia.dto.TriviaCategoryResponse
+import br.com.jwar.triviachallenge.data.datasources.dto.TriviaCategoryResponse
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Lesson
 import javax.inject.Inject

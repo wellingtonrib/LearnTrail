@@ -12,7 +12,7 @@ import com.google.mlkit.nl.translate.TranslatorOptions
 import javax.inject.Inject
 import kotlinx.coroutines.tasks.await
 
-class TranslatorServiceImpl @Inject constructor(): TranslatorService {
+class MLKitTranslatorService @Inject constructor(): TranslatorService {
 
     private var translator: Translator? = null
 

@@ -1,6 +1,6 @@
-package br.com.jwar.triviachallenge.data.datasources.trivia
+package br.com.jwar.triviachallenge.data.datasources
 
-import br.com.jwar.triviachallenge.data.datasources.trivia.dto.TriviaQuestionsResponse
+import br.com.jwar.triviachallenge.data.datasources.dto.TriviaQuestionsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

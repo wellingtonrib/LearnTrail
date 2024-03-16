@@ -1,24 +1,24 @@
-package br.com.jwar.triviachallenge.data.datasources.trivia
+package br.com.jwar.triviachallenge.data.datasources
 
-import br.com.jwar.triviachallenge.data.datasources.trivia.dto.TriviaCategoryResponse
+import br.com.jwar.triviachallenge.data.datasources.dto.TriviaCategoryResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class TriviaRemoteDataSourceImpl @Inject constructor(
+class TriviaRemoteDataSource @Inject constructor(
     private val triviaApi: TriviaApi,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : TriviaRemoteDataSource {
+) {
 
-    override suspend fun getQuestion(
+    suspend fun getQuestion(
         category: String,
         difficult: String,
     ) = withContext(dispatcher) {
         triviaApi.getQuestions(category, difficult)
     }
 
-    override suspend fun getCategories() = listOf(
+    fun getCategories() = listOf(
         TriviaCategoryResponse("9", "General Knowledge"),
         TriviaCategoryResponse("10", "Entertainment: Books"),
         TriviaCategoryResponse("11", "Entertainment: Film"),
