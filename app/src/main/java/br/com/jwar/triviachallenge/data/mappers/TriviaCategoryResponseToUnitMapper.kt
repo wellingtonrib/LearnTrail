@@ -6,24 +6,21 @@ import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Lesson
 import javax.inject.Inject
 
-class UnitDataToDomainMapperImpl @Inject constructor(
+class TriviaCategoryResponseToUnitMapper @Inject constructor(
     private val translatorService: TranslatorService,
-) : UnitDataToDomainMapper {
-    override suspend fun mapFrom(triviaCategoryResponse: List<TriviaCategoryResponse>): List<Unit> {
-        return triviaCategoryResponse.map { response ->
+) {
+    suspend fun mapFrom(triviaCategoryResponse: List<TriviaCategoryResponse>) =
+        triviaCategoryResponse.map { response ->
             Unit(
                 id = response.id,
                 name = translatorService.translate(response.name),
-                lessons = mapLessons(response)
+                lessons = getLessons()
             )
         }
-    }
 
-    private suspend fun mapLessons(response: TriviaCategoryResponse) =
-        response.lessons.map { lesson ->
-            Lesson(
-                id = lesson.id,
-                name = translatorService.translate(lesson.name),
-            )
-        }
+    private suspend fun getLessons() = listOf(
+        Lesson(id = "easy", name = translatorService.translate("Easy")),
+        Lesson(id = "medium", name = translatorService.translate("Medium")),
+        Lesson(id = "hard", name = translatorService.translate("Difficult"))
+    )
 }

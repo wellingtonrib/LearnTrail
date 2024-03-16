@@ -1,7 +1,9 @@
 package br.com.jwar.triviachallenge.data.datasources.trivia.dto
 
+import com.squareup.moshi.Json
+
 data class TriviaCategoryResponse(
-    val id: String,
-    val name: String,
+    @field:Json(name = "id") val id: String,
+    @field:Json(name = "name") val name: String,
 )
 

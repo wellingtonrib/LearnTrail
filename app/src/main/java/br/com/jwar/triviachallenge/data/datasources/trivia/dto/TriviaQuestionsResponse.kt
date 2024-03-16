@@ -4,6 +4,6 @@ import com.squareup.moshi.Json
 
 data class TriviaQuestionsResponse(
     @field:Json(name = "response_code") val responseCode: Int,
-    @field:Json(name = "results") val triviaQuestionResults: List<TriviaQuestionResult>
+    @field:Json(name = "results") val results: List<TriviaQuestionResult>
 )
 

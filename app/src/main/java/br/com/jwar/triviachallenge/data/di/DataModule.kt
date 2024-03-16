@@ -1,14 +1,13 @@
 package br.com.jwar.triviachallenge.data.di
 
+import br.com.jwar.triviachallenge.data.datasources.trivia.TRIVIA_API_BASE_URL
 import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaRemoteDataSource
 import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaRemoteDataSourceImpl
-import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapper
-import br.com.jwar.triviachallenge.data.mappers.UnitDataToDomainMapperImpl
-import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapper
-import br.com.jwar.triviachallenge.data.mappers.ActivityDataToDomainMapperImpl
-import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
-import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.TriviaUnitRepository
+import br.com.jwar.triviachallenge.data.repositories.TriviaActivityRepository
 import br.com.jwar.triviachallenge.data.datasources.trivia.TriviaApi
+import br.com.jwar.triviachallenge.data.mappers.TriviaCategoryResponseToUnitMapper
+import br.com.jwar.triviachallenge.data.mappers.TriviaQuestionResponseToActivityMapper
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
 import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
@@ -23,7 +22,6 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,48 +38,32 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesActivityService(
+    fun providesTriviaApi(
         convertFactory: Converter.Factory
     ): TriviaApi =
         Retrofit.Builder()
-            .baseUrl("https://opentdb.com/")
+            .baseUrl(TRIVIA_API_BASE_URL)
             .addConverterFactory(convertFactory)
             .build()
             .create(TriviaApi::class.java)
 
     @Provides
-    fun providesActivityDataSource(
+    fun providesTriviaRemoteDataSource(
         triviaApi: TriviaApi,
     ): TriviaRemoteDataSource = TriviaRemoteDataSourceImpl(triviaApi)
 
     @Provides
     @Singleton
-    fun providesActivityDataToDomainMapper(
-        translatorService: TranslatorService,
-    ): ActivityDataToDomainMapper = ActivityDataToDomainMapperImpl(translatorService)
-
-    @Provides
-    @Singleton
     fun providesActivityRepository(
         triviaRemoteDataSource: TriviaRemoteDataSource,
-        activityDataToDomainMapper: ActivityDataToDomainMapper,
-    ): ActivityRepository = ActivityRepositoryImpl(triviaRemoteDataSource, activityDataToDomainMapper)
-
-    @Provides
-    @Singleton
-    fun providesUnitDataSource(): UnitsDataSource = TriviaCategoriesDataSource()
-
-    @Provides
-    @Singleton
-    fun providesUnitDataToDomainMapper(
-        translatorService: TranslatorService
-    ): UnitDataToDomainMapper = UnitDataToDomainMapperImpl(translatorService)
+        triviaQuestionResponseToActivityMapper: TriviaQuestionResponseToActivityMapper,
+    ): ActivityRepository = TriviaActivityRepository(triviaRemoteDataSource, triviaQuestionResponseToActivityMapper)
 
     @Provides
     fun providesUnitRepository(
-        unitsDataSource: UnitsDataSource,
-        unitDataToDomainMapper: UnitDataToDomainMapper,
-    ): UnitRepository = UnitRepositoryImpl(unitsDataSource, unitDataToDomainMapper)
+        triviaRemoteDataSource: TriviaRemoteDataSource,
+        triviaCategoryToUnitMapper: TriviaCategoryResponseToUnitMapper,
+    ): UnitRepository = TriviaUnitRepository(triviaRemoteDataSource, triviaCategoryToUnitMapper)
 
     @Provides
     @Singleton
