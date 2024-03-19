@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.data.datasources.dto
+package br.com.jwar.triviachallenge.data.datasources.opentdb.dto
 
 import com.squareup.moshi.Json
 

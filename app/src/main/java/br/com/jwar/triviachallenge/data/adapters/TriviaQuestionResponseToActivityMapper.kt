@@ -1,7 +1,7 @@
-package br.com.jwar.triviachallenge.data.mappers
+package br.com.jwar.triviachallenge.data.adapters
 
-import br.com.jwar.triviachallenge.data.datasources.dto.TriviaQuestionResult
-import br.com.jwar.triviachallenge.data.datasources.dto.TriviaQuestionsResponse
+import br.com.jwar.triviachallenge.data.datasources.opentdb.dto.TriviaQuestionResult
+import br.com.jwar.triviachallenge.data.datasources.opentdb.dto.TriviaQuestionsResponse
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question

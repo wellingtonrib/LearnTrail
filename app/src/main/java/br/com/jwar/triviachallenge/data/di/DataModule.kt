@@ -1,18 +1,19 @@
 package br.com.jwar.triviachallenge.data.di
 
-import br.com.jwar.triviachallenge.data.datasources.TRIVIA_API_BASE_URL
-import br.com.jwar.triviachallenge.data.datasources.TriviaApi
-import br.com.jwar.triviachallenge.data.datasources.TriviaRemoteDataSource
-import br.com.jwar.triviachallenge.data.mappers.TriviaCategoryResponseToUnitMapper
-import br.com.jwar.triviachallenge.data.mappers.TriviaQuestionResponseToActivityMapper
-import br.com.jwar.triviachallenge.data.repositories.TriviaActivityRepository
-import br.com.jwar.triviachallenge.data.repositories.TriviaUnitRepository
+import br.com.jwar.triviachallenge.data.datasources.opentdb.TRIVIA_API_BASE_URL
+import br.com.jwar.triviachallenge.data.datasources.opentdb.TriviaApi
+import br.com.jwar.triviachallenge.data.datasources.opentdb.TriviaRemoteDataSource
+import br.com.jwar.triviachallenge.data.adapters.TriviaCategoryResponseToUnitMapper
+import br.com.jwar.triviachallenge.data.adapters.TriviaQuestionResponseToActivityMapper
+import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import com.squareup.moshi.Moshi
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +27,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+abstract class DataModule {
 
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
@@ -51,18 +52,15 @@ class DataModule {
             .build()
             .create(TriviaApi::class.java)
 
-    @Provides
-    @Singleton
-    fun provideActivityRepository(
-        triviaRemoteDataSource: TriviaRemoteDataSource,
-        triviaQuestionResponseToActivityMapper: TriviaQuestionResponseToActivityMapper,
-    ): ActivityRepository = TriviaActivityRepository(triviaRemoteDataSource, triviaQuestionResponseToActivityMapper)
+    @Binds
+    abstract fun bindUnitRepository(
+        unitRepositoryImpl: UnitRepositoryImpl
+    ): UnitRepository
 
-    @Provides
-    fun provideUnitRepository(
-        triviaRemoteDataSource: TriviaRemoteDataSource,
-        triviaCategoryToUnitMapper: TriviaCategoryResponseToUnitMapper,
-    ): UnitRepository = TriviaUnitRepository(triviaRemoteDataSource, triviaCategoryToUnitMapper)
+    @Binds
+    abstract fun bindActivityRepository(
+        unitRepositoryImpl: ActivityRepositoryImpl
+    ): ActivityRepository
 
     @Provides
     @Singleton
