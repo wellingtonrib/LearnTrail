@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import br.com.jwar.triviachallenge.presentation.ui.screens.categories.CategoriesRoute
-import br.com.jwar.triviachallenge.presentation.ui.screens.challenge.ChallengeRoute
+import br.com.jwar.triviachallenge.presentation.ui.screens.home.HomeRoute
+import br.com.jwar.triviachallenge.presentation.ui.screens.activity.ActivityRoute
 import br.com.jwar.triviachallenge.presentation.ui.screens.settings.SettingsRoute
 
 @ExperimentalMaterial3Api
@@ -14,25 +14,26 @@ import br.com.jwar.triviachallenge.presentation.ui.screens.settings.SettingsRout
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "categories"
+        startDestination = "home"
     ) {
         composable("settings") {
             SettingsRoute()
         }
-        composable("categories") {
-            CategoriesRoute(
+        composable("home") {
+            HomeRoute(
                 navigateToSettings = {
                     navController.navigate("settings")
                 },
-                navigateToChallenge = { categoryId ->
-                    navController.navigate("challenge/$categoryId")
+                navigateToHome = { unitId, activityId ->
+                    navController.navigate("activity/$unitId/$activityId")
                 }
             )
         }
-        composable("challenge/{categoryId}") { backStackEntry ->
-            val categoryId = backStackEntry.arguments?.getString("categoryId").orEmpty()
-            ChallengeRoute(categoryId = categoryId) {
-                navController.navigate("categories") {
+        composable("activity/{unitId}/{activityId}") { backStackEntry ->
+            val unitId = backStackEntry.arguments?.getString("unitId").orEmpty()
+            val activityId = backStackEntry.arguments?.getString("activityId").orEmpty()
+            ActivityRoute(unitId = unitId, activityId = activityId) {
+                navController.navigate("home") {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }

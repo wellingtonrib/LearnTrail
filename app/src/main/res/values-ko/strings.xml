@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">퀴즈 챌린지</string>
-    <string name="title_categories">카테고리 선택</string>
+    <string name="title_home">홈</string>
     <string name="title_settings">설정</string>
     <string name="error_unknown">알 수 없는 오류</string>
     <string name="action_close">닫기</string>
@@ -12,4 +12,5 @@
     <string name="label_language">언어</string>
     <string name="message_correct_answer">정답입니다!</string>
     <string name="message_wrong_answer">"잘못된 답변! "</string>
+    <string name="label_lesson">레슨 %1$d</string>
 </resources>

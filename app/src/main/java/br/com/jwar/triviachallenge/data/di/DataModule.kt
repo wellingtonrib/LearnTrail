@@ -1,39 +1,54 @@
 package br.com.jwar.triviachallenge.data.di
 
-import br.com.jwar.triviachallenge.data.datasources.CategoryDataSource
-import br.com.jwar.triviachallenge.data.datasources.CategoryDataSourceImpl
-import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSource
-import br.com.jwar.triviachallenge.data.datasources.ChallengeDataSourceImpl
-import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapper
-import br.com.jwar.triviachallenge.data.mappers.CategoryResponseToCategoryMapperImpl
-import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapper
-import br.com.jwar.triviachallenge.data.mappers.ChallengeResponseToChallengeMapperImpl
-import br.com.jwar.triviachallenge.data.repositories.CategoryRepositoryImpl
-import br.com.jwar.triviachallenge.data.repositories.ChallengeRepositoryImpl
-import br.com.jwar.triviachallenge.data.services.ChallengeService
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceAdapter
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.fake.FakeRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TRIVIA_API_BASE_URL
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaApi
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaRemoteDataSourceAdapter
+import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
+import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
-import br.com.jwar.triviachallenge.data.services.translator.TranslatorServiceImpl
-import br.com.jwar.triviachallenge.data.util.HtmlStringAdapter
-import br.com.jwar.triviachallenge.domain.repositories.CategoryRepository
-import br.com.jwar.triviachallenge.domain.repositories.ChallengeRepository
+import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
+import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
+import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
     @Provides
+    fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
     @Singleton
-    fun providesConvertFactory() : Converter.Factory =
+    fun provideTranslatorService(): TranslatorService = MLKitTranslatorService()
+
+    @Provides
+    fun provideUnitRepository(
+        unitRepository: UnitRepositoryImpl
+    ): UnitRepository = unitRepository
+
+    @Provides
+    fun provideActivityRepository(
+        activityRepository: ActivityRepositoryImpl
+    ): ActivityRepository = activityRepository
+
+    @Provides
+    @Singleton
+    fun provideConvertFactory() : Converter.Factory =
         MoshiConverterFactory.create(
             Moshi.Builder()
                 .add(HtmlStringAdapter())
@@ -42,51 +57,22 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesChallengeService(
+    fun provideTriviaApi(
         convertFactory: Converter.Factory
-    ): ChallengeService =
+    ): TriviaApi =
         Retrofit.Builder()
-            .baseUrl("https://opentdb.com/")
+            .baseUrl(TRIVIA_API_BASE_URL)
             .addConverterFactory(convertFactory)
             .build()
-            .create(ChallengeService::class.java)
+            .create(TriviaApi::class.java)
 
     @Provides
-    fun providesChallengeDataSource(
-        challengeService: ChallengeService,
-    ): ChallengeDataSource = ChallengeDataSourceImpl(challengeService)
+    fun provideRemoteDataSourceStrategy(
+        remoteDataSourceStrategy: FakeRemoteDataSource
+    ): RemoteDataSourceStrategy = remoteDataSourceStrategy
 
     @Provides
-    @Singleton
-    fun providesChallengeResponseToChallengeMapper(
-        translatorService: TranslatorService,
-    ): ChallengeResponseToChallengeMapper = ChallengeResponseToChallengeMapperImpl(translatorService)
-
-    @Provides
-    @Singleton
-    fun providesChallengeRepository(
-        challengeDataSource: ChallengeDataSource,
-        challengeResponseToChallengeMapper: ChallengeResponseToChallengeMapper,
-    ): ChallengeRepository =
-        ChallengeRepositoryImpl(challengeDataSource, challengeResponseToChallengeMapper)
-
-    @Provides
-    @Singleton
-    fun providesCategoryDataSource(): CategoryDataSource = CategoryDataSourceImpl()
-
-    @Provides
-    @Singleton
-    fun providesCategoryResponseToCategoryMapper(
-        translatorService: TranslatorService
-    ): CategoryResponseToCategoryMapper = CategoryResponseToCategoryMapperImpl(translatorService)
-
-    @Provides
-    fun providesCategoryRepository(
-        categoryDataSource: CategoryDataSource,
-        categoryResponseToCategoryMapper: CategoryResponseToCategoryMapper,
-    ): CategoryRepository = CategoryRepositoryImpl(categoryDataSource, categoryResponseToCategoryMapper)
-
-    @Provides
-    @Singleton
-    fun providesTranslatorService(): TranslatorService = TranslatorServiceImpl()
+    fun provideRemoteDataSourceAdapter(
+        remoteDataSourceAdapter: TriviaRemoteDataSourceAdapter
+    ): RemoteDataSourceAdapter = remoteDataSourceAdapter
 }

@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.Language
-import br.com.jwar.triviachallenge.presentation.model.UIMessage
+import br.com.jwar.triviachallenge.presentation.utils.UIMessage
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 
 @ExperimentalMaterial3Api

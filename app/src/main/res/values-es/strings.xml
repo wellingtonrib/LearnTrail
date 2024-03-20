@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Trivia Desafío</string>
-    <string name="title_categories">Elige una categoría</string>
+    <string name="title_home">Inicio</string>
     <string name="title_settings">Ajustes</string>
     <string name="error_unknown">Error desconocido</string>
     <string name="action_close">Cerrar</string>
@@ -12,4 +12,5 @@
     <string name="label_language">Idioma</string>
     <string name="message_correct_answer">Respuesta correcta</string>
     <string name="message_wrong_answer">Respuesta incorrecta</string>
+    <string name="label_lesson">Lección %1$d</string>
 </resources>
