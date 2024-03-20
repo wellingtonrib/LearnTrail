@@ -1,10 +1,11 @@
 package br.com.jwar.triviachallenge.data.di
 
-import br.com.jwar.triviachallenge.data.datasources.opentdb.TRIVIA_API_BASE_URL
-import br.com.jwar.triviachallenge.data.datasources.opentdb.TriviaApi
-import br.com.jwar.triviachallenge.data.datasources.opentdb.TriviaRemoteDataSource
-import br.com.jwar.triviachallenge.data.adapters.TriviaCategoryResponseToUnitMapper
-import br.com.jwar.triviachallenge.data.adapters.TriviaQuestionResponseToActivityMapper
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceAdapter
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.fake.FakeRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TRIVIA_API_BASE_URL
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaApi
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaRemoteDataSourceAdapter
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
@@ -13,7 +14,6 @@ import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import com.squareup.moshi.Moshi
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,10 +27,24 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DataModule {
+class DataModule {
 
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    fun provideTranslatorService(): TranslatorService = MLKitTranslatorService()
+
+    @Provides
+    fun provideUnitRepository(
+        unitRepository: UnitRepositoryImpl
+    ): UnitRepository = unitRepository
+
+    @Provides
+    fun provideActivityRepository(
+        activityRepository: ActivityRepositoryImpl
+    ): ActivityRepository = activityRepository
 
     @Provides
     @Singleton
@@ -52,17 +66,13 @@ abstract class DataModule {
             .build()
             .create(TriviaApi::class.java)
 
-    @Binds
-    abstract fun bindUnitRepository(
-        unitRepositoryImpl: UnitRepositoryImpl
-    ): UnitRepository
-
-    @Binds
-    abstract fun bindActivityRepository(
-        unitRepositoryImpl: ActivityRepositoryImpl
-    ): ActivityRepository
+    @Provides
+    fun provideRemoteDataSourceStrategy(
+        remoteDataSourceStrategy: FakeRemoteDataSource
+    ): RemoteDataSourceStrategy = remoteDataSourceStrategy
 
     @Provides
-    @Singleton
-    fun provideTranslatorService(): TranslatorService = MLKitTranslatorService()
+    fun provideRemoteDataSourceAdapter(
+        remoteDataSourceAdapter: TriviaRemoteDataSourceAdapter
+    ): RemoteDataSourceAdapter = remoteDataSourceAdapter
 }

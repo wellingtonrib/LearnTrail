@@ -1,8 +1,7 @@
-package br.com.jwar.triviachallenge.data.datasources.opentdb
+package br.com.jwar.triviachallenge.data.datasources.remote.trivia
 
-import br.com.jwar.triviachallenge.data.datasources.RemoteDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.opentdb.dto.TriviaCategoryResponse
-import br.com.jwar.triviachallenge.data.datasources.opentdb.dto.TriviaQuestionsResponse
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaCategoryResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,8 +9,9 @@ import javax.inject.Inject
 
 class TriviaRemoteDataSource @Inject constructor(
     private val triviaApi: TriviaApi,
+    private val triviaAdapter: TriviaRemoteDataSourceAdapter,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : RemoteDataSourceStrategy<TriviaCategoryResponse, TriviaQuestionsResponse> {
+) : RemoteDataSourceStrategy {
 
     override suspend fun getUnits() = listOf(
         TriviaCategoryResponse("9", "General Knowledge"),
@@ -38,12 +38,14 @@ class TriviaRemoteDataSource @Inject constructor(
         TriviaCategoryResponse("30", "Science: Gadgets"),
         TriviaCategoryResponse("31", "Entertainment: Japanese Anime & Manga"),
         TriviaCategoryResponse("32", "Entertainment: Cartoon & Animations"),
-    )
+    ).map { triviaAdapter.adaptToUnit(it) }
 
     override suspend fun getActivity(
         unitId: String,
         activityId: String
     ) = withContext(dispatcher) {
-        triviaApi.getQuestions(unitId, activityId)
+        triviaApi.getQuestions(unitId, activityId).let {
+            triviaAdapter.adaptToActivity(it)
+        }
     }
 }        

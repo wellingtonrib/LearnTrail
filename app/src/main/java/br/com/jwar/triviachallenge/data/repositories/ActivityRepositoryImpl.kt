@@ -1,7 +1,6 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.opentdb.TriviaRemoteDataSource
-import br.com.jwar.triviachallenge.data.adapters.TriviaQuestionResponseToActivityMapper
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -10,14 +9,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class ActivityRepositoryImpl @Inject constructor(
-    private val triviaRemoteDataSource: TriviaRemoteDataSource,
-    private val triviaQuestionResponseToActivityMapper: TriviaQuestionResponseToActivityMapper,
+    private val remoteDataSource: RemoteDataSourceStrategy,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
 
     override fun getActivity(unitId: String, activityId: String) = flow {
-        val response = triviaRemoteDataSource.getQuestion(unitId, activityId)
-        val activity = triviaQuestionResponseToActivityMapper.mapFrom(response)
+        val activity = remoteDataSource.getActivity(unitId, activityId)
         emit(activity)
     }.flowOn(dispatcher)
 }
