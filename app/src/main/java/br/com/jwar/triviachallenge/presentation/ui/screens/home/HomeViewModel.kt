@@ -26,8 +26,8 @@ class HomeViewModel @Inject constructor(
     private val _uiEffect = Channel<HomeViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    fun getUnits() = viewModelScope.launch {
-        categoriesRepository.getUnits()
+    fun getUnits(refresh: Boolean = false) = viewModelScope.launch {
+        categoriesRepository.getUnits(refresh)
             .onStart { setLoadingState() }
             .catch { error -> setErrorState(error) }
             .collect { units -> setLoadedState(units) }
@@ -53,4 +53,5 @@ class HomeViewModel @Inject constructor(
         _uiEffect.send(HomeViewEffect.NavigateToActivity(lessonId))
     }
 
+    fun onRefresh() = getUnits(refresh = true)
 }

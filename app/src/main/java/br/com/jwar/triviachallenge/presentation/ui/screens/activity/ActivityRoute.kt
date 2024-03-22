@@ -47,7 +47,7 @@ fun ActivityRoute(
             ) { viewModel.onFinish() }
 
         is ActivityViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
+            ErrorContent(error = stringResource(R.string.error_unknown)) {
                 viewModel.getActivity(lessonId)
             }
     }

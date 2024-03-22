@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 
 class ActivityRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSourceStrategy,
@@ -15,11 +16,15 @@ class ActivityRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
     override fun getActivity(lessonId: String) = flow {
-        localDataSource.getActivity(lessonId).collect { localActivity ->
-            if (localActivity.questions.isEmpty()) {
-                val remoteActivity = remoteDataSource.getActivity(lessonId)
-                localDataSource.saveActivity(remoteActivity, lessonId)
+        val localActivity = localDataSource.getActivity(lessonId).first()
+        if (localActivity.questions.isEmpty()) {
+            val remoteActivity = runCatching {
+                remoteDataSource.getActivity(lessonId).also {
+                    localDataSource.saveActivity(it, lessonId)
+                }
             }
+            emit(remoteActivity.getOrDefault(localActivity))
+        } else {
             emit(localActivity)
         }
     }

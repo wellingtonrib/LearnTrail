@@ -3,7 +3,7 @@
     <string name="app_name">تحدي المعلومات</string>
     <string name="title_home">الصفحة الرئيسية</string>
     <string name="title_settings">الإعدادات</string>
-    <string name="error_unknown">خطأ غير معروف</string>
+    <string name="error_unknown">هناك خطأ م</string>
     <string name="action_close">إغلاق</string>
     <string name="action_finish">إنهاء</string>
     <string name="action_continue">استمر</string>

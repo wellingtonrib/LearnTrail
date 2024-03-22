@@ -3,7 +3,7 @@
     <string name="app_name">トリビア チャレンジ</string>
     <string name="title_home">ホーム</string>
     <string name="title_settings">設定</string>
-    <string name="error_unknown">不明なエラー</string>
+    <string name="error_unknown">何かが間違っていました</string>
     <string name="action_close">閉じる</string>
     <string name="action_finish">終了</string>
     <string name="action_continue">続ける</string>

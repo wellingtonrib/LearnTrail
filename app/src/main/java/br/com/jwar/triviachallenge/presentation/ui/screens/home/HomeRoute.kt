@@ -34,10 +34,11 @@ fun HomeRoute(
             HomeScreen(
                 units = state.units,
                 onNavigateToSettings = viewModel::onNavigateToSettings,
-                onNavigateToActivity = viewModel::onNavigateToActivity
+                onNavigateToActivity = viewModel::onNavigateToActivity,
+                onRefresh = viewModel::onRefresh,
             )
         is HomeViewState.Error ->
-            ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {
+            ErrorContent(error = stringResource(R.string.error_unknown)) {
                 viewModel.getUnits()
             }
     }

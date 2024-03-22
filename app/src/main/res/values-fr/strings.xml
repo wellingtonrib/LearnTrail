@@ -3,7 +3,7 @@
     <string name="app_name">Défi Trivia</string>
     <string name="title_home">Accueil</string>
     <string name="title_settings">Paramètres</string>
-    <string name="error_unknown">Erreur inconnue</string>
+    <string name="error_unknown">Quelque chose a mal tourné</string>
     <string name="action_close">Fermer</string>
     <string name="action_finish">Terminer</string>
     <string name="action_continue">Continuer</string>

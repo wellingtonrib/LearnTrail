@@ -4,5 +4,5 @@ import br.com.jwar.triviachallenge.domain.model.Unit
 import kotlinx.coroutines.flow.Flow
 
 interface UnitRepository {
-    fun getUnits(): Flow<List<Unit>>
+    fun getUnits(refresh: Boolean): Flow<List<Unit>>
 }
