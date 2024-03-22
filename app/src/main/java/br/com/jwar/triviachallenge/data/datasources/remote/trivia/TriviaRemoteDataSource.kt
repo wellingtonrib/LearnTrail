@@ -41,10 +41,10 @@ class TriviaRemoteDataSource @Inject constructor(
     ).map { triviaAdapter.adaptToUnit(it) }
 
     override suspend fun getActivity(
-        unitId: String,
-        activityId: String
+        lessonId: String
     ) = withContext(dispatcher) {
-        triviaApi.getQuestions(unitId, activityId).let {
+        val (category, difficult) = lessonId.split(":")
+        triviaApi.getQuestions(category, difficult).let {
             triviaAdapter.adaptToActivity(it)
         }
     }

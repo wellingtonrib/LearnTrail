@@ -15,13 +15,13 @@ import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
-    navigateToHome: (String, String) -> Unit,
+    navigateToActivity: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.getUnits()
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                is HomeViewEffect.NavigateToHome -> navigateToHome(effect.unitId, effect.activityId)
+                is HomeViewEffect.NavigateToActivity -> navigateToActivity(effect.lessonId)
                 is HomeViewEffect.NavigateToSettings -> navigateToSettings()
             }
         }
@@ -32,9 +32,9 @@ fun HomeRoute(
             LoadingContent()
         is HomeViewState.Loaded ->
             HomeScreen(
-                categories = state.units,
+                units = state.units,
                 onNavigateToSettings = viewModel::onNavigateToSettings,
-                onNavigateToHome = viewModel::onNavigateToChallenge
+                onNavigateToActivity = viewModel::onNavigateToActivity
             )
         is HomeViewState.Error ->
             ErrorContent(error = state.error.localizedMessage ?: stringResource(R.string.error_unknown)) {

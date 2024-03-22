@@ -5,5 +5,5 @@ import br.com.jwar.triviachallenge.domain.model.Unit
 
 interface RemoteDataSourceStrategy {
     suspend fun getUnits(): List<Unit>
-    suspend fun getActivity(unitId: String, activityId: String): Activity
+    suspend fun getActivity(lessonId: String): Activity
 }

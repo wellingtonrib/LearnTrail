@@ -28,9 +28,9 @@ import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
-    categories: List<Unit>,
+    units: List<Unit>,
     onNavigateToSettings: () -> kotlin.Unit,
-    onNavigateToHome: (String, String) -> kotlin.Unit,
+    onNavigateToActivity: (String) -> kotlin.Unit,
 ) {
     Scaffold(
         topBar = {
@@ -50,23 +50,23 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            items(categories) { category ->
+            items(units) { unit ->
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         modifier = Modifier.padding(16.dp),
-                        text = category.name
+                        text = unit.name
                     )
                 }
-                category.lessons.forEachIndexed { index, lesson ->
+                unit.lessons.forEachIndexed { lessonIndex, lesson ->
                     Card(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        onClick = { onNavigateToHome(category.id, lesson.id) }
+                        onClick = { onNavigateToActivity(lesson.id) }
                     ) {
                         Text(
                             modifier = Modifier.padding(16.dp),
-                            text = stringResource(id = R.string.label_lesson, index + 1)
+                            text = stringResource(id = R.string.label_lesson, lessonIndex + 1)
                         )
                     }
                 }
@@ -81,7 +81,7 @@ fun HomeScreen(
 fun PreviewHomeScreen() {
     TriviaChallengeTheme {
         HomeScreen(
-            categories = listOf(
+            units = listOf(
                 Unit(
                     id = "1",
                     name = "Unit 1",
@@ -91,27 +91,9 @@ fun PreviewHomeScreen() {
                         Lesson(id = "3", name = "Lesson 3"),
                     )
                 ),
-                Unit(
-                    id = "2",
-                    name = "Unit 2",
-                    lessons = listOf(
-                        Lesson(id = "4", name = "Lesson 1"),
-                        Lesson(id = "5", name = "Lesson 2"),
-                        Lesson(id = "6", name = "Lesson 3"),
-                    )
-                ),
-                Unit(
-                    id = "3",
-                    name = "Unit 3",
-                    lessons = listOf(
-                        Lesson(id = "7", name = "Lesson 1"),
-                        Lesson(id = "8", name = "Lesson 2"),
-                        Lesson(id = "9", name = "Lesson 3"),
-                    )
-                ),
             ),
             onNavigateToSettings = {},
-            onNavigateToHome = { _, _ -> }
+            onNavigateToActivity = {}
         )
     }
 }

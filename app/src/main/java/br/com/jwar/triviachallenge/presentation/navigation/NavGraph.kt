@@ -24,15 +24,14 @@ fun NavGraph(navController: NavHostController) {
                 navigateToSettings = {
                     navController.navigate("settings")
                 },
-                navigateToHome = { unitId, activityId ->
-                    navController.navigate("activity/$unitId/$activityId")
+                navigateToActivity = { lessonId ->
+                    navController.navigate("activity/$lessonId")
                 }
             )
         }
-        composable("activity/{unitId}/{activityId}") { backStackEntry ->
-            val unitId = backStackEntry.arguments?.getString("unitId").orEmpty()
-            val activityId = backStackEntry.arguments?.getString("activityId").orEmpty()
-            ActivityRoute(unitId = unitId, activityId = activityId) {
+        composable("activity/{lessonId}") { backStackEntry ->
+            val lessonId = backStackEntry.arguments?.getString("lessonId").orEmpty()
+            ActivityRoute(lessonId = lessonId) {
                 navController.navigate("home") {
                     popUpTo(navController.graph.id) {
                         inclusive = true

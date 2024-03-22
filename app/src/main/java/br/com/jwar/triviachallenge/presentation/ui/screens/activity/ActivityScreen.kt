@@ -182,6 +182,7 @@ fun GreetingChallengeScreen() {
     TriviaChallengeTheme {
         ActivityScreen(
             currentQuestion = Question(
+                id = "1",
                 unit = "Category name",
                 correctAnswer = "Correct",
                 difficulty = "",

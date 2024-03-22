@@ -8,7 +8,7 @@ sealed class ActivityViewState {
     object Loading : ActivityViewState()
     data class Loaded(
         val activity: Activity,
-        val currentQuestion: Question = activity.questions.first(),
+        val currentQuestion: Question,
         val selectedAnswer: String? = null,
         val isResultShown: Boolean = false,
         val attemptsLeft: Int = 3,

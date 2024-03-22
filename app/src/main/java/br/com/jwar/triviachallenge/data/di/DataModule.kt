@@ -90,6 +90,12 @@ class DataModule {
     fun provideUnitDao(database: RoomAppDatabase) = database.unitDao()
 
     @Provides
+    fun provideLessonDao(database: RoomAppDatabase) = database.lessonDao()
+
+    @Provides
+    fun provideQuestionDao(database: RoomAppDatabase) = database.questionDao()
+
+    @Provides
     fun provideLocalDataSourceStrategy(
         localDataSourceStrategy: RoomLocalDataSource
     ) : LocalDataSourceStrategy = localDataSourceStrategy

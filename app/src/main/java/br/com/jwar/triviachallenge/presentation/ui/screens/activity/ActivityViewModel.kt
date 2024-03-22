@@ -3,6 +3,7 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.jwar.triviachallenge.R
+import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
 import br.com.jwar.triviachallenge.presentation.utils.UIMessageStyle
@@ -29,11 +30,29 @@ class ActivityViewModel @Inject constructor(
     private val _uiEffect = Channel<ActivityViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    fun getActivity(unitId: String, activityId: String) = viewModelScope.launch {
-        activityRepository.getActivity(unitId, activityId)
-            .onStart { _uiState.update { ActivityViewState.Loading } }
-            .catch { error -> _uiState.update { ActivityViewState.Error(error) } }
-            .collect { challenge -> _uiState.update { ActivityViewState.Loaded(challenge) } }
+    fun getActivity(lessonId: String) = viewModelScope.launch {
+        activityRepository.getActivity(lessonId)
+            .onStart { setLoadingState() }
+            .catch { error -> setErrorState(error) }
+            .collect { activity -> setLoadedState(activity) }
+    }
+
+    private fun setLoadedState(activity: Activity) {
+        _uiState.update {
+            if (activity.questions.isNotEmpty()) {
+                ActivityViewState.Loaded(activity, activity.questions.first())
+            } else {
+                ActivityViewState.Error(IllegalArgumentException("Activity has no questions"))
+            }
+        }
+    }
+
+    private fun setErrorState(error: Throwable) {
+        _uiState.update { ActivityViewState.Error(error) }
+    }
+
+    private fun setLoadingState() {
+        _uiState.update { ActivityViewState.Loading }
     }
 
     fun onSelectAnswer(answer: String) {
