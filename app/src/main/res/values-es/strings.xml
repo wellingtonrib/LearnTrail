@@ -3,7 +3,7 @@
     <string name="app_name">Trivia Desafío</string>
     <string name="title_home">Inicio</string>
     <string name="title_settings">Ajustes</string>
-    <string name="error_unknown">Error desconocido</string>
+    <string name="error_unknown">Etwas ist schief gelaufen</string>
     <string name="action_close">Cerrar</string>
     <string name="action_finish">Terminar</string>
     <string name="action_continue">Continuar</string>

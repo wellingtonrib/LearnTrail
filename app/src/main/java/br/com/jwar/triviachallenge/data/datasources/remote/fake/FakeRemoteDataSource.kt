@@ -16,33 +16,16 @@ class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
                 lessons = listOf(
                     Lesson("1", "Lesson 1"),
                     Lesson("2", "Lesson 2"),
-                    Lesson("3", "Lesson 3")
-                ),
-            ),
-            Unit(
-                id = "2",
-                name = "Unit 2",
-                lessons = listOf(
-                    Lesson("4", "Lesson 4"),
-                    Lesson("5", "Lesson 5"),
-                    Lesson("6", "Lesson 6")
-                ),
-            ),
-            Unit(
-                id = "3",
-                name = "Unit 3",
-                lessons = listOf(
-                    Lesson("7", "Lesson 7"),
-                    Lesson("8", "Lesson 8"),
-                    Lesson("9", "Lesson 9")
+                    Lesson("3", "Lesson 3"),
                 ),
             ),
         )
     }
 
-    override suspend fun getActivity(unitId: String, activityId: String) = Activity(
+    override suspend fun getActivity(lessonId: String) = Activity(
         questions = listOf(
             Question(
+                id = "1",
                 unit = "Unit 1",
                 correctAnswer = "2",
                 difficulty = "easy",
@@ -51,6 +34,7 @@ class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
                 type = "multiple",
             ),
             Question(
+                id = "2",
                 unit = "Unit 1",
                 correctAnswer = "4",
                 difficulty = "easy",
@@ -59,6 +43,7 @@ class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
                 type = "multiple",
             ),
             Question(
+                id = "3",
                 unit = "Unit 1",
                 correctAnswer = "6",
                 difficulty = "easy",

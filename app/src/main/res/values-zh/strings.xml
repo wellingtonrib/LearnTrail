@@ -3,7 +3,7 @@
     <string name="app_name">智力挑战</string>
     <string name="title_home">首页</string>
     <string name="title_settings">设置</string>
-    <string name="error_unknown">未知错误</string>
+    <string name="error_unknown">出了些问题</string>
     <string name="action_close">关闭</string>
     <string name="action_finish">完成</string>
     <string name="action_continue">继续</string>

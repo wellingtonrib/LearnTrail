@@ -3,7 +3,7 @@
     <string name="app_name">퀴즈 챌린지</string>
     <string name="title_home">홈</string>
     <string name="title_settings">설정</string>
-    <string name="error_unknown">알 수 없는 오류</string>
+    <string name="error_unknown">문제가 발생했습니다</string>
     <string name="action_close">닫기</string>
     <string name="action_finish">완료</string>
     <string name="action_continue">계속</string>

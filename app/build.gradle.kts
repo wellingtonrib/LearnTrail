@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 android {
@@ -62,6 +63,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.material)
     implementation(libs.navigation)
     implementation(libs.retrofit)
     implementation(libs.moshi)
@@ -70,8 +72,11 @@ dependencies {
     implementation(libs.mlkit.translate)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.ktx)
 
     kapt(libs.hilt.compiler)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
 

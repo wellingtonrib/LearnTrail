@@ -1,12 +1,18 @@
 package br.com.jwar.triviachallenge.presentation.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,17 +27,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
-import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.domain.model.Lesson
+import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
-    categories: List<Unit>,
+    units: List<Unit>,
+    isRefreshing: Boolean = false,
     onNavigateToSettings: () -> kotlin.Unit,
-    onNavigateToHome: (String, String) -> kotlin.Unit,
+    onNavigateToActivity: (String) -> kotlin.Unit,
+    onRefresh: () -> kotlin.Unit,
 ) {
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -44,44 +55,55 @@ fun HomeScreen(
             )
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            contentPadding = padding,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .pullRefresh(state = pullRefreshState)
         ) {
-            items(categories) { category ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        text = category.name
-                    )
-                }
-                category.lessons.forEachIndexed { index, lesson ->
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                items(units) { unit ->
                     Card(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        onClick = { onNavigateToHome(category.id, lesson.id) }
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             modifier = Modifier.padding(16.dp),
-                            text = stringResource(id = R.string.label_lesson, index + 1)
+                            text = unit.name
                         )
+                    }
+                    unit.lessons.forEachIndexed { lessonIndex, lesson ->
+                        Card(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            onClick = { onNavigateToActivity(lesson.id) }
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = stringResource(id = R.string.label_lesson, lessonIndex + 1)
+                            )
+                        }
                     }
                 }
             }
+            PullRefreshIndicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                refreshing = isRefreshing,
+                state = pullRefreshState
+            )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
     TriviaChallengeTheme {
         HomeScreen(
-            categories = listOf(
+            units = listOf(
                 Unit(
                     id = "1",
                     name = "Unit 1",
@@ -91,27 +113,11 @@ fun PreviewHomeScreen() {
                         Lesson(id = "3", name = "Lesson 3"),
                     )
                 ),
-                Unit(
-                    id = "2",
-                    name = "Unit 2",
-                    lessons = listOf(
-                        Lesson(id = "4", name = "Lesson 1"),
-                        Lesson(id = "5", name = "Lesson 2"),
-                        Lesson(id = "6", name = "Lesson 3"),
-                    )
-                ),
-                Unit(
-                    id = "3",
-                    name = "Unit 3",
-                    lessons = listOf(
-                        Lesson(id = "7", name = "Lesson 1"),
-                        Lesson(id = "8", name = "Lesson 2"),
-                        Lesson(id = "9", name = "Lesson 3"),
-                    )
-                ),
             ),
+            isRefreshing = false,
             onNavigateToSettings = {},
-            onNavigateToHome = { _, _ -> }
+            onNavigateToActivity = {},
+            onRefresh = {},
         )
     }
 }

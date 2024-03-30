@@ -1,6 +1,5 @@
 package br.com.jwar.triviachallenge.data.datasources.remote.trivia
 
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceAdapter
 import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaCategoryResponse
 import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaQuestionResult
@@ -9,23 +8,25 @@ import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Lesson
 import br.com.jwar.triviachallenge.domain.model.Question
+import java.util.UUID
 import javax.inject.Inject
 
 class TriviaRemoteDataSourceAdapter @Inject constructor(
     private val translatorService: TranslatorService,
-) : RemoteDataSourceAdapter {
+) {
+    suspend fun adaptToUnit(data: Any) =
+        (data as TriviaCategoryResponse).let {
+            Unit(
+                id = data.id,
+                name = data.name.translated(),
+                lessons = getLessons(data.id)
+            )
+        }
 
-    override suspend fun adaptToUnit(data: Any) = (data as TriviaCategoryResponse).let { data ->
-        Unit(
-            id = data.id,
-            name = data.name.translated(),
-            lessons = getLessons()
-        )
-    }
-
-    override suspend fun adaptToActivity(data: Any) = Activity(
+    suspend fun adaptToActivity(data: Any) = Activity(
         questions = (data as TriviaQuestionsResponse).results.map { result ->
             Question(
+                id = UUID.randomUUID().toString(),
                 unit = result.category.translated(),
                 correctAnswer = result.correctAnswer.translated(),
                 difficulty = result.difficulty,
@@ -41,10 +42,10 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
             answer.translated()
         }
 
-    private suspend fun getLessons() = listOf(
-        Lesson(id = "easy", name = "Easy".translated()),
-        Lesson(id = "medium", name = "Medium".translated()),
-        Lesson(id = "hard", name = "Difficult".translated())
+    private suspend fun getLessons(id: String) = listOf(
+        Lesson(id = "$id:easy", name = "Easy".translated()),
+        Lesson(id = "$id:medium", name = "Medium".translated()),
+        Lesson(id = "$id:hard", name = "Difficult".translated())
     )
 
     private suspend fun String.translated() = translatorService.translate(this)
