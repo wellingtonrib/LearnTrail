@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class LessonEntity(
+data class ActivityEntity(
     @PrimaryKey val id: String,
     val name: String,
     val unitId: String

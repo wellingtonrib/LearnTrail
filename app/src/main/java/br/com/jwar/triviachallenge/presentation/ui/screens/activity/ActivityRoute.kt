@@ -13,12 +13,12 @@ import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
 @ExperimentalMaterial3Api
 @Composable
 fun ActivityRoute(
-    lessonId: String,
+    activityId: String,
     viewModel: ActivityViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
-        viewModel.getActivity(lessonId)
+        viewModel.getActivity(activityId)
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is ActivityViewEffect.NavigateToHome -> onNavigateToHome()
@@ -48,7 +48,7 @@ fun ActivityRoute(
 
         is ActivityViewState.Error ->
             ErrorContent(error = stringResource(R.string.error_unknown)) {
-                viewModel.getActivity(lessonId)
+                viewModel.getActivity(activityId)
             }
     }
 }

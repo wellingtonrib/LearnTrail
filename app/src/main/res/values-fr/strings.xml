@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Défi Trivia</string>
     <string name="title_home">Accueil</string>
@@ -12,5 +11,5 @@
     <string name="label_language">Langue</string>
     <string name="message_correct_answer">Réponse correcte !</string>
     <string name="message_wrong_answer">Mauvaise réponse !</string>
-    <string name="label_lesson">Leçon %1$d</string>
+    <string name="label_done">Fait</string>
 </resources>

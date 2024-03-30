@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -31,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.datasources.local.Progression
-import br.com.jwar.triviachallenge.domain.model.Lesson
+import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 
@@ -73,28 +74,39 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = unit.name
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = unit.name
+                            )
+                            if (unit.activities.all { it.id in Progression.activitiesCompleted }) {
+                                Image(
+                                    imageVector = Icons.Filled.Done,
+                                    contentDescription = stringResource(R.string.label_done),
+                                )
+                            }
+                        }
                     }
-                    unit.lessons.forEachIndexed { lessonIndex, lesson ->
+                    unit.activities.forEach { activity ->
                         Card(
-                            modifier = Modifier.padding(top = 8.dp),
-                            onClick = { onNavigateToActivity(lesson.id) },
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .widthIn(min = 200.dp),
+                            onClick = { onNavigateToActivity(activity.id) },
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
                                     modifier = Modifier.padding(16.dp),
-                                    text = stringResource(id = R.string.label_lesson, lessonIndex + 1)
+                                    text = activity.name
                                 )
-                                if (Progression.lessonsCompleted.contains(lesson.id)) {
+                                if (Progression.activitiesCompleted.contains(activity.id)) {
                                     Image(
                                         imageVector = Icons.Filled.Done,
-                                        contentDescription = ""
+                                        contentDescription = stringResource(R.string.label_done),
                                     )
                                 }
                             }
@@ -122,10 +134,10 @@ fun PreviewHomeScreen() {
                 Unit(
                     id = "1",
                     name = "Unit 1",
-                    lessons = listOf(
-                        Lesson(id = "1", name = "Lesson 1", unitId = "1"),
-                        Lesson(id = "2", name = "Lesson 2", unitId = "1"),
-                        Lesson(id = "3", name = "Lesson 3", unitId = "1"),
+                    activities = listOf(
+                        Activity(id = "1", name = "Lesson 1", unitId = "1"),
+                        Activity(id = "2", name = "Lesson 2", unitId = "1"),
+                        Activity(id = "3", name = "Lesson 3", unitId = "1"),
                     )
                 ),
             ),

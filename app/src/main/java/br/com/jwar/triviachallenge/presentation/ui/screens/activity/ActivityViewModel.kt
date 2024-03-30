@@ -31,8 +31,8 @@ class ActivityViewModel @Inject constructor(
     private val _uiEffect = Channel<ActivityViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    fun getActivity(lessonId: String) = viewModelScope.launch {
-        activityRepository.getActivity(lessonId)
+    fun getActivity(activityId: String) = viewModelScope.launch {
+        activityRepository.getActivity(activityId)
             .onStart { setLoadingState() }
             .catch { error -> setErrorState(error) }
             .collect { activity -> setLoadedState(activity) }
@@ -94,7 +94,7 @@ class ActivityViewModel @Inject constructor(
                 )
             } else {
                 if (hasAttemptsRemaining) {
-                    Progression.lessonsCompleted.add(state.activity.lessonId)
+                    Progression.activitiesCompleted.add(state.activity.id)
                 }
                 state.copy(
                     isFinished = true,

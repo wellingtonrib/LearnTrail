@@ -55,8 +55,8 @@ class HomeViewModel @Inject constructor(
         _uiEffect.send(HomeViewEffect.NavigateToSettings)
     }
 
-    fun onNavigateToActivity(lessonId: String) = viewModelScope.launch {
-        _uiEffect.send(HomeViewEffect.NavigateToActivity(lessonId))
+    fun onNavigateToActivity(activityId: String) = viewModelScope.launch {
+        _uiEffect.send(HomeViewEffect.NavigateToActivity(activityId))
     }
 
     fun onRefresh() = getUnits(refresh = true)

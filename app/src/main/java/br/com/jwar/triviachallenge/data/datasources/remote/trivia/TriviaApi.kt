@@ -10,6 +10,6 @@ interface TriviaApi {
     @GET("api.php?amount=5&type=multiple")
     suspend fun getQuestions(
         @Query("category") unitId: String,
-        @Query("difficulty") lessonId: String,
+        @Query("difficulty") activityId: String,
     ): TriviaQuestionsResponse
 }

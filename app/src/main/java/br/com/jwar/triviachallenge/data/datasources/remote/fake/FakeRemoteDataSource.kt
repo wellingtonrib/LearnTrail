@@ -2,7 +2,6 @@ package br.com.jwar.triviachallenge.data.datasources.remote.fake
 
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
 import br.com.jwar.triviachallenge.domain.model.Activity
-import br.com.jwar.triviachallenge.domain.model.Lesson
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
 import javax.inject.Inject
@@ -13,17 +12,19 @@ class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
             Unit(
                 id = "1",
                 name = "Unit 1",
-                lessons = listOf(
-                    Lesson("1", "Lesson 1", "1"),
-                    Lesson("2", "Lesson 2", "1"),
-                    Lesson("3", "Lesson 3", "1"),
+                activities = listOf(
+                    Activity("1", "Lesson 1", "1"),
+                    Activity("2", "Lesson 2", "1"),
+                    Activity("3", "Lesson 3", "1"),
                 ),
             ),
         )
     }
 
-    override suspend fun getActivity(lessonId: String) = Activity(
-        lessonId = lessonId,
+    override suspend fun getActivity(activityId: String) = Activity(
+        id = activityId,
+        name = "Lesson 1",
+        unitId = "1",
         questions = listOf(
             Question(
                 id = "1",

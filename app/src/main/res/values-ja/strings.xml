@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">トリビア チャレンジ</string>
     <string name="title_home">ホーム</string>
@@ -12,5 +11,5 @@
     <string name="label_language">言語</string>
     <string name="message_correct_answer">正しい答えです！</string>
     <string name="message_wrong_answer">間違った答えです！</string>
-    <string name="label_lesson">レッスン %1$d</string>
+    <string name="label_done">終わり</string>
 </resources>

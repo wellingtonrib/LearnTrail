@@ -17,12 +17,12 @@ class ActivityRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSourceStrategy,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
-    override fun getActivity(lessonId: String) = flow {
-        val localActivity = localDataSource.getActivity(lessonId).first()
+    override fun getActivity(activityId: String) = flow {
+        val localActivity = localDataSource.getActivity(activityId).first()
         if (localActivity.questions.isEmpty()) {
             val remoteActivity = runCatching {
-                remoteDataSource.getActivity(lessonId).also {
-                    localDataSource.saveActivity(it, lessonId)
+                remoteDataSource.getActivity(activityId).also {
+                    localDataSource.saveActivity(it, activityId)
                 }
             }
             emitOrFail(remoteActivity.getOrDefault(localActivity))

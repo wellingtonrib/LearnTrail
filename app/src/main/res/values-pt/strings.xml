@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Desafio de curiosidades</string>
     <string name="title_home">Início</string>
@@ -12,5 +11,5 @@
     <string name="label_language">Idioma</string>
     <string name="message_correct_answer">Resposta correta!</string>
     <string name="message_wrong_answer">Resposta errada!</string>
-    <string name="label_lesson">Lição %1$d</string>
+    <string name="label_done">Feito</string>
 </resources>

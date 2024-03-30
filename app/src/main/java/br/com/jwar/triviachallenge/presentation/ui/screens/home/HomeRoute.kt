@@ -21,7 +21,7 @@ fun HomeRoute(
         viewModel.getUnits()
         viewModel.uiEffect.collect { effect ->
             when(effect) {
-                is HomeViewEffect.NavigateToActivity -> navigateToActivity(effect.lessonId)
+                is HomeViewEffect.NavigateToActivity -> navigateToActivity(effect.activityId)
                 is HomeViewEffect.NavigateToSettings -> navigateToSettings()
             }
         }

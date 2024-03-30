@@ -1,27 +1,26 @@
 package br.com.jwar.triviachallenge.data.datasources.local.room
 
-import br.com.jwar.triviachallenge.data.datasources.local.room.entities.LessonEntity
+import br.com.jwar.triviachallenge.data.datasources.local.room.entities.ActivityEntity
 import br.com.jwar.triviachallenge.data.datasources.local.room.entities.QuestionEntity
 import br.com.jwar.triviachallenge.data.datasources.local.room.entities.UnitEntity
 import br.com.jwar.triviachallenge.domain.model.Activity
-import br.com.jwar.triviachallenge.domain.model.Lesson
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
 import javax.inject.Inject
 
 class RoomLocalDataSourceAdapter @Inject constructor() {
 
-    fun adaptToUnit(entity: Any, lessons: List<LessonEntity>) =
+    fun adaptToUnit(entity: Any, activityEntities: List<ActivityEntity>) =
         (entity as UnitEntity).let {
             Unit(
                 id = entity.id,
                 name = entity.name,
-                lessons = lessons.map { lesson -> adaptToLesson(lesson) }
+                activities = activityEntities.map { activity -> adaptToActivity(activity) }
             )
         }
 
-    fun adaptToLesson(data: LessonEntity) =
-        Lesson(
+    fun adaptToActivity(data: ActivityEntity) =
+        Activity(
             id = data.id,
             name = data.name,
             unitId = data.unitId,
@@ -33,16 +32,18 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             name = unit.name,
         )
 
-    fun adaptFromLesson(lesson: Lesson, unitId: String) =
-        LessonEntity(
-            id = lesson.id,
-            name = lesson.name,
+    fun adaptFromActivity(activity: Activity, unitId: String) =
+        ActivityEntity(
+            id = activity.id,
+            name = activity.name,
             unitId = unitId
         )
 
-    fun adaptToActivity(questions: List<QuestionEntity>, lessonId: String) =
+    fun adaptToActivity(questions: List<QuestionEntity>, activity: ActivityEntity) =
         Activity(
-            lessonId = lessonId,
+            id = activity.id,
+            name = activity.name,
+            unitId = activity.unitId,
             questions = questions.map { question ->
                 Question(
                     id = question.id,
@@ -56,10 +57,10 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             }
         )
 
-    fun adaptFromQuestion(question: Question, lessonId: String) =
+    fun adaptFromQuestion(question: Question, activityId: String) =
         QuestionEntity(
             id = question.id,
-            lessonId = lessonId,
+            activityId = activityId,
             unit = question.unit,
             correctAnswer = question.correctAnswer,
             difficulty = question.difficulty,

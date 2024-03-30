@@ -7,16 +7,16 @@ import androidx.room.PrimaryKey
 @Entity(
     foreignKeys = [
         ForeignKey(
-            entity = LessonEntity::class,
+            entity = ActivityEntity::class,
             parentColumns = ["id"],
-            childColumns = ["lessonId"],
+            childColumns = ["activityId"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class QuestionEntity(
     @PrimaryKey val id: String,
-    val lessonId: String,
+    val activityId: String,
     val unit: String,
     val correctAnswer: String,
     val difficulty: String,
