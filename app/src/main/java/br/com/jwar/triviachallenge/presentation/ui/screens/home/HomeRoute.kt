@@ -33,6 +33,7 @@ fun HomeRoute(
         is HomeViewState.Loaded ->
             HomeScreen(
                 units = state.units,
+                isRefreshing = state.isRefreshing,
                 onNavigateToSettings = viewModel::onNavigateToSettings,
                 onNavigateToActivity = viewModel::onNavigateToActivity,
                 onRefresh = viewModel::onRefresh,

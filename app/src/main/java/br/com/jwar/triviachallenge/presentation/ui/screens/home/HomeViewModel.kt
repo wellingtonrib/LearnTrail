@@ -42,7 +42,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun setLoadingState() {
-        _uiState.update { HomeViewState.Loading }
+        _uiState.update { currentState ->
+            if (currentState is HomeViewState.Loaded) {
+                currentState.copy(isRefreshing = true)
+            } else {
+                HomeViewState.Loading
+            }
+        }
     }
 
     fun onNavigateToSettings() = viewModelScope.launch {

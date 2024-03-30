@@ -2,6 +2,7 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,9 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,8 +41,7 @@ fun HomeScreen(
     onNavigateToActivity: (String) -> kotlin.Unit,
     onRefresh: () -> kotlin.Unit,
 ) {
-    val refreshing by remember { mutableStateOf(isRefreshing) }
-    val refreshState = rememberPullRefreshState(refreshing, onRefresh)
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
 
     Scaffold(
         topBar = {
@@ -59,11 +56,12 @@ fun HomeScreen(
         }
     ) { padding ->
         Box(
-            modifier = Modifier.pullRefresh(state = refreshState),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .pullRefresh(state = pullRefreshState)
         ) {
             LazyColumn(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                contentPadding = padding,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -91,8 +89,8 @@ fun HomeScreen(
             }
             PullRefreshIndicator(
                 modifier = Modifier.align(Alignment.TopCenter),
-                refreshing = refreshing,
-                state = refreshState
+                refreshing = isRefreshing,
+                state = pullRefreshState
             )
         }
     }
