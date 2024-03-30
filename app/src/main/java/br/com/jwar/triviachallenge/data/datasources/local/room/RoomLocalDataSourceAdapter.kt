@@ -24,12 +24,13 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
         Lesson(
             id = data.id,
             name = data.name,
+            unitId = data.unitId,
         )
 
     fun adaptFromUnit(unit: Unit) =
         UnitEntity(
             id = unit.id,
-            name = unit.name
+            name = unit.name,
         )
 
     fun adaptFromLesson(lesson: Lesson, unitId: String) =
@@ -39,8 +40,9 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             unitId = unitId
         )
 
-    fun adaptToActivity(questions: List<QuestionEntity>) =
+    fun adaptToActivity(questions: List<QuestionEntity>, lessonId: String) =
         Activity(
+            lessonId = lessonId,
             questions = questions.map { question ->
                 Question(
                     id = question.id,

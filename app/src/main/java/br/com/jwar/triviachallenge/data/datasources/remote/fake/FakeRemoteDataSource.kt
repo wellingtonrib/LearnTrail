@@ -14,15 +14,16 @@ class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
                 id = "1",
                 name = "Unit 1",
                 lessons = listOf(
-                    Lesson("1", "Lesson 1"),
-                    Lesson("2", "Lesson 2"),
-                    Lesson("3", "Lesson 3"),
+                    Lesson("1", "Lesson 1", "1"),
+                    Lesson("2", "Lesson 2", "1"),
+                    Lesson("3", "Lesson 3", "1"),
                 ),
             ),
         )
     }
 
     override suspend fun getActivity(lessonId: String) = Activity(
+        lessonId = lessonId,
         questions = listOf(
             Question(
                 id = "1",

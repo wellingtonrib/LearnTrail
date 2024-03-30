@@ -36,7 +36,7 @@ class RoomLocalDataSource @Inject constructor(
 
     override suspend fun getActivity(lessonId: String) =
         questionDao.getByLessonId(lessonId).map { questions ->
-            roomAdapter.adaptToActivity(questions)
+            roomAdapter.adaptToActivity(questions, lessonId)
         }
 
     override suspend fun saveActivity(activity: Activity, lessonId: String) {

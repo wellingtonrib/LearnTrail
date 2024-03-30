@@ -45,7 +45,7 @@ class TriviaRemoteDataSource @Inject constructor(
     ) = withContext(dispatcher) {
         val (category, difficult) = lessonId.split(":")
         triviaApi.getQuestions(category, difficult).let {
-            triviaAdapter.adaptToActivity(it)
+            triviaAdapter.adaptToActivity(it, lessonId)
         }
     }
 }        

@@ -23,7 +23,8 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
             )
         }
 
-    suspend fun adaptToActivity(data: Any) = Activity(
+    suspend fun adaptToActivity(data: Any, lessonId: String) = Activity(
+        lessonId = lessonId,
         questions = (data as TriviaQuestionsResponse).results.map { result ->
             Question(
                 id = UUID.randomUUID().toString(),
@@ -42,10 +43,10 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
             answer.translated()
         }
 
-    private suspend fun getLessons(id: String) = listOf(
-        Lesson(id = "$id:easy", name = "Easy".translated()),
-        Lesson(id = "$id:medium", name = "Medium".translated()),
-        Lesson(id = "$id:hard", name = "Difficult".translated())
+    private suspend fun getLessons(unitId: String) = listOf(
+        Lesson(id = "$unitId:easy", name = "Easy".translated(), unitId = unitId),
+        Lesson(id = "$unitId:medium", name = "Medium".translated(), unitId = unitId),
+        Lesson(id = "$unitId:hard", name = "Difficult".translated(), unitId = unitId)
     )
 
     private suspend fun String.translated() = translatorService.translate(this)

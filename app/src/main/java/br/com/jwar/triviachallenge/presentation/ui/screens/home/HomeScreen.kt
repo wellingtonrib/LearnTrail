@@ -1,7 +1,9 @@
 package br.com.jwar.triviachallenge.presentation.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -27,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
+import br.com.jwar.triviachallenge.data.datasources.local.Progression
 import br.com.jwar.triviachallenge.domain.model.Lesson
 import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
@@ -76,13 +80,24 @@ fun HomeScreen(
                     }
                     unit.lessons.forEachIndexed { lessonIndex, lesson ->
                         Card(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            onClick = { onNavigateToActivity(lesson.id) }
+                            modifier = Modifier.padding(top = 8.dp),
+                            onClick = { onNavigateToActivity(lesson.id) },
                         ) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = stringResource(id = R.string.label_lesson, lessonIndex + 1)
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = stringResource(id = R.string.label_lesson, lessonIndex + 1)
+                                )
+                                if (Progression.lessonsCompleted.contains(lesson.id)) {
+                                    Image(
+                                        imageVector = Icons.Filled.Done,
+                                        contentDescription = ""
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -108,9 +123,9 @@ fun PreviewHomeScreen() {
                     id = "1",
                     name = "Unit 1",
                     lessons = listOf(
-                        Lesson(id = "1", name = "Lesson 1"),
-                        Lesson(id = "2", name = "Lesson 2"),
-                        Lesson(id = "3", name = "Lesson 3"),
+                        Lesson(id = "1", name = "Lesson 1", unitId = "1"),
+                        Lesson(id = "2", name = "Lesson 2", unitId = "1"),
+                        Lesson(id = "3", name = "Lesson 3", unitId = "1"),
                     )
                 ),
             ),

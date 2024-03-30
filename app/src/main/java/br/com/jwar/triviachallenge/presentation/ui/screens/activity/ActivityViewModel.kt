@@ -3,6 +3,7 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.jwar.triviachallenge.R
+import br.com.jwar.triviachallenge.data.datasources.local.Progression
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
@@ -39,11 +40,7 @@ class ActivityViewModel @Inject constructor(
 
     private fun setLoadedState(activity: Activity) {
         _uiState.update {
-            if (activity.questions.isNotEmpty()) {
-                ActivityViewState.Loaded(activity, activity.questions.first())
-            } else {
-                ActivityViewState.Error(IllegalArgumentException("Activity has no questions"))
-            }
+            ActivityViewState.Loaded(activity, activity.questions.first())
         }
     }
 
@@ -96,6 +93,9 @@ class ActivityViewModel @Inject constructor(
                     progress = progress,
                 )
             } else {
+                if (hasAttemptsRemaining) {
+                    Progression.lessonsCompleted.add(state.activity.lessonId)
+                }
                 state.copy(
                     isFinished = true,
                     isSucceeded = hasAttemptsRemaining,
