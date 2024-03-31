@@ -17,5 +17,7 @@ import androidx.room.PrimaryKey
 data class ActivityEntity(
     @PrimaryKey val id: String,
     val name: String,
-    val unitId: String
+    val unitId: String,
+    val isUnlocked: Boolean,
+    val isCompleted: Boolean,
 )

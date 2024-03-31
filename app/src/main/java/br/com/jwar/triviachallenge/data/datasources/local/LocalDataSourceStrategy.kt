@@ -9,4 +9,7 @@ interface LocalDataSourceStrategy {
     suspend fun saveUnits(units: List<Unit>)
     suspend fun getActivity(activityId: String): Flow<Activity>
     suspend fun saveActivity(activity: Activity, activityId: String)
+    suspend fun completeActivity(activityId: String)
+    suspend fun unlockActivity(activityId: String)
+    suspend fun unlockUnit(unitId: String)
 }

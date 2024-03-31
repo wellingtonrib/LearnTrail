@@ -17,13 +17,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,20 +25,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.triviachallenge.R
-import br.com.jwar.triviachallenge.data.datasources.local.Progression
-import br.com.jwar.triviachallenge.domain.model.Activity
-import br.com.jwar.triviachallenge.domain.model.Unit
+import br.com.jwar.triviachallenge.presentation.model.ActivityModel
+import br.com.jwar.triviachallenge.presentation.model.UnitModel
 import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
-    units: List<Unit>,
+    units: List<UnitModel>,
     isRefreshing: Boolean = false,
-    onNavigateToSettings: () -> kotlin.Unit,
-    onNavigateToActivity: (String) -> kotlin.Unit,
-    onRefresh: () -> kotlin.Unit,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToActivity: (String) -> Unit,
+    onRefresh: () -> Unit,
 ) {
     val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
 
@@ -71,47 +64,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(units) { unit ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = unit.name
-                            )
-                            if (unit.activities.all { it.id in Progression.activitiesCompleted }) {
-                                Image(
-                                    imageVector = Icons.Filled.Done,
-                                    contentDescription = stringResource(R.string.label_done),
-                                )
-                            }
-                        }
-                    }
-                    unit.activities.forEach { activity ->
-                        Card(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .widthIn(min = 200.dp),
-                            onClick = { onNavigateToActivity(activity.id) },
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(16.dp),
-                                    text = activity.name
-                                )
-                                if (Progression.activitiesCompleted.contains(activity.id)) {
-                                    Image(
-                                        imageVector = Icons.Filled.Done,
-                                        contentDescription = stringResource(R.string.label_done),
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    UnitComponent(unit, onNavigateToActivity)
                 }
             }
             PullRefreshIndicator(
@@ -124,6 +77,82 @@ fun HomeScreen(
 }
 
 @ExperimentalMaterial3Api
+@Composable
+private fun UnitComponent(
+    unit: UnitModel,
+    onNavigateToActivity: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (unit.isUnlocked) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                MaterialTheme.colorScheme.secondaryContainer
+            }
+        ),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = unit.name
+            )
+            if (unit.isCompleted) {
+                Image(
+                    imageVector = Icons.Filled.Done,
+                    contentDescription = stringResource(R.string.label_done),
+                )
+            }
+        }
+    }
+    unit.activities.forEach { activity ->
+        ActivityComponent(onNavigateToActivity, activity)
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+private fun ActivityComponent(
+    onNavigateToActivity: (String) -> Unit,
+    activity: ActivityModel,
+) {
+    Card(
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .widthIn(min = 200.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (activity.isUnlocked) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                MaterialTheme.colorScheme.secondaryContainer
+            }
+        ),
+        onClick = {
+            if (activity.isUnlocked) {
+                onNavigateToActivity(activity.id)
+            }
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = activity.name
+            )
+            if (activity.isCompleted) {
+                Image(
+                    imageVector = Icons.Filled.Done,
+                    contentDescription = stringResource(R.string.label_done),
+                )
+            }
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
@@ -131,20 +160,29 @@ fun PreviewHomeScreen() {
     TriviaChallengeTheme {
         HomeScreen(
             units = listOf(
-                Unit(
+                UnitModel(
                     id = "1",
                     name = "Unit 1",
                     activities = listOf(
-                        Activity(id = "1", name = "Lesson 1", unitId = "1"),
-                        Activity(id = "2", name = "Lesson 2", unitId = "1"),
-                        Activity(id = "3", name = "Lesson 3", unitId = "1"),
-                    )
+                        ActivityModel(id = "1", name = "Lesson 1", isUnlocked = true),
+                        ActivityModel(id = "2", name = "Lesson 2"),
+                        ActivityModel(id = "3", name = "Lesson 3"),
+                    ),
+                    isUnlocked = true,
+                ),
+                UnitModel(
+                    id = "2",
+                    name = "Unit 2",
+                    activities = listOf(
+                        ActivityModel(id = "4", name = "Lesson 1"),
+                        ActivityModel(id = "5", name = "Lesson 2"),
+                        ActivityModel(id = "6", name = "Lesson 3"),
+                    ),
                 ),
             ),
             isRefreshing = false,
             onNavigateToSettings = {},
             onNavigateToActivity = {},
-            onRefresh = {},
-        )
+        ) {}
     }
 }

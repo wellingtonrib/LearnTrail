@@ -3,7 +3,6 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.jwar.triviachallenge.R
-import br.com.jwar.triviachallenge.data.datasources.local.Progression
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
@@ -94,7 +93,7 @@ class ActivityViewModel @Inject constructor(
                 )
             } else {
                 if (hasAttemptsRemaining) {
-                    Progression.activitiesCompleted.add(state.activity.id)
+                    completeActivity(state.activity.id)
                 }
                 state.copy(
                     isFinished = true,
@@ -112,6 +111,10 @@ class ActivityViewModel @Inject constructor(
         _uiState.updateLoadedState { state ->
             state.copy(userMessages = state.userMessages - uiMessage)
         }
+    }
+
+    private fun completeActivity(activityId: String) = viewModelScope.launch {
+        activityRepository.completeActivity(activityId)
     }
 }
 

@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UnitRepository {
     fun getUnits(refresh: Boolean): Flow<List<Unit>>
+    suspend fun unlockUnit(unitId: String)
 }

@@ -5,5 +5,7 @@ data class Activity(
     val name: String,
     val unitId: String,
     val questions: List<Question> = emptyList(),
+    val isUnlocked: Boolean = false,
+    val isCompleted: Boolean = false,
 )
 

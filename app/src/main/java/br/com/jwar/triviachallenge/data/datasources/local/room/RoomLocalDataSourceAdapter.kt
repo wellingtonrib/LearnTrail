@@ -15,7 +15,8 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             Unit(
                 id = entity.id,
                 name = entity.name,
-                activities = activityEntities.map { activity -> adaptToActivity(activity) }
+                activities = activityEntities.map { activity -> adaptToActivity(activity) },
+                isUnlocked = entity.isUnlocked,
             )
         }
 
@@ -24,26 +25,31 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             id = data.id,
             name = data.name,
             unitId = data.unitId,
+            isUnlocked = data.isUnlocked,
+            isCompleted = data.isCompleted,
         )
 
     fun adaptFromUnit(unit: Unit) =
         UnitEntity(
             id = unit.id,
             name = unit.name,
+            isUnlocked = unit.isUnlocked,
         )
 
     fun adaptFromActivity(activity: Activity, unitId: String) =
         ActivityEntity(
             id = activity.id,
             name = activity.name,
-            unitId = unitId
+            unitId = unitId,
+            isUnlocked = activity.isUnlocked,
+            isCompleted = activity.isCompleted,
         )
 
-    fun adaptToActivity(questions: List<QuestionEntity>, activity: ActivityEntity) =
+    fun adaptToActivity(questions: List<QuestionEntity>, entity: ActivityEntity) =
         Activity(
-            id = activity.id,
-            name = activity.name,
-            unitId = activity.unitId,
+            id = entity.id,
+            name = entity.name,
+            unitId = entity.unitId,
             questions = questions.map { question ->
                 Question(
                     id = question.id,
@@ -54,7 +60,9 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
                     question = question.question,
                     type = question.type
                 )
-            }
+            },
+            isUnlocked = entity.isUnlocked,
+            isCompleted = entity.isCompleted,
         )
 
     fun adaptFromQuestion(question: Question, activityId: String) =
