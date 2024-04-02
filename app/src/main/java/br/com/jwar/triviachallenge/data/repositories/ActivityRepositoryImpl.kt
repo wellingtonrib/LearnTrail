@@ -16,24 +16,38 @@ class ActivityRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSourceStrategy,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
-    override fun getActivity(activityId: String) = flow {
-        val localActivity = localDataSource.getActivity(activityId)
-        if (localActivity.first().questions.isEmpty()) {
+    override suspend fun getActivities(unitId: String) = flow {
+        val localActivities = localDataSource.getActivities(unitId)
+        if (localActivities.first().isEmpty()) {
             runCatching {
-                remoteDataSource.getActivity(activityId).also { remoteActivity ->
-                    localDataSource.saveActivity(remoteActivity, activityId)
+                remoteDataSource.getActivities(unitId).also { remoteActivities ->
+                    localDataSource.saveActivities(remoteActivities)
                 }
             }
         }
-        emitAll(localActivity)
+        emitAll(localActivities)
+    }
+
+    override suspend fun getQuestions(activityId: String) = flow {
+        val localQuestions = localDataSource.getQuestions(activityId)
+        if (localQuestions.first().isEmpty()) {
+            runCatching {
+                remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
+                    localDataSource.saveQuestions(remoteQuestions)
+                }
+            }
+        }
+        emitAll(localQuestions)
     }
     .flowOn(dispatcher)
 
-    override suspend fun completeActivity(activityId: String) {
-        localDataSource.completeActivity(activityId)
-    }
+    override suspend fun completeActivity(activityId: String) =
+        localDataSource.getActivity(activityId).first().let { activity ->
+            localDataSource.updateActivity(activity.copy(isCompleted = true))
+        }
 
-    override suspend fun unlockActivity(id: String) {
-        localDataSource.unlockActivity(id)
-    }
+    override suspend fun unlockActivity(activityId: String) =
+        localDataSource.getActivity(activityId).first().let { activity ->
+            localDataSource.updateActivity(activity.copy(isUnlocked = true))
+        }
 }

@@ -10,23 +10,11 @@ import javax.inject.Inject
 
 class RoomLocalDataSourceAdapter @Inject constructor() {
 
-    fun adaptToUnit(entity: Any, activityEntities: List<ActivityEntity>) =
-        (entity as UnitEntity).let {
-            Unit(
-                id = entity.id,
-                name = entity.name,
-                activities = activityEntities.map { activity -> adaptToActivity(activity) },
-                isUnlocked = entity.isUnlocked,
-            )
-        }
-
-    fun adaptToActivity(data: ActivityEntity) =
-        Activity(
-            id = data.id,
-            name = data.name,
-            unitId = data.unitId,
-            isUnlocked = data.isUnlocked,
-            isCompleted = data.isCompleted,
+    fun adaptToUnit(entity: UnitEntity) =
+        Unit(
+            id = entity.id,
+            name = entity.name,
+            isUnlocked = entity.isUnlocked,
         )
 
     fun adaptFromUnit(unit: Unit) =
@@ -36,40 +24,41 @@ class RoomLocalDataSourceAdapter @Inject constructor() {
             isUnlocked = unit.isUnlocked,
         )
 
-    fun adaptFromActivity(activity: Activity, unitId: String) =
+    fun adaptFromActivity(activity: Activity) =
         ActivityEntity(
             id = activity.id,
             name = activity.name,
-            unitId = unitId,
+            unitId = activity.unitId,
             isUnlocked = activity.isUnlocked,
             isCompleted = activity.isCompleted,
         )
 
-    fun adaptToActivity(questions: List<QuestionEntity>, entity: ActivityEntity) =
+    fun adaptToActivity(entity: ActivityEntity) =
         Activity(
             id = entity.id,
             name = entity.name,
             unitId = entity.unitId,
-            questions = questions.map { question ->
-                Question(
-                    id = question.id,
-                    unit = question.unit,
-                    correctAnswer = question.correctAnswer,
-                    difficulty = question.difficulty,
-                    answers = question.answers,
-                    question = question.question,
-                    type = question.type
-                )
-            },
             isUnlocked = entity.isUnlocked,
             isCompleted = entity.isCompleted,
         )
 
-    fun adaptFromQuestion(question: Question, activityId: String) =
+    fun adaptToQuestions(entities: List<QuestionEntity>) =
+        entities.map { entity ->
+            Question(
+                id = entity.id,
+                activityId = entity.activityId,
+                correctAnswer = entity.correctAnswer,
+                difficulty = entity.difficulty,
+                answers = entity.answers,
+                question = entity.question,
+                type = entity.type,
+            )
+        }
+
+    fun adaptFromQuestion(question: Question) =
         QuestionEntity(
             id = question.id,
-            activityId = activityId,
-            unit = question.unit,
+            activityId = question.activityId,
             correctAnswer = question.correctAnswer,
             difficulty = question.difficulty,
             answers = question.answers,

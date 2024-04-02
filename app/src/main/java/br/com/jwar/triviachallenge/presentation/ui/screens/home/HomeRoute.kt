@@ -18,7 +18,6 @@ fun HomeRoute(
     navigateToActivity: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
-        viewModel.getUnits()
         viewModel.uiEffect.collect { effect ->
             when(effect) {
                 is HomeViewEffect.NavigateToActivity -> navigateToActivity(effect.activityId)

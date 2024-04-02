@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.Flow
 interface UnitDao {
     @Query("SELECT * FROM UnitEntity WHERE id = :unitId")
     fun getById(unitId: String): Flow<UnitEntity>
+
     @Query("SELECT * FROM UnitEntity")
     fun getAll(): Flow<List<UnitEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(unit: UnitEntity)
+
     @Update
     suspend fun update(unit: UnitEntity)
 }

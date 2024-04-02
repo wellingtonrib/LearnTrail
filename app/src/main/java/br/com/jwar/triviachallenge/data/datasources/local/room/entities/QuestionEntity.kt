@@ -17,7 +17,6 @@ import androidx.room.PrimaryKey
 data class QuestionEntity(
     @PrimaryKey val id: String,
     val activityId: String,
-    val unit: String,
     val correctAnswer: String,
     val difficulty: String,
     val answers: List<String>,

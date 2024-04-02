@@ -2,6 +2,7 @@ package br.com.jwar.triviachallenge.data.datasources.remote.trivia
 
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
 import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaCategoryResponse
+import br.com.jwar.triviachallenge.domain.model.Activity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,17 +41,18 @@ class TriviaRemoteDataSource @Inject constructor(
         TriviaCategoryResponse("32", "Entertainment: Cartoon & Animations"),
     ).map { triviaAdapter.adaptToUnit(it) }
 
-    override suspend fun getActivity(
+    override suspend fun getActivities(unitId: String) = listOf(
+        Activity(id = "$unitId:easy", name = "Easy", unitId = unitId),
+        Activity(id = "$unitId:medium", name = "Medium", unitId = unitId),
+        Activity(id = "$unitId:hard", name = "Difficult", unitId = unitId)
+    )
+
+    override suspend fun getQuestions(
         activityId: String
     ) = withContext(dispatcher) {
         val (categoryId, difficult) = activityId.split(":")
-        triviaApi.getQuestions(categoryId, difficult).let { data ->
-            triviaAdapter.adaptToActivity(
-                data = data,
-                activityId = activityId,
-                categoryId = categoryId,
-                difficult = difficult
-            )
+        triviaApi.getQuestions(categoryId, difficult).let { response ->
+            triviaAdapter.adaptToQuestions(response, activityId)
         }
     }
 }        

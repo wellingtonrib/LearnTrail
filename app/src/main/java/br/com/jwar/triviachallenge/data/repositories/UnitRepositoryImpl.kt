@@ -29,6 +29,8 @@ class UnitRepositoryImpl @Inject constructor(
     }.flowOn(dispatcher)
 
     override suspend fun unlockUnit(unitId: String) {
-        localDataSource.unlockUnit(unitId)
+        localDataSource.getUnit(unitId).first().let { unit ->
+            localDataSource.updateUnit(unit.copy(isUnlocked = true))
+        }
     }
 }

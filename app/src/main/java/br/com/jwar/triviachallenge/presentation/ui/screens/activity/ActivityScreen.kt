@@ -78,9 +78,15 @@ fun ActivityScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = currentQuestion.unit)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Text(text = progress)
+                        Text(text = "❤️ $attemptsLeft")
+                    }
                 },
-                actions = {
+                navigationIcon = {
                     IconButton(onClick = onFinish) {
                         Icon(Icons.Outlined.Close, stringResource(R.string.action_close))
                     }
@@ -115,13 +121,6 @@ fun ActivityScreen(
                 modifier = Modifier.padding(padding),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    Text(text = progress)
-                    Text(text = "❤️ $attemptsLeft")
-                }
                 Text(text = currentQuestion.question)
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -183,7 +182,7 @@ fun GreetingChallengeScreen() {
         ActivityScreen(
             currentQuestion = Question(
                 id = "1",
-                unit = "Category name",
+                activityId = "1",
                 correctAnswer = "Correct",
                 difficulty = "",
                 answers = listOf(),
@@ -197,10 +196,10 @@ fun GreetingChallengeScreen() {
             isResultShown = false,
             isFinished = false,
             isSucceeded = false,
+            onMessageShown = {},
             onSelectAnswer = {},
             onCheck = {},
-            onNext = {},
-            onMessageShown = {}
+            onNext = {}
         ) {}
     }
 }

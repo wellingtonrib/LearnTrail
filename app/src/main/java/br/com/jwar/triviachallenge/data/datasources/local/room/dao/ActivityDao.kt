@@ -12,10 +12,16 @@ import kotlinx.coroutines.flow.Flow
 interface ActivityDao {
     @Query("SELECT * FROM ActivityEntity WHERE id = :id")
     fun getById(id: String): Flow<ActivityEntity>
+
     @Query("SELECT * FROM ActivityEntity WHERE unitId = :unitId")
     fun getByUnitId(unitId: String): Flow<List<ActivityEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(activities: List<ActivityEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(activity: ActivityEntity)
+
     @Update
-    suspend fun updateActivity(activity: ActivityEntity)
+    suspend fun update(activity: ActivityEntity)
 }

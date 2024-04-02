@@ -12,10 +12,10 @@ data class UnitModel(
         get() = activities.all { it.isCompleted }
 
     companion object {
-        fun fromUnit(unit: Unit) = UnitModel(
+        fun fromUnit(unit: Unit, activities: List<ActivityModel>) = UnitModel(
             id = unit.id,
             name = unit.name,
-            activities = unit.activities.map { ActivityModel.fromActivity(it) },
+            activities = activities,
             isUnlocked = unit.isUnlocked,
         )
     }
