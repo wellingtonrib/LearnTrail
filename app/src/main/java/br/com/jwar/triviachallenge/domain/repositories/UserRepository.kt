@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getXP(): Flow<Int>
-    fun saveXP(xp: Int)
+    suspend fun saveXP(xp: Int)
 }

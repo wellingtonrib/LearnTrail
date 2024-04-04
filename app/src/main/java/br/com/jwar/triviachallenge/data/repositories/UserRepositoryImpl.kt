@@ -10,5 +10,5 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override fun getXP(): Flow<Int> = userPreferences.getXP()
 
-    override fun saveXP(xp: Int) = userPreferences.saveXP(xp)
+    override suspend fun saveXP(xp: Int) = userPreferences.saveXP(xp)
 }
