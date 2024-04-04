@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class UserRepositoryImpl @Inject constructor(
     private val userPreferences: UserPreferences,
 ) : UserRepository {
-    override fun getXP(): Flow<Int> = userPreferences.getXP()
+    override suspend fun getXP(): Flow<Int> = userPreferences.getXP()
 
     override suspend fun saveXP(xp: Int) = userPreferences.saveXP(xp)
 }
