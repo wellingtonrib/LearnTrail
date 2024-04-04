@@ -18,9 +18,8 @@ class OpenTDBRemoteDataSourceAdapter @Inject constructor(
             name = data.name.translated()
         )
 
-    suspend fun adaptToActivity(activity: Activity) = activity.copy(
-        name = activity.name.translated()
-    )
+    suspend fun adaptToActivity(activity: Activity) =
+        activity.copy(name = activity.name.translated())
 
     suspend fun adaptToQuestions(
         data: OpenTDBQuestionsResponse,

@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.screens.home
+package br.com.jwar.triviachallenge.presentation.screens.home
 
 sealed class HomeViewEffect {
     object NavigateToSettings : HomeViewEffect()

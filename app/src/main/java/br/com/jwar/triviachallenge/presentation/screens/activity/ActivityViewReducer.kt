@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.screens.activity
+package br.com.jwar.triviachallenge.presentation.screens.activity
 
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository

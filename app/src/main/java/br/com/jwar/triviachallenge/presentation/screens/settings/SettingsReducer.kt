@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.screens.settings
+package br.com.jwar.triviachallenge.presentation.screens.settings
 
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.Language

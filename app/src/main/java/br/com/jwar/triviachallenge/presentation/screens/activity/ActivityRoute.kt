@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.screens.activity
+package br.com.jwar.triviachallenge.presentation.screens.activity
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -7,8 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.jwar.triviachallenge.R
-import br.com.jwar.triviachallenge.presentation.ui.components.ErrorContent
-import br.com.jwar.triviachallenge.presentation.ui.components.LoadingContent
+import br.com.jwar.triviachallenge.presentation.components.ErrorContent
+import br.com.jwar.triviachallenge.presentation.components.LoadingContent
 
 @ExperimentalMaterial3Api
 @Composable

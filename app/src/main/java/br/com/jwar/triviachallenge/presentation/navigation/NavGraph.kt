@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import br.com.jwar.triviachallenge.presentation.ui.screens.home.HomeRoute
-import br.com.jwar.triviachallenge.presentation.ui.screens.activity.ActivityRoute
-import br.com.jwar.triviachallenge.presentation.ui.screens.settings.SettingsRoute
+import br.com.jwar.triviachallenge.presentation.screens.home.HomeRoute
+import br.com.jwar.triviachallenge.presentation.screens.activity.ActivityRoute
+import br.com.jwar.triviachallenge.presentation.screens.settings.SettingsRoute
 
 @ExperimentalMaterial3Api
 @Composable

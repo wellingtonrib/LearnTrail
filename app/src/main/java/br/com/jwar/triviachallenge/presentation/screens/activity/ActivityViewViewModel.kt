@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.presentation.ui.screens.activity
+package br.com.jwar.triviachallenge.presentation.screens.activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
