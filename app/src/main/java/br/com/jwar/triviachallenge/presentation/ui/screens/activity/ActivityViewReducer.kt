@@ -24,7 +24,7 @@ interface ActivityViewReducer {
         }
     }
 
-    fun onCheck(state: ActivityViewState): ActivityViewState {
+    private fun onCheck(state: ActivityViewState): ActivityViewState {
         if (state !is ActivityViewState.Loaded) return state
 
         val isCorrectAnswer = state.selectedAnswer == state.currentQuestion.correctAnswer
@@ -44,7 +44,7 @@ interface ActivityViewReducer {
         )
     }
 
-    fun onNext(state: ActivityViewState): ActivityViewState {
+    private fun onNext(state: ActivityViewState): ActivityViewState {
         if (state !is ActivityViewState.Loaded) return state
 
         val hasAttemptsRemaining = state.attemptsLeft > 0

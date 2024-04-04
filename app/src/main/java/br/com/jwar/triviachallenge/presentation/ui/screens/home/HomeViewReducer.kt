@@ -22,7 +22,7 @@ interface HomeViewReducer {
         }
     }
 
-    suspend fun unlockUnitsOrActivitiesIfNeeded(units: List<UnitModel>): Boolean {
+    private suspend fun unlockUnitsOrActivitiesIfNeeded(units: List<UnitModel>): Boolean {
         if (areAllUnitsLocked(units)) {
             unlockFirstUnit(units)
             return true
@@ -43,14 +43,14 @@ interface HomeViewReducer {
         return false
     }
 
-    suspend fun unlockFirstUnit(units: List<UnitModel>) {
+    private suspend fun unlockFirstUnit(units: List<UnitModel>) {
         units.firstOrNull()?.let { firstUnit ->
             unitRepository.unlockUnit(firstUnit.id)
             unlockFirstActivity(firstUnit)
         }
     }
 
-    suspend fun unlockNextUnit(currentUnit: UnitModel, units: List<UnitModel>) {
+    private suspend fun unlockNextUnit(currentUnit: UnitModel, units: List<UnitModel>) {
         val nextLockedUnit = currentUnit.getNextLockedUnit(units)
         if (nextLockedUnit != null) {
             unitRepository.unlockUnit(nextLockedUnit.id)
@@ -58,31 +58,31 @@ interface HomeViewReducer {
         }
     }
 
-    suspend fun unlockNextActivity(lastUnlockedUnit: UnitModel, lastUnlockedActivity: ActivityModel) {
+    private suspend fun unlockNextActivity(lastUnlockedUnit: UnitModel, lastUnlockedActivity: ActivityModel) {
         val nextLockedActivity = lastUnlockedUnit.getNextLockedActivity(lastUnlockedActivity)
         if (nextLockedActivity != null) {
             activityRepository.unlockActivity(nextLockedActivity.id)
         }
     }
 
-    suspend fun unlockFirstActivity(unit: UnitModel) =
+    private suspend fun unlockFirstActivity(unit: UnitModel) =
         unit.activities.firstOrNull()?.let { activityRepository.unlockActivity(it.id) }
 
-    fun areAllUnitsLocked(units: List<UnitModel>) = units.all { !it.isUnlocked }
+    private fun areAllUnitsLocked(units: List<UnitModel>) = units.all { !it.isUnlocked }
 
-    fun getLastUnlockedUnit(units: List<UnitModel>) = units.lastOrNull { it.isUnlocked }
+    private fun getLastUnlockedUnit(units: List<UnitModel>) = units.lastOrNull { it.isUnlocked }
 
-    fun UnitModel.areAllActivitiesCompleted() = this.activities.all { it.isCompleted }
+    private fun UnitModel.areAllActivitiesCompleted() = this.activities.all { it.isCompleted }
 
-    fun UnitModel.getLastUnlockedActivity() =
+    private fun UnitModel.getLastUnlockedActivity() =
         this.activities.lastOrNull { it.isUnlocked }
 
-    fun UnitModel.getNextLockedActivity(currentActivity: ActivityModel) =
+    private fun UnitModel.getNextLockedActivity(currentActivity: ActivityModel) =
         this.activities.zipWithNext().find { (current, next) ->
             current == currentActivity && next.isUnlocked.not()
         }?.second
 
-    fun UnitModel.getNextLockedUnit(units: List<UnitModel>) =
+    private fun UnitModel.getNextLockedUnit(units: List<UnitModel>) =
         units.zipWithNext().find { (current, next) ->
             current == this && next.isUnlocked.not()
         }?.second

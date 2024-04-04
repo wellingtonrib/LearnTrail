@@ -4,6 +4,7 @@ import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaCate
 import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaQuestionResult
 import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaQuestionsResponse
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
+import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
 import java.util.UUID
@@ -17,6 +18,10 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
             id = data.id,
             name = data.name.translated()
         )
+
+    suspend fun adaptToActivity(activity: Activity) = activity.copy(
+        name = activity.name.translated()
+    )
 
     suspend fun adaptToQuestions(
         data: TriviaQuestionsResponse,
@@ -37,6 +42,5 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
         (incorrectAnswers + correctAnswer).shuffled().map { answer ->
             answer.translated()
         }
-
     private suspend fun String.translated() = translatorService.translate(this)
 }

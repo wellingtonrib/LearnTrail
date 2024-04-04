@@ -45,7 +45,7 @@ class TriviaRemoteDataSource @Inject constructor(
         Activity(id = "$unitId:easy", name = "Easy", unitId = unitId),
         Activity(id = "$unitId:medium", name = "Medium", unitId = unitId),
         Activity(id = "$unitId:hard", name = "Difficult", unitId = unitId)
-    )
+    ).map { triviaAdapter.adaptToActivity(it) }
 
     override suspend fun getQuestions(
         activityId: String

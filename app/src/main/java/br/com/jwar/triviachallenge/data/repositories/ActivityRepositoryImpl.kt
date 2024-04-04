@@ -16,9 +16,9 @@ class ActivityRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSourceStrategy,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
-    override suspend fun getActivities(unitId: String) = flow {
+    override suspend fun getActivities(unitId: String, refresh: Boolean) = flow {
         val localActivities = localDataSource.getActivities(unitId)
-        if (localActivities.first().isEmpty()) {
+        if (refresh || localActivities.first().isEmpty()) {
             runCatching {
                 remoteDataSource.getActivities(unitId).also { remoteActivities ->
                     localDataSource.saveActivities(remoteActivities)

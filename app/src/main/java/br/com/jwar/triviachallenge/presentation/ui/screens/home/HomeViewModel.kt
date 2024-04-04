@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
     fun getUnits(refresh: Boolean = false) = viewModelScope.launch {
         unitRepository.getUnits(refresh)
             .onStart { setLoadingState() }
-            .flatMapLatest { units -> units.toUnitModels() }
+            .flatMapLatest { units -> units.toUnitModels(refresh) }
             .catch { error -> setErrorState(error) }
             .collect { unitModels -> setLoadedState(unitModels) }
     }
@@ -70,9 +70,9 @@ class HomeViewModel @Inject constructor(
 
     fun onRefresh() = getUnits(refresh = true)
 
-    private suspend fun List<Unit>.toUnitModels() = combine(
+    private suspend fun List<Unit>.toUnitModels(refresh: Boolean) = combine(
         this.map { unit ->
-            activityRepository.getActivities(unit.id).map { activities ->
+            activityRepository.getActivities(unit.id, refresh).map { activities ->
                 UnitModel.fromUnit(unit, activities.toActivityModels())
             }.distinctUntilChanged()
         }
