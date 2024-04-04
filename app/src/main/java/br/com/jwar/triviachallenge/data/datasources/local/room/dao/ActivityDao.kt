@@ -24,4 +24,7 @@ interface ActivityDao {
 
     @Update
     suspend fun update(activity: ActivityEntity)
+
+    @Query("UPDATE ActivityEntity SET name = :name, unitId = :unitId WHERE id = :id")
+    suspend fun update(id: String, name: String, unitId: String)
 }

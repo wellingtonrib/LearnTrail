@@ -15,6 +15,9 @@ interface ActivityViewReducer {
 
     fun reduce(state: ActivityViewState, action: ActivityViewState.Action): ActivityViewState {
         return when (action) {
+            is ActivityViewState.Action.OnLoaded -> {
+                onLoaded(state, action)
+            }
             is ActivityViewState.Action.OnCheck -> {
                 onCheck(state)
             }
@@ -22,6 +25,19 @@ interface ActivityViewReducer {
                 onNext(state)
             }
         }
+    }
+
+    fun onLoaded(
+        state: ActivityViewState,
+        action: ActivityViewState.Action.OnLoaded
+    ) = when {
+        action.questions.isNotEmpty() -> ActivityViewState.Loaded(
+            activityId = action.activityId,
+            questions = action.questions,
+            currentQuestion = action.questions.first(),
+            progress = "1/${action.questions.size}"
+        )
+        else -> ActivityViewState.Error(Throwable("No questions found"))
     }
 
     private fun onCheck(state: ActivityViewState): ActivityViewState {

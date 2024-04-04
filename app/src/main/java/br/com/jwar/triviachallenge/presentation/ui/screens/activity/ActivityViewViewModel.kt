@@ -38,13 +38,8 @@ class ActivityViewViewModel @Inject constructor(
     }
 
     private fun setLoadedState(activityId: String, questions: List<Question>) {
-        _uiState.update {
-            ActivityViewState.Loaded(
-                activityId = activityId,
-                questions = questions,
-                currentQuestion = questions.first(),
-                progress = "1/${questions.size}",
-            )
+        _uiState.update { state ->
+            reduce(state, ActivityViewState.Action.OnLoaded(activityId, questions))
         }
     }
 

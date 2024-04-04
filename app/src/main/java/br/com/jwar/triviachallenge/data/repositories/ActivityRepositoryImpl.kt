@@ -30,11 +30,9 @@ class ActivityRepositoryImpl @Inject constructor(
 
     override suspend fun getQuestions(activityId: String) = flow {
         val localQuestions = localDataSource.getQuestions(activityId)
-        if (localQuestions.first().isEmpty()) {
-            runCatching {
-                remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
-                    localDataSource.saveQuestions(remoteQuestions)
-                }
+        runCatching {
+            remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
+                localDataSource.saveQuestions(remoteQuestions)
             }
         }
         emitAll(localQuestions)

@@ -57,16 +57,14 @@ class RoomLocalDataSource @Inject constructor(
         activities.forEach { activity ->
             val activityEntity = roomAdapter.adaptFromActivity(activity)
             activityDao.findById(activity.id).firstOrNull()?.let {
-                activityDao.update(activityEntity)
+                activityDao.update(activityEntity.id, activityEntity.name, activityEntity.unitId)
             } ?: kotlin.run {
                 activityDao.insert(activityEntity)
             }
         }
 
     override suspend fun saveQuestions(questions: List<Question>) {
-        val questionEntities = questions.map { question ->
-            roomAdapter.adaptFromQuestion(question)
-        }
+        val questionEntities = questions.map { question -> roomAdapter.adaptFromQuestion(question) }
         questionDao.insertAll(questionEntities)
     }
 

@@ -7,7 +7,6 @@ import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
-import java.util.UUID
 import javax.inject.Inject
 
 class OpenTDBRemoteDataSourceAdapter @Inject constructor(
@@ -26,9 +25,9 @@ class OpenTDBRemoteDataSourceAdapter @Inject constructor(
     suspend fun adaptToQuestions(
         data: OpenTDBQuestionsResponse,
         activityId: String
-    ) = data.results.map { result ->
+    ) = data.results.mapIndexed { index, result ->
         Question(
-            id = UUID.randomUUID().toString(),
+            id = "$activityId:$index",
             activityId = activityId,
             correctAnswer = result.correctAnswer.translated(),
             difficulty = result.difficulty,
