@@ -20,7 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 @HiltViewModel
 class ActivityViewViewModel @Inject constructor(
     override val activityRepository: ActivityRepository
-): ViewModel(), ActivityViewProcessor {
+): ViewModel(), ActivityViewReducer {
 
     override val scope: CoroutineScope = viewModelScope
 
@@ -63,14 +63,14 @@ class ActivityViewViewModel @Inject constructor(
     }
 
     fun onCheck() {
-        _uiState.updateLoadedState { state ->
-            getStateByCheckingAnswer(state)
+        _uiState.update { state ->
+            reduce(state, ActivityViewState.Action.OnCheck)
         }
     }
 
     fun onNext() {
-        _uiState.updateLoadedState { state ->
-            getStateByCheckingNextQuestion(state)
+        _uiState.update { state ->
+            reduce(state, ActivityViewState.Action.OnNext)
         }
     }
 
@@ -86,5 +86,5 @@ class ActivityViewViewModel @Inject constructor(
 }
 
 private fun MutableStateFlow<ActivityViewState>.updateLoadedState(
-    block: (ActivityViewState.Loaded) -> ActivityViewState.Loaded
+    block: (ActivityViewState.Loaded) -> ActivityViewState
 ) = this.update { state -> (state as? ActivityViewState.Loaded)?.let { block(it) } ?: state }

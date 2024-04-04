@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.*
 class HomeViewModel @Inject constructor(
     override val unitRepository: UnitRepository,
     override val activityRepository: ActivityRepository,
-) : ViewModel(), HomeViewProcessor {
+) : ViewModel(), HomeViewReducer {
 
     private val _uiState = MutableStateFlow<HomeViewState>(HomeViewState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -34,14 +34,13 @@ class HomeViewModel @Inject constructor(
             .onStart { setLoadingState() }
             .flatMapLatest { it.toUnitModels() }
             .catch { error -> setErrorState(error) }
-            .collect { unitModels ->
-                unlockUnitsOrActivitiesIfNeeded(unitModels)
-                setLoadedState(unitModels)
-            }
+            .collect { unitModels -> setLoadedState(unitModels) }
     }
 
-    private fun setLoadedState(units: List<UnitModel>) {
-        _uiState.update { HomeViewState.Loaded(units) }
+    private suspend fun setLoadedState(units: List<UnitModel>) {
+        _uiState.update { currentState ->
+            reduce(currentState, HomeViewState.Action.OnLoaded(units))
+        }
     }
 
     private fun setErrorState(error: Throwable) {

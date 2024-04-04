@@ -19,4 +19,9 @@ sealed class ActivityViewState {
         val userMessages: List<UIMessage> = emptyList(),
     ) : ActivityViewState()
     data class Error(val error: Throwable) : ActivityViewState()
+
+    sealed class Action {
+        object OnCheck : Action()
+        object OnNext : Action()
+    }
 }
