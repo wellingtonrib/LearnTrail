@@ -7,9 +7,8 @@ import br.com.jwar.triviachallenge.data.datasources.local.room.APP_DATABASE_NAME
 import br.com.jwar.triviachallenge.data.datasources.local.room.RoomAppDatabase
 import br.com.jwar.triviachallenge.data.datasources.local.room.RoomLocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TRIVIA_API_BASE_URL
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaApi
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBApi
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBRemoteDataSource
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
@@ -62,18 +61,18 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideTriviaApi(
+    fun provideOpenTDBApi(
         convertFactory: Converter.Factory
-    ): TriviaApi =
+    ): OpenTDBApi =
         Retrofit.Builder()
-            .baseUrl(TRIVIA_API_BASE_URL)
+            .baseUrl("https://opentdb.com/")
             .addConverterFactory(convertFactory)
             .build()
-            .create(TriviaApi::class.java)
+            .create(OpenTDBApi::class.java)
 
     @Provides
     fun provideRemoteDataSourceStrategy(
-        remoteDataSourceStrategy: TriviaRemoteDataSource
+        remoteDataSourceStrategy: OpenTDBRemoteDataSource
     ): RemoteDataSourceStrategy = remoteDataSourceStrategy
 
     @Provides

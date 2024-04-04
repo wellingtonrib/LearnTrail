@@ -1,8 +1,8 @@
-package br.com.jwar.triviachallenge.data.datasources.remote.trivia
+package br.com.jwar.triviachallenge.data.datasources.remote.opentdb
 
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaCategoryResponse
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaQuestionResult
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto.TriviaQuestionsResponse
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto.OpenTDBCategoryResponse
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto.OpenTDBQuestionResult
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto.OpenTDBQuestionsResponse
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
@@ -10,10 +10,10 @@ import br.com.jwar.triviachallenge.domain.model.Unit
 import java.util.UUID
 import javax.inject.Inject
 
-class TriviaRemoteDataSourceAdapter @Inject constructor(
+class OpenTDBRemoteDataSourceAdapter @Inject constructor(
     private val translatorService: TranslatorService,
 ) {
-    suspend fun adaptToUnit(data: TriviaCategoryResponse) =
+    suspend fun adaptToUnit(data: OpenTDBCategoryResponse) =
         Unit(
             id = data.id,
             name = data.name.translated()
@@ -24,7 +24,7 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
     )
 
     suspend fun adaptToQuestions(
-        data: TriviaQuestionsResponse,
+        data: OpenTDBQuestionsResponse,
         activityId: String
     ) = data.results.map { result ->
         Question(
@@ -38,7 +38,7 @@ class TriviaRemoteDataSourceAdapter @Inject constructor(
         )
     }
 
-    private suspend fun TriviaQuestionResult.getAnswers() =
+    private suspend fun OpenTDBQuestionResult.getAnswers() =
         (incorrectAnswers + correctAnswer).shuffled().map { answer ->
             answer.translated()
         }

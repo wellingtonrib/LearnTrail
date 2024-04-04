@@ -1,8 +1,8 @@
-package br.com.jwar.triviachallenge.data.datasources.remote.trivia.dto
+package br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto
 
 import com.squareup.moshi.Json
 
-data class TriviaQuestionResult(
+data class OpenTDBQuestionResult(
     @field:Json(name = "category") val category: String,
     @field:Json(name = "correct_answer") val correctAnswer: String,
     @field:Json(name = "difficulty") val difficulty: String,
