@@ -1,8 +1,8 @@
-package br.com.jwar.triviachallenge.data.datasources.local.room
+package br.com.jwar.triviachallenge.data.datasources.local.database
 
-import br.com.jwar.triviachallenge.data.datasources.local.room.entities.ActivityEntity
-import br.com.jwar.triviachallenge.data.datasources.local.room.entities.QuestionEntity
-import br.com.jwar.triviachallenge.data.datasources.local.room.entities.UnitEntity
+import br.com.jwar.triviachallenge.data.datasources.local.database.entities.ActivityEntity
+import br.com.jwar.triviachallenge.data.datasources.local.database.entities.QuestionEntity
+import br.com.jwar.triviachallenge.data.datasources.local.database.entities.UnitEntity
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit

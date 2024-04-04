@@ -31,6 +31,7 @@ fun HomeRoute(
             LoadingContent()
         is HomeViewState.Loaded ->
             HomeScreen(
+                userXP = state.userXP,
                 units = state.units,
                 isRefreshing = state.isRefreshing,
                 onNavigateToSettings = viewModel::onNavigateToSettings,

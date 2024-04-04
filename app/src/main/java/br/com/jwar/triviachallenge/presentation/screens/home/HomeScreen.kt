@@ -33,6 +33,7 @@ import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
+    userXP: Int,
     units: List<UnitModel>,
     isRefreshing: Boolean = false,
     onNavigateToSettings: () -> Unit,
@@ -44,7 +45,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.title_home)) },
+                title = { Text(text = "$userXP XP") },
                 actions = {
                     IconButton(onClick = onNavigateToSettings) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.title_settings))
@@ -159,6 +160,7 @@ private fun ActivityComponent(
 fun PreviewHomeScreen() {
     TriviaChallengeTheme {
         HomeScreen(
+            userXP = 100,
             units = listOf(
                 UnitModel(
                     id = "1",

@@ -2,6 +2,7 @@ package br.com.jwar.triviachallenge.presentation.screens.activity
 
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
+import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
 import br.com.jwar.triviachallenge.presentation.utils.UIMessageStyle
 import br.com.jwar.triviachallenge.presentation.utils.UIText
@@ -11,6 +12,7 @@ import kotlinx.coroutines.launch
 interface ActivityViewReducer {
 
     val activityRepository: ActivityRepository
+    val userRepository: UserRepository
     val scope: CoroutineScope
 
     fun reduce(state: ActivityViewState, action: ActivityViewState.Action): ActivityViewState {
@@ -78,7 +80,10 @@ interface ActivityViewReducer {
                 progress = progress,
             )
         } else {
-            if (hasAttemptsRemaining) { completeActivity(state.activityId) }
+            if (hasAttemptsRemaining) {
+                completeActivity(state.activityId)
+                incrementUserXP(5)
+            }
             state.copy(
                 isFinished = true,
                 isSucceeded = hasAttemptsRemaining,
@@ -88,5 +93,9 @@ interface ActivityViewReducer {
 
     private fun completeActivity(activityId: String) = scope.launch {
         activityRepository.completeActivity(activityId)
+    }
+
+    private fun incrementUserXP(points: Int) = scope.launch {
+        userRepository.saveXP(points)
     }
 }

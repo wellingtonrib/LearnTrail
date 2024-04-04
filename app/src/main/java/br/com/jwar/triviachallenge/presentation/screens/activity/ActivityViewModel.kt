@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
+import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,8 +19,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 
 @HiltViewModel
-class ActivityViewViewModel @Inject constructor(
-    override val activityRepository: ActivityRepository
+class ActivityViewModel @Inject constructor(
+    override val activityRepository: ActivityRepository,
+    override val userRepository: UserRepository,
 ): ViewModel(), ActivityViewReducer {
 
     override val scope: CoroutineScope = viewModelScope

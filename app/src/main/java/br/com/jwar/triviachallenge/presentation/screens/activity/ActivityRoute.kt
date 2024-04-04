@@ -14,7 +14,7 @@ import br.com.jwar.triviachallenge.presentation.components.LoadingContent
 @Composable
 fun ActivityRoute(
     activityId: String,
-    viewModel: ActivityViewViewModel = hiltViewModel(),
+    viewModel: ActivityViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
 ) {
     LaunchedEffect(Unit) {

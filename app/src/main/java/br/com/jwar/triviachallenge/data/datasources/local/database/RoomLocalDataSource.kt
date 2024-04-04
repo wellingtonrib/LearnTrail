@@ -1,9 +1,9 @@
-package br.com.jwar.triviachallenge.data.datasources.local.room
+package br.com.jwar.triviachallenge.data.datasources.local.database
 
 import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.local.room.dao.ActivityDao
-import br.com.jwar.triviachallenge.data.datasources.local.room.dao.QuestionDao
-import br.com.jwar.triviachallenge.data.datasources.local.room.dao.UnitDao
+import br.com.jwar.triviachallenge.data.datasources.local.database.dao.ActivityDao
+import br.com.jwar.triviachallenge.data.datasources.local.database.dao.QuestionDao
+import br.com.jwar.triviachallenge.data.datasources.local.database.dao.UnitDao
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit

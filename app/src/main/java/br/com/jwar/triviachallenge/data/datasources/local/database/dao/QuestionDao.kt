@@ -1,10 +1,10 @@
-package br.com.jwar.triviachallenge.data.datasources.local.room.dao
+package br.com.jwar.triviachallenge.data.datasources.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import br.com.jwar.triviachallenge.data.datasources.local.room.entities.QuestionEntity
+import br.com.jwar.triviachallenge.data.datasources.local.database.entities.QuestionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

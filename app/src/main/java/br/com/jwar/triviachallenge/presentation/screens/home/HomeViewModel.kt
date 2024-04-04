@@ -6,6 +6,7 @@ import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
+import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import br.com.jwar.triviachallenge.presentation.model.ActivityModel
 import br.com.jwar.triviachallenge.presentation.model.UnitModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.*
 class HomeViewModel @Inject constructor(
     override val unitRepository: UnitRepository,
     override val activityRepository: ActivityRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel(), HomeViewReducer {
 
     private val _uiState = MutableStateFlow<HomeViewState>(HomeViewState.Loading)
@@ -37,7 +39,18 @@ class HomeViewModel @Inject constructor(
             .onStart { setLoadingState() }
             .flatMapLatest { units -> units.toUnitModels(refresh) }
             .catch { error -> setErrorState(error) }
-            .collect { unitModels -> setLoadedState(unitModels) }
+            .collect { unitModels ->
+                setLoadedState(unitModels)
+                getUserXP()
+            }
+    }
+
+    private fun getUserXP() = viewModelScope.launch {
+        userRepository.getXP().collect { userXP ->
+            _uiState.update { currentState ->
+                reduce(currentState, HomeViewState.Action.OnUserXPUpdated(userXP))
+            }
+        }
     }
 
     private suspend fun setLoadedState(units: List<UnitModel>) {

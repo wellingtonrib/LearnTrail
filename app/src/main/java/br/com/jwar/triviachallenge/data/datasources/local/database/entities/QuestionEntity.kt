@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.data.datasources.local.room.entities
+package br.com.jwar.triviachallenge.data.datasources.local.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

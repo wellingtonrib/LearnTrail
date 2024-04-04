@@ -3,19 +3,22 @@ package br.com.jwar.triviachallenge.data.di
 import android.content.Context
 import androidx.room.Room
 import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.local.room.APP_DATABASE_NAME
-import br.com.jwar.triviachallenge.data.datasources.local.room.RoomAppDatabase
-import br.com.jwar.triviachallenge.data.datasources.local.room.RoomLocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.APP_DATABASE_NAME
+import br.com.jwar.triviachallenge.data.datasources.local.database.RoomAppDatabase
+import br.com.jwar.triviachallenge.data.datasources.local.database.RoomLocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.preferences.UserPreferences
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBApi
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBRemoteDataSource
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.UserRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
+import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -51,6 +54,11 @@ class DataModule {
     ): ActivityRepository = activityRepository
 
     @Provides
+    fun provideUserRepository(
+        userRepository: UserRepositoryImpl
+    ): UserRepository = userRepository
+
+    @Provides
     @Singleton
     fun provideConvertFactory() : Converter.Factory =
         MoshiConverterFactory.create(
@@ -71,7 +79,7 @@ class DataModule {
             .create(OpenTDBApi::class.java)
 
     @Provides
-    fun provideRemoteDataSourceStrategy(
+    fun provideRemoteDataSource(
         remoteDataSourceStrategy: OpenTDBRemoteDataSource
     ): RemoteDataSourceStrategy = remoteDataSourceStrategy
 
@@ -95,7 +103,12 @@ class DataModule {
     fun provideQuestionDao(database: RoomAppDatabase) = database.questionDao()
 
     @Provides
-    fun provideLocalDataSourceStrategy(
+    fun provideLocalDataSource(
         localDataSourceStrategy: RoomLocalDataSource
     ) : LocalDataSourceStrategy = localDataSourceStrategy
+
+    @Provides
+    fun provideUserPreferences(
+        @ApplicationContext context: Context
+    ) = UserPreferences(context)
 }

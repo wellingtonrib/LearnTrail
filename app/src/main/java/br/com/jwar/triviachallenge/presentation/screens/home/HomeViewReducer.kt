@@ -13,13 +13,25 @@ interface HomeViewReducer {
     suspend fun reduce(state: HomeViewState, action: HomeViewState.Action): HomeViewState {
         return when (action) {
             is HomeViewState.Action.OnLoaded -> {
-                if (unlockUnitsOrActivitiesIfNeeded(action.units)) {
-                    HomeViewState.Loading
-                } else {
-                    HomeViewState.Loaded(action.units)
-                }
+                onLoaded(action)
+            }
+            is HomeViewState.Action.OnUserXPUpdated -> {
+                onUserXPUpdated(state, action.userXP)
             }
         }
+    }
+
+    suspend fun HomeViewReducer.onLoaded(
+        action: HomeViewState.Action.OnLoaded
+    ) = if (unlockUnitsOrActivitiesIfNeeded(action.units)) {
+        HomeViewState.Loading
+    } else {
+        HomeViewState.Loaded(action.units)
+    }
+
+    fun onUserXPUpdated(state: HomeViewState, userXP: Int) = when (state) {
+        is HomeViewState.Loaded -> state.copy(userXP = userXP)
+        else -> state
     }
 
     private suspend fun unlockUnitsOrActivitiesIfNeeded(units: List<UnitModel>): Boolean {
