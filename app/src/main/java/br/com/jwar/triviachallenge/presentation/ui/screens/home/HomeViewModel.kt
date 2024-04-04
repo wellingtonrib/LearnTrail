@@ -2,8 +2,11 @@ package br.com.jwar.triviachallenge.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.jwar.triviachallenge.domain.model.Activity
+import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
+import br.com.jwar.triviachallenge.presentation.model.ActivityModel
 import br.com.jwar.triviachallenge.presentation.model.UnitModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -32,7 +35,7 @@ class HomeViewModel @Inject constructor(
     fun getUnits(refresh: Boolean = false) = viewModelScope.launch {
         unitRepository.getUnits(refresh)
             .onStart { setLoadingState() }
-            .flatMapLatest { it.toUnitModels() }
+            .flatMapLatest { units -> units.toUnitModels() }
             .catch { error -> setErrorState(error) }
             .collect { unitModels -> setLoadedState(unitModels) }
     }
@@ -66,4 +69,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onRefresh() = getUnits(refresh = true)
+
+    private suspend fun List<Unit>.toUnitModels() = combine(
+        this.map { unit ->
+            activityRepository.getActivities(unit.id).map { activities ->
+                UnitModel.fromUnit(unit, activities.toActivityModels())
+            }.distinctUntilChanged()
+        }
+    ) { unitModels -> unitModels.toList() }
+
+    private fun List<Activity>.toActivityModels() = this.map { ActivityModel.fromActivity(it) }
 }

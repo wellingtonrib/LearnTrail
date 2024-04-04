@@ -1,13 +1,9 @@
 package br.com.jwar.triviachallenge.presentation.ui.screens.home
 
-import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import br.com.jwar.triviachallenge.presentation.model.ActivityModel
 import br.com.jwar.triviachallenge.presentation.model.UnitModel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 
 interface HomeViewReducer {
 
@@ -25,15 +21,6 @@ interface HomeViewReducer {
             }
         }
     }
-
-    suspend fun List<Unit>.toUnitModels() = combine(
-        this.map { unit ->
-            activityRepository.getActivities(unit.id).map { activities ->
-                val activityModels = activities.map { ActivityModel.fromActivity(it) }
-                UnitModel.fromUnit(unit = unit, activities = activityModels)
-            }.distinctUntilChanged()
-        }
-    ) { unitModels -> unitModels.toList() }
 
     suspend fun unlockUnitsOrActivitiesIfNeeded(units: List<UnitModel>): Boolean {
         if (areAllUnitsLocked(units)) {
