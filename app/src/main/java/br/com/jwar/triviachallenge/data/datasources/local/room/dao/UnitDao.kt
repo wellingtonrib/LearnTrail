@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UnitDao {
     @Query("SELECT * FROM UnitEntity WHERE id = :unitId")
-    fun getById(unitId: String): Flow<UnitEntity>
+    fun findById(unitId: String): Flow<UnitEntity>
 
     @Query("SELECT * FROM UnitEntity")
     fun getAll(): Flow<List<UnitEntity>>

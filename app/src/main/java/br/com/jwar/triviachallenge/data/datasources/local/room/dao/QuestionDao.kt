@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface QuestionDao {
     @Query("SELECT * FROM QuestionEntity WHERE activityId = :activityId")
-    fun getByActivityId(activityId: String): Flow<List<QuestionEntity>>
+    fun findByActivityId(activityId: String): Flow<List<QuestionEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(question: QuestionEntity)

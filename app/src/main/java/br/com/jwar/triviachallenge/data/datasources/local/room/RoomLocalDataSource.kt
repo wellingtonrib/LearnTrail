@@ -22,32 +22,46 @@ class RoomLocalDataSource @Inject constructor(
         unitDao.getAll().map { units -> units.map { unit -> roomAdapter.adaptToUnit(unit) } }
 
     override suspend fun getUnit(unitId: String) =
-        unitDao.getById(unitId).map { unitEntity ->
+        unitDao.findById(unitId).map { unitEntity ->
             roomAdapter.adaptToUnit(unitEntity)
         }
 
     override suspend fun saveUnits(units: List<Unit>) =
-        units.forEach { unit -> insertOrUpdateUnit(unit) }
+        units.forEach { unit ->
+            val unitEntity = roomAdapter.adaptFromUnit(unit)
+            unitDao.findById(unit.id).firstOrNull()?.let {
+                unitDao.update(unitEntity)
+            } ?: kotlin.run {
+                unitDao.insert(unitEntity)
+            }
+        }
 
     override suspend fun getQuestions(activityId: String): Flow<List<Question>> =
-        questionDao.getByActivityId(activityId).map { questions ->
+        questionDao.findByActivityId(activityId).map { questions ->
             roomAdapter.adaptToQuestions(questions)
         }
 
     override suspend fun getActivity(activityId: String) =
-        activityDao.getById(activityId).map { activityEntity ->
+        activityDao.findById(activityId).map { activityEntity ->
             roomAdapter.adaptToActivity(activityEntity)
         }
 
     override suspend fun getActivities(unitId: String) =
-        activityDao.getByUnitId(unitId).map { activityEntities ->
+        activityDao.findByUnitId(unitId).map { activityEntities ->
             activityEntities.map { activityEntity ->
                 roomAdapter.adaptToActivity(activityEntity)
             }
         }
 
     override suspend fun saveActivities(activities: List<Activity>) =
-        activities.forEach { insertOrUpdateActivity(it) }
+        activities.forEach { activity ->
+            val activityEntity = roomAdapter.adaptFromActivity(activity)
+            activityDao.findById(activity.id).firstOrNull()?.let {
+                activityDao.update(activityEntity)
+            } ?: kotlin.run {
+                activityDao.insert(activityEntity)
+            }
+        }
 
     override suspend fun saveQuestions(questions: List<Question>) {
         val questionEntities = questions.map { question ->
@@ -64,23 +78,5 @@ class RoomLocalDataSource @Inject constructor(
     override suspend fun updateUnit(unit: Unit) {
         val unitEntity = roomAdapter.adaptFromUnit(unit)
         unitDao.update(unitEntity)
-    }
-
-    private suspend fun insertOrUpdateUnit(unit: Unit) {
-        val unitEntity = roomAdapter.adaptFromUnit(unit)
-        unitDao.getById(unit.id).firstOrNull()?.let {
-            unitDao.update(unitEntity)
-        } ?: kotlin.run {
-            unitDao.insert(unitEntity)
-        }
-    }
-
-    private suspend fun insertOrUpdateActivity(activity: Activity) {
-        val activityEntity = roomAdapter.adaptFromActivity(activity)
-        activityDao.getById(activity.id).firstOrNull()?.let {
-            activityDao.update(activityEntity)
-        } ?: kotlin.run {
-            activityDao.insert(activityEntity)
-        }
     }
 }
