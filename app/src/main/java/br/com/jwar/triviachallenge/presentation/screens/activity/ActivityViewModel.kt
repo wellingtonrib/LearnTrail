@@ -32,53 +32,51 @@ class ActivityViewModel @Inject constructor(
     private val _uiEffect = Channel<ActivityViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    fun getActivity(activityId: String) = viewModelScope.launch {
+    fun onIntent(intent: ActivityViewIntent) {
+        when (intent) {
+            is ActivityViewIntent.LoadActivity -> onLoadActivity(intent.activityId)
+            is ActivityViewIntent.SelectAnswer -> onSelectAnswer(intent.answer)
+            is ActivityViewIntent.CheckAnswer -> onCheckAnswer()
+            is ActivityViewIntent.Next -> onNext()
+            is ActivityViewIntent.Finish -> onFinish()
+            is ActivityViewIntent.MessageShown -> onMessageShown(intent.uiMessage)
+        }
+    }
+
+    private fun onLoadActivity(activityId: String) = viewModelScope.launch {
         activityRepository.getQuestions(activityId)
             .onStart { setLoadingState() }
             .catch { error -> setErrorState(error) }
             .collect { questions -> setLoadedState(activityId, questions) }
     }
 
-    private fun setLoadedState(activityId: String, questions: List<Question>) {
+    private fun setLoadedState(activityId: String, questions: List<Question>) =
         _uiState.update { state ->
             reduce(state, ActivityViewState.Action.OnLoaded(activityId, questions))
         }
+
+    private fun setErrorState(error: Throwable) = _uiState.update { ActivityViewState.Error(error) }
+
+    private fun setLoadingState() = _uiState.update { ActivityViewState.Loading }
+
+    private fun onSelectAnswer(answer: String) = _uiState.updateLoadedState { state ->
+        state.copy(selectedAnswer = answer)
     }
 
-    private fun setErrorState(error: Throwable) {
-        _uiState.update { ActivityViewState.Error(error) }
+    private fun onCheckAnswer() = _uiState.update { state ->
+        reduce(state, ActivityViewState.Action.OnCheck)
     }
 
-    private fun setLoadingState() {
-        _uiState.update { ActivityViewState.Loading }
+    private fun onNext() = _uiState.update { state ->
+        reduce(state, ActivityViewState.Action.OnNext)
     }
 
-    fun onSelectAnswer(answer: String) {
-        _uiState.updateLoadedState { state ->
-            state.copy(selectedAnswer = answer)
-        }
-    }
-
-    fun onCheck() {
-        _uiState.update { state ->
-            reduce(state, ActivityViewState.Action.OnCheck)
-        }
-    }
-
-    fun onNext() {
-        _uiState.update { state ->
-            reduce(state, ActivityViewState.Action.OnNext)
-        }
-    }
-
-    fun onFinish() = viewModelScope.launch {
+    private fun onFinish() = viewModelScope.launch {
         _uiEffect.send(ActivityViewEffect.NavigateToHome)
     }
 
-    fun onMessageShown(uiMessage: UIMessage) {
-        _uiState.updateLoadedState { state ->
-            state.copy(userMessages = state.userMessages - uiMessage)
-        }
+    private fun onMessageShown(uiMessage: UIMessage) = _uiState.updateLoadedState { state ->
+        state.copy(userMessages = state.userMessages - uiMessage)
     }
 }
 

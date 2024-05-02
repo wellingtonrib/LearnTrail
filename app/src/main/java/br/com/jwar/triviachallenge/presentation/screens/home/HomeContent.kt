@@ -32,22 +32,20 @@ import br.com.jwar.triviachallenge.presentation.ui.theme.TriviaChallengeTheme
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable
-fun HomeScreen(
+fun HomeContent(
     userXP: Int,
     units: List<UnitModel>,
     isRefreshing: Boolean = false,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToActivity: (String) -> Unit,
-    onRefresh: () -> Unit,
+    onIntent: (HomeViewIntent) -> Unit,
 ) {
-    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, { onIntent(HomeViewIntent.Refresh) })
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "$userXP XP") },
                 actions = {
-                    IconButton(onClick = onNavigateToSettings) {
+                    IconButton(onClick = { onIntent(HomeViewIntent.NavigateToSettings) }) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.title_settings))
                     }
                 }
@@ -65,7 +63,9 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(units) { unit ->
-                    UnitComponent(unit, onNavigateToActivity)
+                    UnitComponent(unit) { activityId ->
+                        onIntent(HomeViewIntent.NavigateToActivity(activityId))
+                    }
                 }
             }
             PullRefreshIndicator(
@@ -159,7 +159,7 @@ private fun ActivityComponent(
 @Composable
 fun PreviewHomeScreen() {
     TriviaChallengeTheme {
-        HomeScreen(
+        HomeContent(
             userXP = 100,
             units = listOf(
                 UnitModel(
@@ -183,8 +183,6 @@ fun PreviewHomeScreen() {
                 ),
             ),
             isRefreshing = false,
-            onNavigateToSettings = {},
-            onNavigateToActivity = {},
         ) {}
     }
 }

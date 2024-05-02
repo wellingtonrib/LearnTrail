@@ -3,9 +3,9 @@ package br.com.jwar.triviachallenge.presentation.screens.home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.presentation.components.ErrorContent
 import br.com.jwar.triviachallenge.presentation.components.LoadingContent
@@ -18,6 +18,7 @@ fun HomeRoute(
     navigateToActivity: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
+        viewModel.onIntent(HomeViewIntent.LoadUnits)
         viewModel.uiEffect.collect { effect ->
             when(effect) {
                 is HomeViewEffect.NavigateToActivity -> navigateToActivity(effect.activityId)
@@ -26,21 +27,19 @@ fun HomeRoute(
         }
     }
 
-    when(val state = viewModel.uiState.collectAsState().value) {
+    when(val state = viewModel.uiState.collectAsStateWithLifecycle().value) {
         is HomeViewState.Loading ->
             LoadingContent()
         is HomeViewState.Loaded ->
-            HomeScreen(
+            HomeContent(
                 userXP = state.userXP,
                 units = state.units,
                 isRefreshing = state.isRefreshing,
-                onNavigateToSettings = viewModel::onNavigateToSettings,
-                onNavigateToActivity = viewModel::onNavigateToActivity,
-                onRefresh = viewModel::onRefresh,
+                onIntent = viewModel::onIntent,
             )
         is HomeViewState.Error ->
             ErrorContent(error = stringResource(R.string.error_unknown)) {
-                viewModel.getUnits()
+                viewModel.onIntent(HomeViewIntent.LoadUnits)
             }
     }
 }

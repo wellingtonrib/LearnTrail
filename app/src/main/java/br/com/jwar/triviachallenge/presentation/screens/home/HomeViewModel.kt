@@ -33,11 +33,16 @@ class HomeViewModel @Inject constructor(
     private val _uiEffect = Channel<HomeViewEffect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    init {
-        getUnits()
+    fun onIntent(intent: HomeViewIntent) {
+        when (intent) {
+            is HomeViewIntent.LoadUnits -> onLoadUnits()
+            is HomeViewIntent.Refresh -> onRefresh()
+            is HomeViewIntent.NavigateToSettings -> onNavigateToSettings()
+            is HomeViewIntent.NavigateToActivity -> onNavigateToActivity(intent.activityId)
+        }
     }
 
-    fun getUnits(refresh: Boolean = false) = viewModelScope.launch {
+    private fun onLoadUnits(refresh: Boolean = false) = viewModelScope.launch {
         unitRepository.getUnits(refresh)
             .onStart { setLoadingState() }
             .flatMapLatest { units -> units.toUnitModels(refresh) }
@@ -56,33 +61,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setLoadedState(units: List<UnitModel>) {
-        _uiState.update { currentState ->
-            reduce(currentState, HomeViewState.Action.OnLoaded(units))
+    private suspend fun setLoadedState(units: List<UnitModel>) = _uiState.update { currentState ->
+        reduce(currentState, HomeViewState.Action.OnLoaded(units))
+    }
+
+    private fun setErrorState(error: Throwable) = _uiState.update { HomeViewState.Error(error) }
+
+    private fun setLoadingState() = _uiState.update { currentState ->
+        if (currentState is HomeViewState.Loaded) {
+            currentState.copy(isRefreshing = true)
+        } else {
+            HomeViewState.Loading
         }
     }
 
-    private fun setErrorState(error: Throwable) {
-        _uiState.update { HomeViewState.Error(error) }
-    }
-
-    private fun setLoadingState() {
-        _uiState.update { currentState ->
-            if (currentState is HomeViewState.Loaded) {
-                currentState.copy(isRefreshing = true)
-            } else {
-                HomeViewState.Loading
-            }
-        }
-    }
-
-    fun onNavigateToSettings() = viewModelScope.launch {
+    private fun onNavigateToSettings() = viewModelScope.launch {
         _uiEffect.send(HomeViewEffect.NavigateToSettings)
     }
 
-    fun onNavigateToActivity(activityId: String) = viewModelScope.launch {
+    private fun onNavigateToActivity(activityId: String) = viewModelScope.launch {
         _uiEffect.send(HomeViewEffect.NavigateToActivity(activityId))
     }
 
-    fun onRefresh() = getUnits(refresh = true)
+    private fun onRefresh() = onLoadUnits(refresh = true)
 }
