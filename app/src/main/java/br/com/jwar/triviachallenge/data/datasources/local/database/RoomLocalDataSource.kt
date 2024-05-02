@@ -1,6 +1,6 @@
 package br.com.jwar.triviachallenge.data.datasources.local.database
 
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.local.database.dao.ActivityDao
 import br.com.jwar.triviachallenge.data.datasources.local.database.dao.QuestionDao
 import br.com.jwar.triviachallenge.data.datasources.local.database.dao.UnitDao
@@ -17,9 +17,13 @@ class RoomLocalDataSource @Inject constructor(
     private val questionDao: QuestionDao,
     private val activityDao: ActivityDao,
     private val roomAdapter: RoomLocalDataSourceAdapter,
-): LocalDataSourceStrategy {
+): LocalDataSource {
     override suspend fun getUnits() =
-        unitDao.getAll().map { units -> units.map { unit -> roomAdapter.adaptToUnit(unit) } }
+        unitDao.getAll().map { unitEntities ->
+            unitEntities.map { unit ->
+                roomAdapter.adaptToUnit(unit)
+            }
+        }
 
     override suspend fun getUnit(unitId: String) =
         unitDao.findById(unitId).map { unitEntity ->
@@ -37,8 +41,8 @@ class RoomLocalDataSource @Inject constructor(
         }
 
     override suspend fun getQuestions(activityId: String): Flow<List<Question>> =
-        questionDao.findByActivityId(activityId).map { questions ->
-            roomAdapter.adaptToQuestions(questions)
+        questionDao.findByActivityId(activityId).map { questionEntities ->
+            roomAdapter.adaptToQuestions(questionEntities)
         }
 
     override suspend fun getActivity(activityId: String) =

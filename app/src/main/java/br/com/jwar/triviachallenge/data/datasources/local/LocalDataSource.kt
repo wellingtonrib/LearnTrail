@@ -5,7 +5,7 @@ import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
 import kotlinx.coroutines.flow.Flow
 
-interface LocalDataSourceStrategy {
+interface LocalDataSource {
     suspend fun getUnit(unitId: String): Flow<Unit>
     suspend fun getUnits(): Flow<List<Unit>>
     suspend fun updateUnit(unit: Unit)

@@ -1,12 +1,12 @@
 package br.com.jwar.triviachallenge.data.datasources.remote.fake
 
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.model.Unit
 import javax.inject.Inject
 
-class FakeRemoteDataSource @Inject constructor() : RemoteDataSourceStrategy {
+class FakeRemoteDataSource @Inject constructor() : RemoteDataSource {
     override suspend fun getUnits(): List<Unit> {
         return listOf(
             Unit(

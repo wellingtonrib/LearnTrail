@@ -1,7 +1,7 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class ActivityRepositoryImpl @Inject constructor(
-    private val remoteDataSource: RemoteDataSourceStrategy,
-    private val localDataSource: LocalDataSourceStrategy,
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ActivityRepository {
     override suspend fun getActivities(unitId: String, refresh: Boolean) = flow {
@@ -23,10 +23,12 @@ class ActivityRepositoryImpl @Inject constructor(
                 remoteDataSource.getActivities(unitId).also { remoteActivities ->
                     localDataSource.saveActivities(remoteActivities)
                 }
+            }.onFailure {
+                it.printStackTrace()
             }
         }
         emitAll(localActivities)
-    }
+    }.flowOn(dispatcher)
 
     override suspend fun getQuestions(activityId: String) = flow {
         val localQuestions = localDataSource.getQuestions(activityId)
@@ -34,6 +36,8 @@ class ActivityRepositoryImpl @Inject constructor(
             remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
                 localDataSource.saveQuestions(remoteQuestions)
             }
+        }.onFailure {
+            it.printStackTrace()
         }
         emitAll(localQuestions)
     }

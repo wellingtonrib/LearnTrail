@@ -96,6 +96,6 @@ interface ActivityViewReducer {
     }
 
     private fun incrementUserXP(points: Int) = scope.launch {
-        userRepository.saveXP(points)
+        userRepository.addXP(points)
     }
 }

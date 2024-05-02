@@ -1,6 +1,6 @@
 package br.com.jwar.triviachallenge.data.datasources.remote.opentdb
 
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto.OpenTDBCategoryResponse
 import br.com.jwar.triviachallenge.domain.model.Activity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 class OpenTDBRemoteDataSource @Inject constructor(
     private val openTDBApi: OpenTDBApi,
-    private val openTDBRemoteDataSourceAdapter: OpenTDBRemoteDataSourceAdapter,
+    private val openTDBAdapter: OpenTDBRemoteDataSourceAdapter,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : RemoteDataSourceStrategy {
+) : RemoteDataSource {
 
     override suspend fun getUnits() = listOf(
         OpenTDBCategoryResponse("9", "General Knowledge"),
@@ -39,20 +39,20 @@ class OpenTDBRemoteDataSource @Inject constructor(
         OpenTDBCategoryResponse("30", "Science: Gadgets"),
         OpenTDBCategoryResponse("31", "Entertainment: Japanese Anime & Manga"),
         OpenTDBCategoryResponse("32", "Entertainment: Cartoon & Animations"),
-    ).map { openTDBRemoteDataSourceAdapter.adaptToUnit(it) }
+    ).map { openTDBAdapter.adaptToUnit(it) }
 
     override suspend fun getActivities(unitId: String) = listOf(
         Activity(id = "$unitId:easy", name = "Easy", unitId = unitId),
         Activity(id = "$unitId:medium", name = "Medium", unitId = unitId),
         Activity(id = "$unitId:hard", name = "Difficult", unitId = unitId)
-    ).map { openTDBRemoteDataSourceAdapter.adaptToActivity(it) }
+    ).map { openTDBAdapter.adaptToActivity(it) }
 
     override suspend fun getQuestions(
         activityId: String
     ) = withContext(dispatcher) {
         val (categoryId, difficult) = activityId.split(":")
         openTDBApi.getQuestions(categoryId, difficult).let { response ->
-            openTDBRemoteDataSourceAdapter.adaptToQuestions(response, activityId)
+            openTDBAdapter.adaptToQuestions(response, activityId)
         }
     }
 }        

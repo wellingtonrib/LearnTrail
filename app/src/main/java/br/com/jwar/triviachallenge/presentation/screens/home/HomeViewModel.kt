@@ -2,19 +2,22 @@ package br.com.jwar.triviachallenge.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.jwar.triviachallenge.domain.model.Activity
-import br.com.jwar.triviachallenge.domain.model.Unit
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import br.com.jwar.triviachallenge.domain.repositories.UserRepository
-import br.com.jwar.triviachallenge.presentation.model.ActivityModel
 import br.com.jwar.triviachallenge.presentation.model.UnitModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,14 +85,4 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onRefresh() = getUnits(refresh = true)
-
-    private suspend fun List<Unit>.toUnitModels(refresh: Boolean) = combine(
-        this.map { unit ->
-            activityRepository.getActivities(unit.id, refresh).map { activities ->
-                UnitModel.fromUnit(unit, activities.toActivityModels())
-            }.distinctUntilChanged()
-        }
-    ) { unitModels -> unitModels.toList() }
-
-    private fun List<Activity>.toActivityModels() = this.map { ActivityModel.fromActivity(it) }
 }

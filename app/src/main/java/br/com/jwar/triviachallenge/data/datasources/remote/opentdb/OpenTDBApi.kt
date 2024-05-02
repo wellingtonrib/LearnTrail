@@ -4,6 +4,8 @@ import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.dto.OpenTDBQu
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+const val OPEN_TDB_API_HOST = "https://opentdb.com/"
+
 interface OpenTDBApi {
     @GET("api.php?amount=5&type=multiple")
     suspend fun getQuestions(

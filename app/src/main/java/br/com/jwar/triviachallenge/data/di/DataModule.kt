@@ -2,12 +2,13 @@ package br.com.jwar.triviachallenge.data.di
 
 import android.content.Context
 import androidx.room.Room
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.local.database.APP_DATABASE_NAME
 import br.com.jwar.triviachallenge.data.datasources.local.database.RoomAppDatabase
 import br.com.jwar.triviachallenge.data.datasources.local.database.RoomLocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.local.preferences.UserPreferences
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OPEN_TDB_API_HOST
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBApi
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBRemoteDataSource
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
@@ -73,7 +74,7 @@ class DataModule {
         convertFactory: Converter.Factory
     ): OpenTDBApi =
         Retrofit.Builder()
-            .baseUrl("https://opentdb.com/")
+            .baseUrl(OPEN_TDB_API_HOST)
             .addConverterFactory(convertFactory)
             .build()
             .create(OpenTDBApi::class.java)
@@ -81,7 +82,7 @@ class DataModule {
     @Provides
     fun provideRemoteDataSource(
         remoteDataSourceStrategy: OpenTDBRemoteDataSource
-    ): RemoteDataSourceStrategy = remoteDataSourceStrategy
+    ): RemoteDataSource = remoteDataSourceStrategy
 
     @Provides
     @Singleton
@@ -105,7 +106,7 @@ class DataModule {
     @Provides
     fun provideLocalDataSource(
         localDataSourceStrategy: RoomLocalDataSource
-    ) : LocalDataSourceStrategy = localDataSourceStrategy
+    ) : LocalDataSource = localDataSourceStrategy
 
     @Provides
     fun provideUserPreferences(
