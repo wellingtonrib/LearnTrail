@@ -10,10 +10,5 @@ sealed class HomeViewState {
         val isRefreshing: Boolean = false
     ) : HomeViewState()
     data class Error(val error: Throwable) : HomeViewState()
-
-    sealed class Action {
-        data class OnLoaded(val units: List<UnitModel>) : Action()
-        data class OnUserXPUpdated(val userXP: Int) : Action()
-    }
 }
 

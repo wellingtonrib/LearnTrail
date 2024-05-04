@@ -2,9 +2,11 @@ package br.com.jwar.triviachallenge.presentation.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.jwar.triviachallenge.R
 import br.com.jwar.triviachallenge.data.services.translator.Language
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
+import br.com.jwar.triviachallenge.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
@@ -14,15 +16,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-sealed class SettingsViewIntent {
-    data class SelectLanguage(val language: Language): SettingsViewIntent()
-    data class MessageShown(val uiMessage: UIMessage): SettingsViewIntent()
-}
-
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    override val translatorService: TranslatorService
-): ViewModel(), SettingsReducer {
+    private val translatorService: TranslatorService
+): ViewModel() {
 
     private val _uiState = MutableStateFlow<SettingsViewState>(getInitialState())
     val uiState = _uiState.asStateFlow()
@@ -40,7 +37,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun onSelectLanguage(language: Language) {
         setProcessingState()
-        setTargetLanguage(language)
+        setTargetLanguageAndUpdateState(language)
     }
 
     private fun onMessageShown(uiMessage: UIMessage) = _uiState.update { state ->
@@ -51,9 +48,25 @@ class SettingsViewModel @Inject constructor(
         currentState.copy(isProcessing = true)
     }
 
-    private fun setTargetLanguage(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+    private fun setTargetLanguageAndUpdateState(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+        val result = translatorService.setTargetLanguage(language)
         _uiState.update { state ->
-            reduce(state, SettingsViewState.Action.SetTargetLanguage(language))
+            if (result.isSuccess) {
+                state.copy(
+                    isProcessing = false,
+                    currentLanguage = language,
+                    userMessages = state.userMessages + UIMessage(
+                        text = UIText.StringResource(R.string.message_language_changed)
+                    )
+                )
+            } else {
+                state.copy(
+                    isProcessing = false,
+                    userMessages = state.userMessages + UIMessage(
+                        text = UIText.DynamicString(result.exceptionOrNull()?.message.orEmpty())
+                    )
+                )
+            }
         }
     }
 }

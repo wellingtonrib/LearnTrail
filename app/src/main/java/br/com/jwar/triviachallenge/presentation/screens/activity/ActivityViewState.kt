@@ -33,10 +33,4 @@ sealed class ActivityViewState {
             else FontWeight.Normal
     }
     data class Error(val error: Throwable) : ActivityViewState()
-
-    sealed class Action {
-        data class OnLoaded(val activityId: String, val questions: List<Question>) : Action()
-        object OnCheck : Action()
-        object OnNext : Action()
-    }
 }
