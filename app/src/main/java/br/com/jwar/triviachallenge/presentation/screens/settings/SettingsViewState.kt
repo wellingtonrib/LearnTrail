@@ -7,8 +7,4 @@ data class SettingsViewState(
     val currentLanguage: Language,
     val userMessages: List<UIMessage> = emptyList(),
     val isProcessing: Boolean = false
-) {
-    sealed class Action {
-        data class SetTargetLanguage(val language: Language) : Action()
-    }
-}
+)
