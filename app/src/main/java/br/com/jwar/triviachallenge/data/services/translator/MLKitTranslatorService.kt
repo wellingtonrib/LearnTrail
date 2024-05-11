@@ -20,6 +20,7 @@ class MLKitTranslatorService @Inject constructor(): TranslatorService {
         try {
             getTranslator().translate(text).await()
         } catch (e: Exception) {
+            e.printStackTrace()
             text
         }
 
@@ -29,6 +30,7 @@ class MLKitTranslatorService @Inject constructor(): TranslatorService {
             setApplicationLocales(LocaleListCompat.forLanguageTags(language.name.lowercase()))
             Result.success(getTranslator(true))
         } catch (e: Exception) {
+            e.printStackTrace()
             Result.failure(e)
         }
 

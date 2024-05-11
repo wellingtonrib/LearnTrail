@@ -57,6 +57,7 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -74,6 +75,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.datastore)
 
     kapt(libs.hilt.compiler)
     ksp(libs.androidx.room.compiler)

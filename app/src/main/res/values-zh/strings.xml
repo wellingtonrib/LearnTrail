@@ -12,5 +12,5 @@
     <string name="label_language">语言</string>
     <string name="message_correct_answer">正确答案！</string>
     <string name="message_wrong_answer">错误答案！</string>
-    <string name="label_lesson">课 %1$d</string>
+    <string name="label_done">完毕</string>
 </resources>
