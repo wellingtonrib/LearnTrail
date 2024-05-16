@@ -23,8 +23,6 @@ class ActivityRepositoryImpl @Inject constructor(
                 remoteDataSource.getActivities(unitId).also { remoteActivities ->
                     localDataSource.saveActivities(remoteActivities)
                 }
-            }.onFailure {
-                it.printStackTrace()
             }
         }
         emitAll(localActivities)
@@ -36,8 +34,6 @@ class ActivityRepositoryImpl @Inject constructor(
             remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
                 localDataSource.saveQuestions(remoteQuestions)
             }
-        }.onFailure {
-            it.printStackTrace()
         }
         emitAll(localQuestions)
     }
