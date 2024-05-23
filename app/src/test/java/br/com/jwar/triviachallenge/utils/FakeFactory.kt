@@ -25,9 +25,10 @@ object FakeFactory {
 
     fun makeQuestionsList(
         size: Int = 3,
-    ) = List(size) { index ->
-        makeQuestion(id = "${index + 1}")
-    }
+        builder: (Int) -> Question = { index ->
+            makeQuestion(id = "${index + 1}")
+        },
+    ) = List(size) { index -> builder(index) }
 
     fun makeUnit(
         id: String = "unitId",
@@ -41,9 +42,10 @@ object FakeFactory {
 
     fun makeUnitsList(
         size: Int = 3,
-    ) = List(size) { index ->
-        makeUnit(id = "${index + 1}")
-    }
+        builder: (Int) -> Unit = { index ->
+            makeUnit(id = "${index + 1}")
+        },
+    ) = List(size) { index -> builder(index) }
 
     fun makeActivity(
         id: String = "activityId",
@@ -63,7 +65,8 @@ object FakeFactory {
 
     fun makeActivitiesList(
         size: Int = 3,
-    ) = List(size) { index ->
-        makeActivity(id = "${index + 1}")
-    }
+        builder: (Int) -> Activity = { index ->
+            makeActivity(id = "${index + 1}")
+        },
+    ) = List(size) { index -> builder(index) }
 }

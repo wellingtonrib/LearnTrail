@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -48,7 +49,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.LoadActivity("activityId")); advanceUntilIdle()
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assertEquals(questions, state.questions)
             assertEquals(questions.first(), state.currentQuestion)
             assertFalse(state.isResultShown)
@@ -81,7 +82,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.SelectAnswer("correctAnswer"))
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assertFalse(state.isResultShown)
             assertEquals("correctAnswer", state.selectedAnswer)
         }
@@ -93,7 +94,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.CheckAnswer)
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assert(state.isResultShown)
             assertEquals(1, state.points)
             assert(state.userMessages.any { it.style == UIMessageStyle.SUCCESS })
@@ -106,7 +107,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.CheckAnswer)
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assert(state.isResultShown)
             assertEquals(2, state.attemptsLeft)
             assert(state.userMessages.any { it.style == UIMessageStyle.DANGER })
@@ -120,7 +121,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assertFalse(state.isResultShown)
             assertNull(state.selectedAnswer)
             assertEquals(questions[1], state.currentQuestion)
@@ -134,7 +135,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assert(state.isFinished)
             assert(state.isSucceeded)
         }
@@ -148,7 +149,7 @@ class ActivityViewModelTest {
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
-        (viewModel.uiState.value as ActivityViewState.Loaded).let { state ->
+        viewModel.uiState.value.asLoaded()?.let { state ->
             assert(state.isFinished)
             assertFalse(state.isSucceeded)
         }
@@ -167,10 +168,10 @@ class ActivityViewModelTest {
     fun `given a message is shown when message shown intent then remove the message from the state`() = runTest {
         scenario(isLoaded = true, selectedAnswer = "wrongAnswer", isAnswerChecked = true)
 
-        val message = (viewModel.uiState.value as ActivityViewState.Loaded).userMessages.first()
+        val message = viewModel.uiState.value.asLoaded()?.userMessages?.first()!!
         viewModel.onIntent(ActivityViewIntent.MessageShown(message))
 
-        assertFalse((viewModel.uiState.value as ActivityViewState.Loaded).userMessages.contains(message))
+        assertFalse(viewModel.uiState.value.asLoaded()?.userMessages?.contains(message) ?: true)
     }
 
     private fun TestScope.scenario(
@@ -178,7 +179,7 @@ class ActivityViewModelTest {
         selectedAnswer: String? = null,
         isAnswerChecked: Boolean = false,
         hasAttemptsRemaining: Boolean = true,
-        questions: Flow<List<Question>> = flow { emit(FakeFactory.makeQuestionsList()) },
+        questions: Flow<List<Question>> = flowOf(FakeFactory.makeQuestionsList()),
     ) {
         coEvery { activityRepository.getQuestions(any()) } returns questions
         coEvery { activityRepository.completeActivity(any()) } just runs

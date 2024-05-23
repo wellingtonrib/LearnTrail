@@ -170,4 +170,4 @@ class HomeViewModel @Inject constructor(
 
 private fun MutableStateFlow<HomeViewState>.updateLoadedState(
     block: (HomeViewState.Loaded) -> HomeViewState
-) = this.update { state -> (state as? HomeViewState.Loaded)?.let { block(it) } ?: state }
+) = this.update { state -> state.asLoadedState()?.let { block(it) } ?: state }
