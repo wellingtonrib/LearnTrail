@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_home">홈</string>
     <string name="title_settings">설정</string>
@@ -11,5 +10,5 @@
     <string name="label_language">언어</string>
     <string name="message_correct_answer">정답입니다!</string>
     <string name="message_wrong_answer">"잘못된 답변! "</string>
-    <string name="label_lesson">레슨 %1$d</string>
+    <string name="label_done">완료</string>
 </resources>

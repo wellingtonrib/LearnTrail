@@ -2,22 +2,27 @@ package br.com.jwar.triviachallenge.data.di
 
 import android.content.Context
 import androidx.room.Room
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.local.room.APP_DATABASE_NAME
-import br.com.jwar.triviachallenge.data.datasources.local.room.RoomAppDatabase
-import br.com.jwar.triviachallenge.data.datasources.local.room.RoomLocalDataSource
-import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSourceStrategy
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TRIVIA_API_BASE_URL
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaApi
-import br.com.jwar.triviachallenge.data.datasources.remote.trivia.TriviaRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.LocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.APP_DATABASE_NAME
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.RoomAppDatabase
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.RoomLocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.preferences.Preferences
+import br.com.jwar.triviachallenge.data.datasources.local.preferences.datastore.DataStorePreferences
+import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OPEN_TDB_API_HOST
+import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBApi
+import br.com.jwar.triviachallenge.data.datasources.remote.sample.SampleRemoteDataSource
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
+import br.com.jwar.triviachallenge.data.repositories.UserRepositoryImpl
 import br.com.jwar.triviachallenge.data.services.translator.MLKitTranslatorService
 import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.data.utils.HtmlStringAdapter
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
+import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,29 +57,41 @@ class DataModule {
     ): ActivityRepository = activityRepository
 
     @Provides
+    fun provideUserRepository(
+        userRepository: UserRepositoryImpl
+    ): UserRepository = userRepository
+
+    @Provides
     @Singleton
     fun provideConvertFactory() : Converter.Factory =
         MoshiConverterFactory.create(
             Moshi.Builder()
                 .add(HtmlStringAdapter())
+                .add(KotlinJsonAdapterFactory())
                 .build()
         )
 
     @Provides
     @Singleton
-    fun provideTriviaApi(
+    fun provideOpenTDBApi(
         convertFactory: Converter.Factory
-    ): TriviaApi =
+    ): OpenTDBApi =
         Retrofit.Builder()
-            .baseUrl(TRIVIA_API_BASE_URL)
+            .baseUrl(OPEN_TDB_API_HOST)
             .addConverterFactory(convertFactory)
             .build()
-            .create(TriviaApi::class.java)
+            .create(OpenTDBApi::class.java)
+
 
     @Provides
-    fun provideRemoteDataSourceStrategy(
-        remoteDataSourceStrategy: TriviaRemoteDataSource
-    ): RemoteDataSourceStrategy = remoteDataSourceStrategy
+    fun provideSampleRemoteDataSource(
+        @ApplicationContext context: Context
+    ) = SampleRemoteDataSource(context)
+
+    @Provides
+    fun provideDefaultRemoteDataSource(
+        remoteDataSourceStrategy: SampleRemoteDataSource
+    ): RemoteDataSource = remoteDataSourceStrategy
 
     @Provides
     @Singleton
@@ -90,13 +107,23 @@ class DataModule {
     fun provideUnitDao(database: RoomAppDatabase) = database.unitDao()
 
     @Provides
-    fun provideLessonDao(database: RoomAppDatabase) = database.lessonDao()
+    fun provideActivityDao(database: RoomAppDatabase) = database.activityDao()
 
     @Provides
     fun provideQuestionDao(database: RoomAppDatabase) = database.questionDao()
 
     @Provides
-    fun provideLocalDataSourceStrategy(
+    fun provideDefaultLocalDataSource(
         localDataSourceStrategy: RoomLocalDataSource
-    ) : LocalDataSourceStrategy = localDataSourceStrategy
+    ) : LocalDataSource = localDataSourceStrategy
+
+    @Provides
+    fun provideDataStorePreferences(
+        @ApplicationContext context: Context
+    ) = DataStorePreferences(context)
+
+    @Provides
+    fun provideDefaultPreferences(
+        preferences: DataStorePreferences
+    ) : Preferences = preferences
 }

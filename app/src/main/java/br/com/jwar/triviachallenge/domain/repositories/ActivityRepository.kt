@@ -1,8 +1,12 @@
 package br.com.jwar.triviachallenge.domain.repositories
 
 import br.com.jwar.triviachallenge.domain.model.Activity
+import br.com.jwar.triviachallenge.domain.model.Question
 import kotlinx.coroutines.flow.Flow
 
 interface ActivityRepository {
-    fun getActivity(lessonId: String): Flow<Activity>
+    suspend fun getActivities(unitId: String, refresh: Boolean): Flow<List<Activity>>
+    suspend fun getQuestions(activityId: String): Flow<List<Question>>
+    suspend fun completeActivity(activityId: String)
+    suspend fun unlockActivity(activityId: String)
 }

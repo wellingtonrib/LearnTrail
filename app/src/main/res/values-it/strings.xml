@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sfida a quiz</string>
+    <string name="title_home">Casa</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="error_unknown">Qualcosa è andato storto</string>
+    <string name="action_close">Vicino</string>
+    <string name="action_finish">Fine</string>
+    <string name="action_continue">Continua</string>
+    <string name="action_check">Controllo</string>
+    <string name="message_language_changed">La lingua è cambiata</string>
+    <string name="label_language">Lingua</string>
+    <string name="message_correct_answer">Risposta corretta!</string>
+    <string name="message_wrong_answer">Risposta sbagliata!</string>
+    <string name="label_done">Fatto</string>
+</resources>
