@@ -4,7 +4,7 @@ import br.com.jwar.triviachallenge.domain.model.Question
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import br.com.jwar.triviachallenge.presentation.utils.UIMessageStyle
-import br.com.jwar.triviachallenge.utils.FakeFactory
+import br.com.jwar.triviachallenge.utils.DataFactory
 import br.com.jwar.triviachallenge.utils.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -44,7 +44,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given the questions are fetched successfully when load activity then set the loaded state`() = runTest {
-        val questions = FakeFactory.makeQuestionsList()
+        val questions = DataFactory.makeQuestionsList()
         scenario(isLoaded = false, questions = flow { emit(questions) })
 
         viewModel.onIntent(ActivityViewIntent.LoadActivity("activityId")); advanceUntilIdle()
@@ -116,7 +116,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given has next question when next intent then update state progress, clear selected answer and change the current question`() = runTest {
-        val questions = FakeFactory.makeQuestionsList(3)
+        val questions = DataFactory.makeQuestionsList(3)
         scenario(isLoaded = true, questions = flow { emit(questions) })
 
         viewModel.onIntent(ActivityViewIntent.Next)
@@ -131,7 +131,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given has no next question when next intent then set the finish state with success, complete activity and add XP`() = runTest {
-        scenario(isLoaded = true, questions = flow { emit(listOf(FakeFactory.makeQuestion())) }, selectedAnswer = "correctAnswer", isAnswerChecked = true)
+        scenario(isLoaded = true, questions = flow { emit(listOf(DataFactory.makeQuestion())) }, selectedAnswer = "correctAnswer", isAnswerChecked = true)
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
@@ -179,7 +179,7 @@ class ActivityViewModelTest {
         selectedAnswer: String? = null,
         isAnswerChecked: Boolean = false,
         hasAttemptsRemaining: Boolean = true,
-        questions: Flow<List<Question>> = flowOf(FakeFactory.makeQuestionsList()),
+        questions: Flow<List<Question>> = flowOf(DataFactory.makeQuestionsList()),
     ) {
         coEvery { activityRepository.getQuestions(any()) } returns questions
         coEvery { activityRepository.completeActivity(any()) } just runs

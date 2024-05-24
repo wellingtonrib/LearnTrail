@@ -2,15 +2,16 @@ package br.com.jwar.triviachallenge.data.di
 
 import android.content.Context
 import androidx.room.Room
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
-import br.com.jwar.triviachallenge.data.datasources.local.database.APP_DATABASE_NAME
-import br.com.jwar.triviachallenge.data.datasources.local.database.RoomAppDatabase
-import br.com.jwar.triviachallenge.data.datasources.local.database.RoomLocalDataSource
-import br.com.jwar.triviachallenge.data.datasources.local.preferences.UserPreferences
+import br.com.jwar.triviachallenge.data.datasources.local.database.LocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.APP_DATABASE_NAME
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.RoomAppDatabase
+import br.com.jwar.triviachallenge.data.datasources.local.database.room.RoomLocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.preferences.Preferences
+import br.com.jwar.triviachallenge.data.datasources.local.preferences.datastore.DataStorePreferences
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OPEN_TDB_API_HOST
 import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBApi
-import br.com.jwar.triviachallenge.data.datasources.remote.opentdb.OpenTDBRemoteDataSource
+import br.com.jwar.triviachallenge.data.datasources.remote.sample.SampleRemoteDataSource
 import br.com.jwar.triviachallenge.data.repositories.ActivityRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UnitRepositoryImpl
 import br.com.jwar.triviachallenge.data.repositories.UserRepositoryImpl
@@ -21,6 +22,7 @@ import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import br.com.jwar.triviachallenge.domain.repositories.UserRepository
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -65,6 +67,7 @@ class DataModule {
         MoshiConverterFactory.create(
             Moshi.Builder()
                 .add(HtmlStringAdapter())
+                .add(KotlinJsonAdapterFactory())
                 .build()
         )
 
@@ -79,9 +82,15 @@ class DataModule {
             .build()
             .create(OpenTDBApi::class.java)
 
+
     @Provides
-    fun provideRemoteDataSource(
-        remoteDataSourceStrategy: OpenTDBRemoteDataSource
+    fun provideSampleRemoteDataSource(
+        @ApplicationContext context: Context
+    ) = SampleRemoteDataSource(context)
+
+    @Provides
+    fun provideDefaultRemoteDataSource(
+        remoteDataSourceStrategy: SampleRemoteDataSource
     ): RemoteDataSource = remoteDataSourceStrategy
 
     @Provides
@@ -104,12 +113,17 @@ class DataModule {
     fun provideQuestionDao(database: RoomAppDatabase) = database.questionDao()
 
     @Provides
-    fun provideLocalDataSource(
+    fun provideDefaultLocalDataSource(
         localDataSourceStrategy: RoomLocalDataSource
     ) : LocalDataSource = localDataSourceStrategy
 
     @Provides
-    fun provideUserPreferences(
+    fun provideDataStorePreferences(
         @ApplicationContext context: Context
-    ) = UserPreferences(context)
+    ) = DataStorePreferences(context)
+
+    @Provides
+    fun provideDefaultPreferences(
+        preferences: DataStorePreferences
+    ) : Preferences = preferences
 }
