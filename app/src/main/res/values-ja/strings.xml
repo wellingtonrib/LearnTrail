@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">トリビア チャレンジ</string>
     <string name="title_home">ホーム</string>
     <string name="title_settings">設定</string>
     <string name="error_unknown">何かが間違っていました</string>
