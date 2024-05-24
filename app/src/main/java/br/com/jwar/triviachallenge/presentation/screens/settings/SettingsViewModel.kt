@@ -8,12 +8,11 @@ import br.com.jwar.triviachallenge.data.services.translator.TranslatorService
 import br.com.jwar.triviachallenge.presentation.utils.UIMessage
 import br.com.jwar.triviachallenge.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -48,7 +47,7 @@ class SettingsViewModel @Inject constructor(
         currentState.copy(isProcessing = true)
     }
 
-    private fun setTargetLanguageAndUpdateState(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+    private fun setTargetLanguageAndUpdateState(language: Language) = viewModelScope.launch {
         val result = translatorService.setTargetLanguage(language)
         _uiState.update { state ->
             if (result.isSuccess) {

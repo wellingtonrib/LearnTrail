@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.retrofit)
     implementation(libs.moshi)
+    implementation(libs.moshi.converter)
+    implementation(libs.moshi.kotlin)
     implementation(libs.hilt)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.mlkit.translate)
@@ -76,11 +78,14 @@ dependencies {
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.core.ktx)
 
     kapt(libs.hilt.compiler)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

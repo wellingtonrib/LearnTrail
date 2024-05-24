@@ -33,4 +33,6 @@ sealed class ActivityViewState {
             else FontWeight.Normal
     }
     data class Error(val error: Throwable) : ActivityViewState()
+
+    fun asLoaded() = this as? Loaded
 }

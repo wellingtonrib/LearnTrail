@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.data.datasources.local
+package br.com.jwar.triviachallenge.data.datasources.local.database
 
 import br.com.jwar.triviachallenge.domain.model.Activity
 import br.com.jwar.triviachallenge.domain.model.Question

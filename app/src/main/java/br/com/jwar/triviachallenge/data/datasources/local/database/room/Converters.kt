@@ -1,4 +1,4 @@
-package br.com.jwar.triviachallenge.data.datasources.local.database
+package br.com.jwar.triviachallenge.data.datasources.local.database.room
 
 import androidx.room.TypeConverter
 

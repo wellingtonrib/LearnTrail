@@ -1,6 +1,6 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.LocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.domain.repositories.UnitRepository
 import javax.inject.Inject
@@ -19,12 +19,8 @@ class UnitRepositoryImpl @Inject constructor(
     override fun getUnits(refresh: Boolean) = flow {
         val localUnits = localDataSource.getUnits()
         if (refresh || localUnits.first().isEmpty()) {
-            runCatching {
-                remoteDataSource.getUnits().also { remoteUnits ->
-                    localDataSource.saveUnits(remoteUnits)
-                }
-            }.onFailure {
-                it.printStackTrace()
+            remoteDataSource.getUnits().also { remoteUnits ->
+                localDataSource.saveUnits(remoteUnits)
             }
         }
         emitAll(localUnits)

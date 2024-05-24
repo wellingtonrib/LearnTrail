@@ -128,7 +128,8 @@ class ActivityViewModel @Inject constructor(
         userRepository.addXP(points)
     }
 
-    private fun setErrorState(error: Throwable) = _uiState.update { ActivityViewState.Error(error) }
+    private fun setErrorState(error: Throwable) =
+        _uiState.update { ActivityViewState.Error(error.also { it.printStackTrace() }) }
 
     private fun setLoadingState() = _uiState.update { ActivityViewState.Loading }
 }

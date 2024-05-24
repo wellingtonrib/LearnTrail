@@ -132,7 +132,8 @@ class HomeViewModel @Inject constructor(
 
     private fun getLastUnlockedUnit(units: List<UnitModel>) = units.lastOrNull { it.isUnlocked }
 
-    private fun UnitModel.areAllActivitiesCompleted() = this.activities.all { it.isCompleted }
+    private fun UnitModel.areAllActivitiesCompleted() =
+        this.activities.isNotEmpty() && this.activities.all { it.isCompleted }
 
     private fun UnitModel.getLastUnlockedActivity() =
         this.activities.lastOrNull { it.isUnlocked }
@@ -157,7 +158,9 @@ class HomeViewModel @Inject constructor(
 
     private fun List<Activity>.toActivityModels() = this.map { ActivityModel.fromActivity(it) }
 
-    private fun setErrorState(error: Throwable) = _uiState.update { HomeViewState.Error(error) }
+    private fun setErrorState(error: Throwable) = _uiState.update {
+        HomeViewState.Error(error.also { error.printStackTrace() })
+    }
 
     private fun setLoadingState() = _uiState.update { currentState ->
         if (currentState is HomeViewState.Loaded) {
@@ -170,4 +173,4 @@ class HomeViewModel @Inject constructor(
 
 private fun MutableStateFlow<HomeViewState>.updateLoadedState(
     block: (HomeViewState.Loaded) -> HomeViewState
-) = this.update { state -> (state as? HomeViewState.Loaded)?.let { block(it) } ?: state }
+) = this.update { state -> state.asLoadedState()?.let { block(it) } ?: state }

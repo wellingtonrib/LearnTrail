@@ -1,6 +1,6 @@
 package br.com.jwar.triviachallenge.data.repositories
 
-import br.com.jwar.triviachallenge.data.datasources.local.LocalDataSource
+import br.com.jwar.triviachallenge.data.datasources.local.database.LocalDataSource
 import br.com.jwar.triviachallenge.data.datasources.remote.RemoteDataSource
 import br.com.jwar.triviachallenge.domain.repositories.ActivityRepository
 import javax.inject.Inject
@@ -19,12 +19,8 @@ class ActivityRepositoryImpl @Inject constructor(
     override suspend fun getActivities(unitId: String, refresh: Boolean) = flow {
         val localActivities = localDataSource.getActivities(unitId)
         if (refresh || localActivities.first().isEmpty()) {
-            runCatching {
-                remoteDataSource.getActivities(unitId).also { remoteActivities ->
-                    localDataSource.saveActivities(remoteActivities)
-                }
-            }.onFailure {
-                it.printStackTrace()
+            remoteDataSource.getActivities(unitId).also { remoteActivities ->
+                localDataSource.saveActivities(remoteActivities)
             }
         }
         emitAll(localActivities)
@@ -32,12 +28,8 @@ class ActivityRepositoryImpl @Inject constructor(
 
     override suspend fun getQuestions(activityId: String) = flow {
         val localQuestions = localDataSource.getQuestions(activityId)
-        runCatching {
-            remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
-                localDataSource.saveQuestions(remoteQuestions)
-            }
-        }.onFailure {
-            it.printStackTrace()
+        remoteDataSource.getQuestions(activityId).also { remoteQuestions ->
+            localDataSource.saveQuestions(remoteQuestions)
         }
         emitAll(localQuestions)
     }
