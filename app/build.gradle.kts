@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "br.com.jwar.triviachallenge"
+    namespace = "br.com.jwar.learntrail"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "br.com.jwar.triviachallenge"
+        applicationId = "br.com.jwar.learntrail"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
