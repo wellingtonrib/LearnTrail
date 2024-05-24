@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Trivia Challenge"
+rootProject.name = "Learn Trail"
 include(":app")
  
