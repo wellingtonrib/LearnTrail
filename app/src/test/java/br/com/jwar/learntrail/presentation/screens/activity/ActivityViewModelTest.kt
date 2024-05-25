@@ -45,7 +45,7 @@ class ActivityViewModelTest {
     @Test
     fun `given the questions are fetched successfully when load activity then set the loaded state`() = runTest {
         val questions = DataFactory.makeQuestionsList()
-        scenario(isLoaded = false, questions = flow { emit(questions) })
+        scenario(isLoaded = false, questions = questions)
 
         viewModel.onIntent(ActivityViewIntent.LoadActivity("activityId")); advanceUntilIdle()
 
@@ -60,7 +60,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given the questions fetched failure when load activity then set the error state`() = runTest {
-        scenario(isLoaded = false, questions = flow { throw Exception() })
+        scenario(isLoaded = false, isSucceeded = false)
 
         viewModel.onIntent(ActivityViewIntent.LoadActivity("activityId")); advanceUntilIdle()
 
@@ -69,7 +69,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given the questions is empty when load activity then set the error state`() = runTest {
-        scenario(isLoaded = false, questions = flow { emit(emptyList()) })
+        scenario(isLoaded = false, questions = emptyList())
 
         viewModel.onIntent(ActivityViewIntent.LoadActivity("activityId")); advanceUntilIdle()
 
@@ -117,7 +117,7 @@ class ActivityViewModelTest {
     @Test
     fun `given has next question when next intent then update state progress, clear selected answer and change the current question`() = runTest {
         val questions = DataFactory.makeQuestionsList(3)
-        scenario(isLoaded = true, questions = flow { emit(questions) })
+        scenario(isLoaded = true, questions = questions)
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
@@ -131,7 +131,7 @@ class ActivityViewModelTest {
 
     @Test
     fun `given has no next question when next intent then set the finish state with success, complete activity and add XP`() = runTest {
-        scenario(isLoaded = true, questions = flow { emit(listOf(DataFactory.makeQuestion())) }, selectedAnswer = "correctAnswer", isAnswerChecked = true)
+        scenario(isLoaded = true, questions = listOf(DataFactory.makeQuestion()), selectedAnswer = "correctAnswer", isAnswerChecked = true)
 
         viewModel.onIntent(ActivityViewIntent.Next)
 
@@ -176,12 +176,15 @@ class ActivityViewModelTest {
 
     private fun TestScope.scenario(
         isLoaded: Boolean = true,
+        isSucceeded: Boolean = true,
         selectedAnswer: String? = null,
         isAnswerChecked: Boolean = false,
         hasAttemptsRemaining: Boolean = true,
-        questions: Flow<List<Question>> = flowOf(DataFactory.makeQuestionsList()),
+        questions: List<Question> = DataFactory.makeQuestionsList(),
     ) {
-        coEvery { activityRepository.getQuestions(any()) } returns questions
+        coEvery { activityRepository.getQuestions(any()) } returns flow {
+            if (isSucceeded) emit(questions) else throw Exception()
+        }
         coEvery { activityRepository.completeActivity(any()) } just runs
         coEvery { userRepository.addXP(any()) } just runs
 
