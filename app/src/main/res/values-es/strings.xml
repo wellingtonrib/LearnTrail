@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Trivia Desafío</string>
     <string name="title_home">Inicio</string>
     <string name="title_settings">Ajustes</string>
     <string name="error_unknown">Etwas ist schief gelaufen</string>

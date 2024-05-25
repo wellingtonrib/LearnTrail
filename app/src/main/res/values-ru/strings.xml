@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Викторина</string>
     <string name="title_home">Главная</string>
     <string name="title_settings">Настройки</string>
     <string name="error_unknown">Что-то пошло не так</string>

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Desafio de curiosidades</string>
     <string name="title_home">Início</string>
     <string name="title_settings">Configurações</string>
     <string name="error_unknown">Alguma coisa saiu errado</string>

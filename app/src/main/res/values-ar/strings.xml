@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">تحدي المعلومات</string>
     <string name="title_home">الصفحة الرئيسية</string>
     <string name="title_settings">الإعدادات</string>
     <string name="error_unknown">هناك خطأ م</string>
