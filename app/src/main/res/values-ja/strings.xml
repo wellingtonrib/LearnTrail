@@ -11,4 +11,6 @@
     <string name="message_correct_answer">正しい答えです！</string>
     <string name="message_wrong_answer">間違った答えです！</string>
     <string name="label_done">終わり</string>
+    <string name="message_success">成功</string>
+    <string name="message_failed">失敗</string>
 </resources>

@@ -17,7 +17,9 @@ fun NavGraph(navController: NavHostController) {
         startDestination = "home"
     ) {
         composable("settings") {
-            SettingsRoute()
+            SettingsRoute {
+                navController.navigateUp()
+            }
         }
         composable("home") {
             HomeRoute(

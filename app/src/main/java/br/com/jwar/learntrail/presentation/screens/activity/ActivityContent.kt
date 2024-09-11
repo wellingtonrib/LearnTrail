@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +38,7 @@ import br.com.jwar.learntrail.R
 import br.com.jwar.learntrail.domain.model.Question
 import br.com.jwar.learntrail.presentation.ui.theme.Theme
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityContent(
     state: ActivityViewState.Loaded,
@@ -66,9 +68,12 @@ fun ActivityContent(
                 title = {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = state.progress)
+                        LinearProgressIndicator(
+                            progress = { state.progress },
+                        )
                         Text(text = "❤️ ${state.attemptsLeft}")
                     }
                 },
@@ -80,72 +85,85 @@ fun ActivityContent(
             )
         }
     ) { padding ->
-        if (state.isFinished) {
-            Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+        Box(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (state.isFinished) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     if (state.isSucceeded) {
-                        Text(text = "Success")
+                        Text(
+                            text = stringResource(R.string.message_success),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
                     } else {
-                        Text(text = "Failed")
+                        Text(
+                            text = stringResource(R.string.message_failed),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
                     }
-                    Text(text = "${state.points}")
+                    Text(
+                        text = "\uD83C\uDFC5 ${state.points}",
+                        style = MaterialTheme.typography.titleLarge,
+                    )
                     Button(onClick = { onIntent(ActivityViewIntent.Finish) }) {
                         Text(text = stringResource(R.string.action_finish))
                     }
                 }
-            }
-        } else {
-            Column(
-                modifier = Modifier.padding(padding),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(text = state.currentQuestion.question)
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+            } else {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    items(state.currentQuestion.answers) { answer ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, state.getAnswerColor(answer)),
-                            onClick = {
-                                onIntent(ActivityViewIntent.SelectAnswer(answer))
+                    Text(
+                        text = state.currentQuestion.question,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(state.currentQuestion.answers) { answer ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .border(1.dp, state.getAnswerColor(answer)),
+                                onClick = {
+                                    onIntent(ActivityViewIntent.SelectAnswer(answer))
+                                }
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = answer,
+                                    fontWeight = state.getAnswerTextStyle(answer),
+                                )
                             }
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = answer,
-                                fontWeight = state.getAnswerTextStyle(answer),
-                            )
                         }
                     }
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    if (state.isResultShown) {
-                        Button(onClick = { onIntent(ActivityViewIntent.Next) }) {
-                            Text(text = stringResource(R.string.action_continue))
-                        }
-                    } else {
-                        Button(
-                            onClick = {
-                                onIntent(ActivityViewIntent.CheckAnswer)
-                            },
-                            enabled = state.selectedAnswer != null
-                        ) {
-                            Text(text = stringResource(R.string.action_check))
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        if (state.isResultShown) {
+                            Button(onClick = { onIntent(ActivityViewIntent.Next) }) {
+                                Text(text = stringResource(R.string.action_continue))
+                            }
+                        } else {
+                            Button(
+                                onClick = {
+                                    onIntent(ActivityViewIntent.CheckAnswer)
+                                },
+                                enabled = state.selectedAnswer != null
+                            ) {
+                                Text(text = stringResource(R.string.action_check))
+                            }
                         }
                     }
                 }
@@ -154,10 +172,9 @@ fun ActivityContent(
     }
 }
 
-@ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
-fun GreetingChallengeScreen() {
+fun ActivityScreen() {
     Theme {
         ActivityContent(
             ActivityViewState.Loaded(
@@ -178,6 +195,84 @@ fun GreetingChallengeScreen() {
                     activityId = "1",
                     correctAnswer = "Correct",
                     difficulty = "",
+                    answers = listOf(
+                        "Answer 1",
+                        "Answer 2",
+                        "Answer 3",
+                        "Answer 4",
+                    ),
+                    question = "Question",
+                    type = ""
+                ),
+                selectedAnswer = null,
+                attemptsLeft = 3,
+                points = 0,
+                progress = 0.5f,
+                isResultShown = false,
+                isFinished = false,
+                isSucceeded = false,
+            )
+        ) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ActivityResultScreen() {
+    Theme {
+        ActivityContent(
+            ActivityViewState.Loaded(
+                activityId = "1",
+                questions = listOf(
+                    Question(
+                        id = "1",
+                        activityId = "1",
+                        correctAnswer = "Correct",
+                        difficulty = "",
+                        answers = listOf(),
+                        question = "Question",
+                        type = ""
+                    )
+                ),
+                currentQuestion = Question(
+                    id = "1",
+                    activityId = "1",
+                    correctAnswer = "Correct",
+                    difficulty = "",
+                    answers = listOf(
+                        "Correct",
+                        "Answer 2",
+                        "Answer 3",
+                        "Answer 4",
+                    ),
+                    question = "Question",
+                    type = ""
+                ),
+                selectedAnswer = "Correct",
+                attemptsLeft = 3,
+                points = 0,
+                progress = 0.5f,
+                isResultShown = true,
+                isFinished = false,
+                isSucceeded = false,
+            )
+        ) {}
+    }
+}
+
+@Preview
+@Composable
+private fun ActivitySuccessScreen() {
+    Theme {
+        ActivityContent(
+            ActivityViewState.Loaded(
+                activityId = "1",
+                questions = listOf(),
+                currentQuestion = Question(
+                    id = "1",
+                    activityId = "1",
+                    correctAnswer = "Correct",
+                    difficulty = "",
                     answers = listOf(),
                     question = "Question",
                     type = ""
@@ -185,9 +280,38 @@ fun GreetingChallengeScreen() {
                 selectedAnswer = null,
                 attemptsLeft = 3,
                 points = 0,
-                progress = "1/3",
-                isResultShown = false,
-                isFinished = false,
+                progress = 0.5f,
+                isResultShown = true,
+                isFinished = true,
+                isSucceeded = true,
+            )
+        ) {}
+    }
+}
+
+@Preview
+@Composable
+private fun ActivityFailedScreen() {
+    Theme {
+        ActivityContent(
+            ActivityViewState.Loaded(
+                activityId = "1",
+                questions = listOf(),
+                currentQuestion = Question(
+                    id = "1",
+                    activityId = "1",
+                    correctAnswer = "Correct",
+                    difficulty = "",
+                    answers = listOf(),
+                    question = "Question",
+                    type = ""
+                ),
+                selectedAnswer = null,
+                attemptsLeft = 3,
+                points = 0,
+                progress = 0.5f,
+                isResultShown = true,
+                isFinished = true,
                 isSucceeded = false,
             )
         ) {}

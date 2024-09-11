@@ -11,4 +11,6 @@
     <string name="message_correct_answer">Richtige Antwort!</string>
     <string name="message_wrong_answer">Falsche Antwort!</string>
     <string name="label_done">Erledigt</string>
+    <string name="message_success">Erfolg</string>
+    <string name="message_failed">Gescheitert</string>
 </resources>

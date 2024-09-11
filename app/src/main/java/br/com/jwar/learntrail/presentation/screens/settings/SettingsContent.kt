@@ -9,16 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.jwar.learntrail.R
 import br.com.jwar.learntrail.data.services.translator.Language
+import br.com.jwar.learntrail.presentation.screens.activity.ActivityViewIntent
 import br.com.jwar.learntrail.presentation.utils.UIMessage
 import br.com.jwar.learntrail.presentation.ui.theme.Theme
 
@@ -64,6 +58,11 @@ fun SettingsContent(
                 title = {
                     Text(text = stringResource(R.string.title_settings))
                 },
+                navigationIcon = {
+                    IconButton(onClick = { onIntent(SettingsViewIntent.Close) }) {
+                        Icon(Icons.Outlined.Close, stringResource(R.string.action_close))
+                    }
+                }
             )
         }
     ) { padding ->

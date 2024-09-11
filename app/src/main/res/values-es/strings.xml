@@ -11,4 +11,6 @@
     <string name="message_correct_answer">Respuesta correcta</string>
     <string name="message_wrong_answer">Respuesta incorrecta</string>
     <string name="label_done">Hecho</string>
+    <string name="message_success">Éxito</string>
+    <string name="message_failed">Fallido</string>
 </resources>

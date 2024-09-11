@@ -11,4 +11,6 @@
     <string name="message_correct_answer">정답입니다!</string>
     <string name="message_wrong_answer">"잘못된 답변! "</string>
     <string name="label_done">완료</string>
+    <string name="message_success">성공</string>
+    <string name="message_failed">실패</string>
 </resources>

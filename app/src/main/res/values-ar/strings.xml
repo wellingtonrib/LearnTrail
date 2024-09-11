@@ -11,4 +11,6 @@
     <string name="message_correct_answer">إجابة صحيحة!</string>
     <string name="message_wrong_answer">إجابة خاطئة!</string>
     <string name="label_done">منتهي</string>
+    <string name="message_success">النجاح</string>
+    <string name="message_failed">فشل</string>
 </resources>
