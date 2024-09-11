@@ -57,7 +57,7 @@ class ActivityViewModel @Inject constructor(
                     activityId = activityId,
                     questions = questions,
                     currentQuestion = questions.first(),
-                    progress = "1/${questions.size}"
+                    progress = 0f,
                 )
                 else -> ActivityViewState.Error(Throwable("No questions found"))
             }
@@ -93,7 +93,7 @@ class ActivityViewModel @Inject constructor(
         if (hasAttemptsRemaining && hasNextQuestion) {
             val nextQuestionIndex = currentQuestionIndex.inc()
             val nextQuestion = state.questions[nextQuestionIndex]
-            val progress = "${nextQuestionIndex.inc()}/${state.questions.size}"
+            val progress = nextQuestionIndex.inc().toFloat().div(state.questions.size)
             state.copy(
                 currentQuestion = nextQuestion,
                 selectedAnswer = null,

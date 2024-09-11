@@ -1,5 +1,7 @@
 package br.com.jwar.learntrail.presentation.screens.activity
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import br.com.jwar.learntrail.domain.model.Question
@@ -15,17 +17,18 @@ sealed class ActivityViewState {
         val isResultShown: Boolean = false,
         val attemptsLeft: Int = 3,
         val points: Int = 0,
-        val progress: String,
+        val progress: Float,
         val isFinished: Boolean = false,
         val isSucceeded: Boolean = false,
         val userMessages: List<UIMessage> = emptyList(),
     ) : ActivityViewState() {
+        @Composable
         fun getAnswerColor(answer: String) = if (isResultShown) {
-            if (answer == currentQuestion.correctAnswer) Color.Green
-            else if (selectedAnswer == answer) Color.Red
+            if (answer == currentQuestion.correctAnswer) MaterialTheme.colorScheme.tertiary
+            else if (selectedAnswer == answer) MaterialTheme.colorScheme.error
             else Color.Transparent
         } else {
-            if (selectedAnswer == answer) Color.Blue else Color.Transparent
+            if (selectedAnswer == answer) MaterialTheme.colorScheme.primary else Color.Transparent
         }
 
         fun getAnswerTextStyle(answer: String) =

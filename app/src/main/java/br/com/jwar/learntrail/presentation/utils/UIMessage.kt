@@ -1,5 +1,7 @@
 package br.com.jwar.learntrail.presentation.utils
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import java.util.UUID
 
@@ -8,10 +10,11 @@ data class UIMessage(
     val text: UIText,
     val style: UIMessageStyle = UIMessageStyle.SUCCESS
 ) {
+    @Composable
     fun getColor() = when (style) {
-        UIMessageStyle.SUCCESS -> Color.Green
-        UIMessageStyle.WARNING -> Color.Yellow
-        UIMessageStyle.DANGER -> Color.Red
+        UIMessageStyle.SUCCESS -> MaterialTheme.colorScheme.primary
+        UIMessageStyle.WARNING -> MaterialTheme.colorScheme.tertiary
+        UIMessageStyle.DANGER -> MaterialTheme.colorScheme.error
     }
 }
 

@@ -11,4 +11,6 @@
     <string name="message_correct_answer">Правильный ответ!</string>
     <string name="message_wrong_answer">"Неправильный ответ! "</string>
     <string name="label_done">Сделанный</string>
+    <string name="message_success">Успех</string>
+    <string name="message_failed">Не удалось</string>
 </resources>

@@ -6,4 +6,5 @@ import br.com.jwar.learntrail.presentation.utils.UIMessage
 sealed class SettingsViewIntent {
     data class SelectLanguage(val language: Language): SettingsViewIntent()
     data class MessageShown(val uiMessage: UIMessage): SettingsViewIntent()
+    object Close: SettingsViewIntent()
 }

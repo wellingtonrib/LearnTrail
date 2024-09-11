@@ -54,7 +54,7 @@ class ActivityViewModelTest {
             assertEquals(questions.first(), state.currentQuestion)
             assertFalse(state.isResultShown)
             assertNull(state.selectedAnswer)
-            assertEquals("1/3", state.progress)
+            assertEquals(0f, state.progress)
         }
     }
 
@@ -125,7 +125,7 @@ class ActivityViewModelTest {
             assertFalse(state.isResultShown)
             assertNull(state.selectedAnswer)
             assertEquals(questions[1], state.currentQuestion)
-            assertEquals("2/3", state.progress)
+            assertEquals(0.6f, state.progress)
         }
     }
 

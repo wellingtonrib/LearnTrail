@@ -43,7 +43,7 @@ fun HomeContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "$userXP XP") },
+                title = { Text(text = "🏅$userXP") },
                 actions = {
                     IconButton(onClick = { onIntent(HomeViewIntent.NavigateToSettings) }) {
                         Icon(Icons.Outlined.Settings, stringResource(R.string.title_settings))
@@ -59,6 +59,7 @@ fun HomeContent(
                 .pullRefresh(state = pullRefreshState)
         ) {
             LazyColumn(
+                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -89,7 +90,7 @@ private fun UnitComponent(
             containerColor = if (unit.isUnlocked) {
                 MaterialTheme.colorScheme.primaryContainer
             } else {
-                MaterialTheme.colorScheme.secondaryContainer
+                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
             }
         ),
     ) {
@@ -127,7 +128,7 @@ private fun ActivityComponent(
             containerColor = if (activity.isUnlocked) {
                 MaterialTheme.colorScheme.primaryContainer
             } else {
-                MaterialTheme.colorScheme.secondaryContainer
+                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
             }
         ),
         onClick = {
