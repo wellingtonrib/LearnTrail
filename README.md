@@ -2,6 +2,13 @@
 
 Education app that creates customizable learning paths for any subject. It integrates with any databases, offering sequential lessons and questions, user progress tracking, and gamification features to enhance the learning experience.
 
+## Screenshots 📱
+<p float="left">
+  <img src="screenshots/home.png" alt="Screenshot 1" width="200" />
+  <img src="screenshots/activity.png" alt="Screenshot 2" width="200" />
+  <img src="screenshots/settings.png" alt="Screenshot 3" width="200" />
+</p>
+
 ##Features ✨
 - Learning progression by sections
 - Multilanguage powered by AI
